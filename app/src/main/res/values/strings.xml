@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Trip4Pet</string>
+    <string name="terms">By signing in you are agree with or <b><u>Term of Services</u></b> &amp; <b><u>Privacy Policy</u></b></string>
+    <string name="to_trip4pets">to <font color="#ACD8F8">Trip4Pets</font></string>
+</resources>
