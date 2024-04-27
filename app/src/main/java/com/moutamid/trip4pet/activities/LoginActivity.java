@@ -27,6 +27,9 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
+        binding.toolbar.back.setOnClickListener(v -> onBackPressed());
+        binding.toolbar.title.setText("Login");
+
         binding.create.setOnClickListener(v -> {
             startActivity(new Intent(this, SignInActivity.class));
             finish();

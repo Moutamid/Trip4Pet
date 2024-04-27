@@ -9,4 +9,6 @@
     <color name="grey2">#C7C7C7</color>
     <color name="facebook">#3b5998</color>
     <color name="text">#918E91</color>
+    <color name="red">#F44336</color>
+    <color name="gold">#FFC107</color>
 </resources>

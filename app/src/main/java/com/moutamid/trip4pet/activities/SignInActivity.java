@@ -26,6 +26,9 @@ public class SignInActivity extends AppCompatActivity {
             return insets;
         });
 
+        binding.toolbar.back.setOnClickListener(v -> onBackPressed());
+        binding.toolbar.title.setText("Create Account");
+
         binding.login.setOnClickListener(v -> startActivity(new Intent(this, LoginActivity.class)));
     }
 }
