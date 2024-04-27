@@ -1,7 +1,11 @@
 package com.moutamid.trip4pet.activities;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.ViewGroup;
+import android.view.Window;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +43,21 @@ public class AccountSettingActivity extends AppCompatActivity {
         });
 
         binding.vehicle.setOnClickListener(v  -> startActivity(new Intent(this, VehicleActivity.class)));
+        binding.name.setOnClickListener(v  -> startActivity(new Intent(this, NameActivity.class)));
+        binding.social.setOnClickListener(v  -> startActivity(new Intent(this, SocialActivity.class)));
+        binding.code.setOnClickListener(v  -> showCodeDialog());
+        binding.password.setOnClickListener(v  -> startActivity(new Intent(this, PasswordActivity.class)));
+
+    }
+
+    private void showCodeDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.code_layout);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
 
     }
 }

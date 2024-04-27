@@ -9,6 +9,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.moutamid.trip4pet.MainActivity;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.databinding.ActivitySignInBinding;
 
@@ -30,5 +31,6 @@ public class SignInActivity extends AppCompatActivity {
         binding.toolbar.title.setText("Create Account");
 
         binding.login.setOnClickListener(v -> startActivity(new Intent(this, LoginActivity.class)));
+        binding.create.setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));
     }
 }
