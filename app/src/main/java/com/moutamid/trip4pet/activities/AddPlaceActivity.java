@@ -1,6 +1,7 @@
 package com.moutamid.trip4pet.activities;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,18 +50,18 @@ public class AddPlaceActivity extends AppCompatActivity {
             mapFragment.getMapAsync(callback);
         }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        binding.back.setOnClickListener(v -> {
-
-        });
+        binding.back.setOnClickListener(v -> onBackPressed());
         binding.setting.setOnClickListener(v -> {
-
+            startActivity(new Intent(this, AroundPlaceActivity.class));
+            finish();
         });
     }
 
     private OnMapReadyCallback callback = googleMap -> {
 
         if (!isGiven) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
             fusedLocationClient.getLastLocation()
@@ -74,12 +75,17 @@ public class AddPlaceActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            if (isCoordinates){
-
-            }
+            String[] cord = name.split(", ");
+            LatLng currentLatLng = new LatLng(Double.parseDouble(cord[0]), Double.parseDouble(cord[1])); // lat, long
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f));
+//            if (isCoordinates) {
+//
+//            } else {
+//                // City name is provided
+//            }
         }
         googleMap.setMaxZoomPreference(20f);
-        googleMap.setMinZoomPreference(12f);
+//        googleMap.setMinZoomPreference(12f);
         googleMap.setOnCameraIdleListener(() -> {
             LatLng centerOfMap = googleMap.getCameraPosition().target;
             double latitude = centerOfMap.latitude;
