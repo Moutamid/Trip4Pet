@@ -15,6 +15,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.moutamid.trip4pet.R;
+import com.moutamid.trip4pet.bottomsheets.FavoruiteDialog;
 import com.moutamid.trip4pet.bottomsheets.FilterDialog;
 import com.moutamid.trip4pet.databinding.FragmentAroundMeBinding;
 
@@ -32,6 +33,14 @@ public class AroundMeFragment extends Fragment {
 
         binding.filter.setOnClickListener(v -> {
             FilterDialog filterDialog = new FilterDialog();
+            filterDialog.setListener(() -> {
+                // dialog is dismissed
+            });
+            filterDialog.show(requireActivity().getSupportFragmentManager(), filterDialog.getTag());
+        });
+
+        binding.star.setOnClickListener(v -> {
+            FavoruiteDialog filterDialog = new FavoruiteDialog();
             filterDialog.setListener(() -> {
                 // dialog is dismissed
             });

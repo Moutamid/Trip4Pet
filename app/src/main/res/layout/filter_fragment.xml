@@ -5,10 +5,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="21dp">
 
+    <View
+        android:layout_width="50dp"
+        android:layout_height="6dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/border"
+        android:background="@drawable/round" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_below="@id/border"
         android:text="Filters"
         android:textSize="20sp" />
 
@@ -16,6 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Clear Filters"
+        android:layout_below="@id/border"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         app:backgroundTint="@color/grey"
