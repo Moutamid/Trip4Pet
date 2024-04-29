@@ -1,32 +1,22 @@
 package com.moutamid.trip4pet;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.ImageSpan;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import com.moutamid.trip4pet.databinding.ActivityMainBinding;
 import com.moutamid.trip4pet.fragments.AroundMeFragment;
 import com.moutamid.trip4pet.fragments.SettingFragment;
 
-import java.util.ArrayList;
-
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 //            return insets;
 //        });
+        requestLocationPermission();
 
         PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
         binding.viewPager.setAdapter(adapter);
@@ -46,6 +37,11 @@ public class MainActivity extends AppCompatActivity {
         // Optionally, you can set icons for the tabs
         binding.tabLayout.getTabAt(0).setIcon(R.drawable.compass);
         binding.tabLayout.getTabAt(1).setIcon(R.drawable.bars);
+    }
+
+    private void requestLocationPermission() {
+        shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_FINE_LOCATION);
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 111);
     }
 
     public class PagerAdapter extends FragmentPagerAdapter {

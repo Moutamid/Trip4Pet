@@ -72,13 +72,6 @@ public class AroundMeFragment extends Fragment {
 
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(hungry));
 
-//        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-//                ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//            googleMap.setMyLocationEnabled(true);
-//        }
-//        googleMap.getUiSettings().setCompassEnabled(true);
-//        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
-
     };
 
 }
