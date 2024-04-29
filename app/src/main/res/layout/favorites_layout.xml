@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="21dp">
 
@@ -44,7 +44,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_below="@id/close">
 
@@ -68,7 +68,7 @@
             app:cardCornerRadius="12dp"
             android:layout_marginTop="6dp"
             android:clickable="true"
-            app:cardBackgroundColor="#F7F1F8"
+            app:cardBackgroundColor="@color/card_bs"
             app:strokeWidth="0dp"
             app:cardElevation="0dp">
 
@@ -133,7 +133,7 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
             android:layout_marginTop="6dp"
-            app:cardBackgroundColor="#F7F1F8"
+            app:cardBackgroundColor="@color/card_bs"
             android:clickable="true"
             app:strokeWidth="0dp"
             app:cardElevation="0dp">

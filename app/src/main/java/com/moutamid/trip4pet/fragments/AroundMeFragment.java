@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.bottomsheets.FavoruiteDialog;
 import com.moutamid.trip4pet.bottomsheets.FilterDialog;
+import com.moutamid.trip4pet.bottomsheets.ListDialog;
 import com.moutamid.trip4pet.databinding.FragmentAroundMeBinding;
 
 public class AroundMeFragment extends Fragment {
@@ -43,6 +44,14 @@ public class AroundMeFragment extends Fragment {
             FavoruiteDialog filterDialog = new FavoruiteDialog();
             filterDialog.setListener(() -> {
                 // dialog is dismissed
+            });
+            filterDialog.show(requireActivity().getSupportFragmentManager(), filterDialog.getTag());
+        });
+        binding.list.setOnClickListener(v -> {
+            binding.mapIcon.setImageResource(R.drawable.map);
+            ListDialog filterDialog = new ListDialog();
+            filterDialog.setListener(() -> {
+                binding.mapIcon.setImageResource(R.drawable.list_solid);
             });
             filterDialog.show(requireActivity().getSupportFragmentManager(), filterDialog.getTag());
         });
