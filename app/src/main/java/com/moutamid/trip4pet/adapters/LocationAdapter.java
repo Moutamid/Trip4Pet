@@ -1,6 +1,7 @@
 package com.moutamid.trip4pet.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.moutamid.trip4pet.R;
+import com.moutamid.trip4pet.activities.DetailActivity;
 import com.moutamid.trip4pet.models.LocationsModel;
 
 import java.util.ArrayList;
@@ -40,6 +42,11 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         holder.imagesCount.setText(model.images.size()+"");
         holder.typeOfPlace.setText(model.typeOfPlace);
         Glide.with(context).load(model.images.get(0)).into(holder.image);
+
+        holder.itemView.setOnClickListener(v -> {
+            context.startActivity(new Intent(context, DetailActivity.class));
+        });
+
     }
 
     @Override
