@@ -19,6 +19,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.moutamid.trip4pet.BottomSheetDismissListener;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.databinding.FilterFragmentBinding;
+import com.moutamid.trip4pet.models.FilterModel;
+
+import java.util.ArrayList;
 
 public class FilterDialog extends BottomSheetDialogFragment {
     FilterFragmentBinding binding;
@@ -38,31 +41,6 @@ public class FilterDialog extends BottomSheetDialogFragment {
             "Windsurf/kitesurf (Spot of)",
             "Beautiful motorcycle rides"
     };
-
-    String[] nearbyServices = {
-            "Electricity (access possible)",
-            "Drinking water",
-            "Black water",
-            "Wastewater",
-            "Waste container",
-            "Bakery",
-            "Public toilets",
-            "Showers (possible access)",
-            "Internet access via WiFi",
-            "Winter-caravanning",
-            "Pets allowed",
-            "Swimming pool",
-            "Laundry",
-            "Wash & Fold",
-            "Dry Cleaning",
-            "Same Day Service (possible)",
-            "Ironing",
-            "Shirt Laundry",
-            "Duvet Cleaning",
-            "Special Care Items",
-            "Shoe Cleaning",
-            "Pick-Up & Delivery (possible)"
-    };
     String[] placesList = {
             "Free motorhome area",
             "Paying motorhome area",
@@ -80,7 +58,8 @@ public class FilterDialog extends BottomSheetDialogFragment {
             "Off-road (4x4)",
             "Extra services"
     };
-
+    ArrayList<FilterModel> service = new ArrayList<>();
+    ArrayList<FilterModel> activities = new ArrayList<>();
 
     @Nullable
     @Override
@@ -92,8 +71,26 @@ public class FilterDialog extends BottomSheetDialogFragment {
         });
 
         addPlaces();
-        addServices();
         addActivities();
+        service.add(new FilterModel("Electricity (access possible)", R.drawable.plug_circle_check_solid));
+        service.add(new FilterModel("Drinking water", R.drawable.faucet_drip_solid));
+        service.add(new FilterModel("Black water", R.drawable.toilet_solid));
+        service.add(new FilterModel("Wastewater", R.drawable.dumpster_solid));
+        service.add(new FilterModel("Waste container", R.drawable.dumpster_solid));
+        service.add(new FilterModel("Bakery", R.drawable.cake_candles_solid));
+        service.add(new FilterModel("Public toilets", R.drawable.restroom_solid));
+        service.add(new FilterModel("Showers (possible access)", R.drawable.shower_solid));
+        service.add(new FilterModel("Internet access via WiFi", R.drawable.wifi_solid));
+        service.add(new FilterModel("Winter-caravanning", R.drawable.snowman_solid));
+        service.add(new FilterModel("Pets allowed", R.drawable.dog_solid));
+        service.add(new FilterModel("Swimming pool", R.drawable.person_swimming_solid));
+        service.add(new FilterModel("Laundry", R.drawable.jug_detergent_solid));
+        service.add(new FilterModel("LPG station", R.drawable.gas_pump_solid));
+        service.add(new FilterModel("Bottled gas service", R.drawable.fire_flame_simple_solid));
+        service.add(new FilterModel("3G/4G internet", R.drawable.signal_solid));
+        service.add(new FilterModel("Washing for motorhome", R.drawable.soap_solid));
+
+        addServices();
 
         return binding.getRoot();
     }
@@ -105,6 +102,9 @@ public class FilterDialog extends BottomSheetDialogFragment {
             MaterialCheckBox checkbox = customEditTextLayout.findViewById(R.id.checkbox);
             TextView text = customEditTextLayout.findViewById(R.id.text);
             ImageView lock = customEditTextLayout.findViewById(R.id.lock);
+            ImageView image = customEditTextLayout.findViewById(R.id.image);
+
+            image.setVisibility(View.GONE);
             lock.setVisibility(View.GONE);
             text.setText(s);
             checkbox.setEnabled(true);
@@ -113,13 +113,18 @@ public class FilterDialog extends BottomSheetDialogFragment {
     }
 
     private void addServices() {
-        for (String s : nearbyServices) {
+        for (FilterModel s : service) {
             LayoutInflater inflater = getLayoutInflater();
             View customEditTextLayout = inflater.inflate(R.layout.filter_check_layout, null);
+
             MaterialCheckBox checkbox = customEditTextLayout.findViewById(R.id.checkbox);
+            ImageView image = customEditTextLayout.findViewById(R.id.image);
             TextView text = customEditTextLayout.findViewById(R.id.text);
             ImageView lock = customEditTextLayout.findViewById(R.id.lock);
-            text.setText(s);
+
+            image.setImageResource(s.icon);
+            text.setText(s.name);
+
             binding.services.addView(customEditTextLayout);
         }
     }

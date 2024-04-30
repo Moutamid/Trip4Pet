@@ -14,4 +14,5 @@
     <color name="gold">#FFC107</color>
     <color name="green">#25D89F</color>
     <color name="card_bs">#F7F1F8</color>
+    <color name="card_bs2">#F0F0F0</color>
 </resources>

@@ -1,4 +1,4 @@
-package com.moutamid.trip4pet;
+package com.moutamid.trip4pet.adapters;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.moutamid.trip4pet.models.Cities;
+import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.activities.AddPlaceActivity;
 
 import java.util.ArrayList;

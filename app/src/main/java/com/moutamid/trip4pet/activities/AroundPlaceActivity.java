@@ -2,13 +2,11 @@ package com.moutamid.trip4pet.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,9 +16,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.gson.JsonArray;
-import com.moutamid.trip4pet.Cities;
-import com.moutamid.trip4pet.CitiesAdapter;
+import com.moutamid.trip4pet.models.Cities;
+import com.moutamid.trip4pet.adapters.CitiesAdapter;
 import com.moutamid.trip4pet.databinding.ActivityAroundPlaceBinding;
 import com.moutamid.trip4pet.R;
 
@@ -33,7 +30,6 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 public class AroundPlaceActivity extends AppCompatActivity {
     ActivityAroundPlaceBinding binding;
