@@ -1,9 +1,12 @@
 package com.moutamid.trip4pet.activities;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -13,6 +16,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.fxn.stash.Stash;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
@@ -57,6 +61,10 @@ public class DetailActivity extends AppCompatActivity {
         binding.typeOfPlace.setText(model.typeOfPlace);
         binding.desc.setText(model.description);
         binding.rating.setText(model.rating+"");
+        String cord = model.latitude + ", " + model.longitude + " (lat, long)";
+        binding.coordinates.setText(cord);
+        String address = model.name + ", " + model.city + ", " + model.country;
+        binding.location.setText(address);
 
         for (int s : model.services) {
             LayoutInflater inflater = getLayoutInflater();
@@ -72,6 +80,14 @@ public class DetailActivity extends AppCompatActivity {
         if (model.activities.isEmpty()){
             binding.activities.setVisibility(View.GONE);
         }
+
+        binding.more.setOnClickListener(v -> {
+            LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View customView = inflater.inflate(R.layout.detail_menu, null);
+            PopupWindow popupWindow = new PopupWindow(customView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+            popupWindow.showAsDropDown(v);
+
+        });
 
     }
 }
