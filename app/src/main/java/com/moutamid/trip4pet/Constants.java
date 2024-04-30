@@ -18,7 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Constants {
-
+    public static final String MODEL = "MODEL";
     public static FirebaseAuth auth() {
         return FirebaseAuth.getInstance();
     }

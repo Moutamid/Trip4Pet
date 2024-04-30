@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.fxn.stash.Stash;
+import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.activities.DetailActivity;
 import com.moutamid.trip4pet.models.LocationsModel;
@@ -44,6 +46,7 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         Glide.with(context).load(model.images.get(0)).into(holder.image);
 
         holder.itemView.setOnClickListener(v -> {
+            Stash.put(Constants.MODEL, model);
             context.startActivity(new Intent(context, DetailActivity.class));
         });
 
