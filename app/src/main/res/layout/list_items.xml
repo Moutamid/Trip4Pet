@@ -131,6 +131,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/typeOfPlace"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/blue"
@@ -139,6 +140,7 @@
                 tool:text="Free motorhome area" />
 
             <TextView
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
@@ -146,6 +148,7 @@
                 tool:text="Name" />
 
             <TextView
+                android:id="@+id/desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/text"
