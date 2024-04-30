@@ -35,6 +35,7 @@ android {
 dependencies {
     implementation("com.fxn769:stash:1.3.2")
     implementation("com.github.smarteist:autoimageslider:1.4.0")
+    implementation("com.iarcuschin:simpleratingbar:0.1.5")
 
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.2.0")

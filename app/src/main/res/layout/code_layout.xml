@@ -39,6 +39,7 @@
             app:boxCornerRadiusTopEnd="12dp"
             app:boxCornerRadiusTopStart="12dp"
             app:boxStrokeWidth="0dp"
+            android:textColorHint="@color/text"
             android:hint="YYY-XXXX"
             app:boxStrokeWidthFocused="0dp">
 

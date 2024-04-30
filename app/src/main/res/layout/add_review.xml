@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     app:cardCornerRadius="12dp"
     app:strokeWidth="0dp"
     app:cardElevation="0dp"
@@ -15,7 +16,66 @@
         android:orientation="vertical"
         android:padding="12dp">
 
+        <TextView
+            android:id="@+id/typeOfPlace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blue"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:text="Add a feedback to help other users" />
 
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Rate this Place" />
+
+        <com.iarcuschin.simpleratingbar.SimpleRatingBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srb_starSize="30dp"
+            android:layout_marginVertical="10dp"
+            app:srb_numberOfStars="5"
+            app:srb_rating="0"
+            android:layout_gravity="center"
+            app:srb_stepSize="0.5"
+            app:srb_borderColor="@color/gold"
+            app:srb_fillColor="@color/gold" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/comment"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            app:boxBackgroundColor="@color/white2"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:boxStrokeWidth="0dp"
+            android:textColorHint="@color/text"
+            android:hint="Add your comment"
+            app:boxStrokeWidthFocused="0dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:inputType="textEmailAddress" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Submit"
+            app:cornerRadius="12dp"
+            android:textSize="16sp" />
 
     </LinearLayout>
 
