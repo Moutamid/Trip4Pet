@@ -1,6 +1,10 @@
 package com.moutamid.trip4pet.activities;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,10 +13,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.fxn.stash.Stash;
+import com.google.android.material.checkbox.MaterialCheckBox;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.adapters.SliderAdapter;
 import com.moutamid.trip4pet.databinding.ActivityDetailBinding;
+import com.moutamid.trip4pet.models.FilterModel;
 import com.moutamid.trip4pet.models.LocationsModel;
 
 public class DetailActivity extends AppCompatActivity {
@@ -36,6 +42,36 @@ public class DetailActivity extends AppCompatActivity {
         binding.back.setOnClickListener(v -> onBackPressed());
 
         binding.imageSlider.setSliderAdapter(new SliderAdapter(this, model.images));
+
+        for (int s : model.activities) {
+            LayoutInflater inflater = getLayoutInflater();
+            View customEditTextLayout = inflater.inflate(R.layout.icon, null);
+            ImageView image = customEditTextLayout.findViewById(R.id.image);
+            image.setImageResource(s);
+            binding.activitiesIcon.addView(customEditTextLayout);
+        }
+
+        binding.totalActivity.setText(model.activities.size() + " Activities");
+        binding.totalServices.setText(model.services.size() + " Services");
+        binding.name.setText(model.name);
+        binding.typeOfPlace.setText(model.typeOfPlace);
+        binding.desc.setText(model.description);
+        binding.rating.setText(model.rating+"");
+
+        for (int s : model.services) {
+            LayoutInflater inflater = getLayoutInflater();
+            View customEditTextLayout = inflater.inflate(R.layout.icon, null);
+            ImageView image = customEditTextLayout.findViewById(R.id.image);
+            image.setImageResource(s);
+            binding.servicesIcon.addView(customEditTextLayout);
+        }
+
+        if (model.services.isEmpty()){
+            binding.services.setVisibility(View.GONE);
+        }
+        if (model.activities.isEmpty()){
+            binding.activities.setVisibility(View.GONE);
+        }
 
     }
 }
