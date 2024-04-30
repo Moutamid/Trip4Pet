@@ -15,7 +15,6 @@ import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.textfield.TextInputLayout;
 import com.moutamid.trip4pet.BottomSheetDismissListener;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.databinding.FilterFragmentBinding;
@@ -26,21 +25,6 @@ import java.util.ArrayList;
 public class FilterDialog extends BottomSheetDialogFragment {
     FilterFragmentBinding binding;
     private BottomSheetDismissListener listener;
-
-    String[] activitiesNearby = {
-            "Playground",
-            "Point of view",
-            "Swimming possible",
-            "Climbing (Sites of)",
-            "Canoe/kayak (Base of)",
-            "Fishing spots",
-            "Beach fisheries",
-            "Departure of hikes",
-            "Monuments to visit",
-            "Mountain bike tracks",
-            "Windsurf/kitesurf (Spot of)",
-            "Beautiful motorcycle rides"
-    };
     String[] placesList = {
             "Free motorhome area",
             "Paying motorhome area",
@@ -72,24 +56,6 @@ public class FilterDialog extends BottomSheetDialogFragment {
 
         addPlaces();
         addActivities();
-        service.add(new FilterModel("Electricity (access possible)", R.drawable.plug_circle_check_solid));
-        service.add(new FilterModel("Drinking water", R.drawable.faucet_drip_solid));
-        service.add(new FilterModel("Black water", R.drawable.toilet_solid));
-        service.add(new FilterModel("Wastewater", R.drawable.dumpster_solid));
-        service.add(new FilterModel("Waste container", R.drawable.dumpster_solid));
-        service.add(new FilterModel("Bakery", R.drawable.cake_candles_solid));
-        service.add(new FilterModel("Public toilets", R.drawable.restroom_solid));
-        service.add(new FilterModel("Showers (possible access)", R.drawable.shower_solid));
-        service.add(new FilterModel("Internet access via WiFi", R.drawable.wifi_solid));
-        service.add(new FilterModel("Winter-caravanning", R.drawable.snowman_solid));
-        service.add(new FilterModel("Pets allowed", R.drawable.dog_solid));
-        service.add(new FilterModel("Swimming pool", R.drawable.person_swimming_solid));
-        service.add(new FilterModel("Laundry", R.drawable.jug_detergent_solid));
-        service.add(new FilterModel("LPG station", R.drawable.gas_pump_solid));
-        service.add(new FilterModel("Bottled gas service", R.drawable.fire_flame_simple_solid));
-        service.add(new FilterModel("3G/4G internet", R.drawable.signal_solid));
-        service.add(new FilterModel("Washing for motorhome", R.drawable.soap_solid));
-
         addServices();
 
         return binding.getRoot();
@@ -113,30 +79,69 @@ public class FilterDialog extends BottomSheetDialogFragment {
     }
 
     private void addServices() {
+        service.clear();
+
+        service.add(new FilterModel("Electricity (access possible)", R.drawable.plug_circle_check_solid));
+        service.add(new FilterModel("Drinking water", R.drawable.faucet_drip_solid));
+        service.add(new FilterModel("Black water", R.drawable.toilet_solid));
+        service.add(new FilterModel("Wastewater", R.drawable.dumpster_solid));
+        service.add(new FilterModel("Waste container", R.drawable.dumpster_solid));
+        service.add(new FilterModel("Bakery", R.drawable.cake_candles_solid));
+        service.add(new FilterModel("Public toilets", R.drawable.restroom_solid));
+        service.add(new FilterModel("Showers (possible access)", R.drawable.shower_solid));
+        service.add(new FilterModel("Internet access via WiFi", R.drawable.wifi_solid));
+        service.add(new FilterModel("Winter-caravanning", R.drawable.snowman_solid));
+        service.add(new FilterModel("Pets allowed", R.drawable.dog_solid));
+        service.add(new FilterModel("Swimming pool", R.drawable.person_swimming_solid));
+        service.add(new FilterModel("Laundry", R.drawable.jug_detergent_solid));
+        service.add(new FilterModel("LPG station", R.drawable.gas_pump_solid));
+        service.add(new FilterModel("Bottled gas service", R.drawable.fire_flame_simple_solid));
+        service.add(new FilterModel("3G/4G internet", R.drawable.signal_solid));
+        service.add(new FilterModel("Washing for motorhome", R.drawable.soap_solid));
+
         for (FilterModel s : service) {
             LayoutInflater inflater = getLayoutInflater();
             View customEditTextLayout = inflater.inflate(R.layout.filter_check_layout, null);
 
             MaterialCheckBox checkbox = customEditTextLayout.findViewById(R.id.checkbox);
+            ImageView lock = customEditTextLayout.findViewById(R.id.lock);
+
             ImageView image = customEditTextLayout.findViewById(R.id.image);
             TextView text = customEditTextLayout.findViewById(R.id.text);
-            ImageView lock = customEditTextLayout.findViewById(R.id.lock);
 
             image.setImageResource(s.icon);
             text.setText(s.name);
-
             binding.services.addView(customEditTextLayout);
         }
     }
 
     private void addActivities() {
-        for (String s : activitiesNearby) {
+        activities.clear();
+        activities.add(new FilterModel("Playground", R.drawable.ride));
+        activities.add(new FilterModel("Point of view", R.drawable.binoculars_solid));
+        activities.add(new FilterModel("Swimming possible", R.drawable.person_swimming_solid));
+        activities.add(new FilterModel("Climbing (Sites of)", R.drawable.climbing_with_rope));
+        activities.add(new FilterModel("Canoe/kayak (Base of)", R.drawable.kayak));
+        activities.add(new FilterModel("Fishing spots", R.drawable.fish_fins_solid));
+        activities.add(new FilterModel("Beach fisheries", R.drawable.umbrella_beach_solid));
+        activities.add(new FilterModel("Departure of hikes", R.drawable.person_hiking_solid));
+        activities.add(new FilterModel("Monuments to visit", R.drawable.monument_solid));
+        activities.add(new FilterModel("Mountain bike tracks", R.drawable.bicycle_solid));
+        activities.add(new FilterModel("Windsurf/kitesurf (Spot of)", R.drawable.kitesurf));
+        activities.add(new FilterModel("Beautiful motorcycle rides", R.drawable.motorcycle_solid));
+
+        for (FilterModel s : activities) {
             LayoutInflater inflater = getLayoutInflater();
             View customEditTextLayout = inflater.inflate(R.layout.filter_check_layout, null);
+
             MaterialCheckBox checkbox = customEditTextLayout.findViewById(R.id.checkbox);
-            TextView text = customEditTextLayout.findViewById(R.id.text);
             ImageView lock = customEditTextLayout.findViewById(R.id.lock);
-            text.setText(s);
+
+            ImageView image = customEditTextLayout.findViewById(R.id.image);
+            TextView text = customEditTextLayout.findViewById(R.id.text);
+
+            image.setImageResource(s.icon);
+            text.setText(s.name);
             binding.activities.addView(customEditTextLayout);
         }
     }
