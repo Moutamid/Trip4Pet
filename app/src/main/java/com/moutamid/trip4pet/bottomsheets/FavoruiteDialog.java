@@ -21,6 +21,8 @@ public class FavoruiteDialog extends BottomSheetDialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FavoritesLayoutBinding.inflate(getLayoutInflater(), container, false);
 
+        binding.close.setOnClickListener(v -> dismiss());
+
         return binding.getRoot();
     }
 
