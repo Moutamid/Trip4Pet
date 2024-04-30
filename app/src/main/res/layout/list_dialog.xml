@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:padding="20dp">
 
     <View
@@ -42,5 +43,12 @@
             app:tint="@color/black" />
 
     </com.google.android.material.card.MaterialCardView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/close"
+        tools:listitem="@layout/list_items"
+        android:id="@+id/listRC" />
 
 </RelativeLayout>
