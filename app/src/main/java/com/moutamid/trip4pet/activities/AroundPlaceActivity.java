@@ -46,7 +46,16 @@ public class AroundPlaceActivity extends AppCompatActivity {
             return insets;
         });
 
+        list.add(new Cities("Sialkot", "Pakistan", "Punjab", 33.70411, 73.08887));
+        list.add(new Cities("Lahore", "Pakistan", "Punjab", 33.70411, 73.08887));
+        list.add(new Cities("Jehlum", "Pakistan", "Punjab", 33.70411, 73.08887));
+        list.add(new Cities("Karachi", "Pakistan", "Sindh", 33.70411, 73.08887));
+        list.add(new Cities("Quetta", "Pakistan", "Balochistan", 33.70411, 73.08887));
 
+        binding.cities.setLayoutManager(new LinearLayoutManager(this));
+        binding.cities.setHasFixedSize(false);
+        CitiesAdapter adapter = new CitiesAdapter(this, list);
+        binding.cities.setAdapter(adapter);
 
         binding.toolbar.title.setText("Add a place");
 
@@ -65,9 +74,6 @@ public class AroundPlaceActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-        binding.cities.setLayoutManager(new LinearLayoutManager(this));
-        binding.cities.setHasFixedSize(false);
 
         binding.gps.setOnCheckedChangeListener((buttonView, isChecked) -> {
             int v = isChecked ? View.VISIBLE : View.GONE;
@@ -95,94 +101,13 @@ public class AroundPlaceActivity extends AppCompatActivity {
                     binding.gps.setVisibility(View.VISIBLE);
                     binding.cities.setVisibility(View.GONE);
                 } else {
-
                     binding.gps.setChecked(false);
                     binding.gps.setVisibility(View.GONE);
                     binding.cities.setVisibility(View.VISIBLE);
-
-                    //     fetchResult(s.toString());
                 }
             }
         });
 
-    }
-
-    public static JSONArray loadJSONArrayFromAssets(Context context, String fileName) {
-        JSONArray jsonArray = null;
-        try {
-            // Read the JSON file from assets
-            InputStream inputStream = context.getAssets().open(fileName);
-            int size = inputStream.available();
-            byte[] buffer = new byte[size];
-            inputStream.read(buffer);
-            inputStream.close();
-            String jsonString = new String(buffer, StandardCharsets.UTF_8);
-
-            // Parse the JSON string into a JSON array
-            jsonArray = new JSONArray(jsonString);
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
-        return jsonArray;
-    }
-
-    private void fetchResult(String search) {
-        // Convert JSON string to JSONArray
-        JSONArray jsonArray = loadJSONArrayFromAssets(this, "cities.json");
-        ArrayList<Cities> matches = partialMatchSearch(jsonArray, search, new Comparator<Cities>() {
-            @Override
-            public int compare(Cities o1, Cities o2) {
-                String name1 = o1.name;
-                String country1 = o1.country;
-                String name2 = o2.name;
-                String country2 = o2.country;
-
-                // Compare name or country name
-                if (name1.toLowerCase().contains(search.toLowerCase()) || country1.toLowerCase().contains(search.toLowerCase())) {
-                    return 0; // Match found
-                } else if (name1.compareTo(name2) != 0) {
-                    return name1.compareTo(name2);
-                } else {
-                    return country1.compareTo(country2);
-                }
-            }
-        });
-
-        // Display the matched JSONObjects
-        if (!matches.isEmpty()) {
-            CitiesAdapter adapter = new CitiesAdapter(this, matches);
-            binding.cities.setAdapter(adapter);
-        } else {
-            Toast.makeText(this, "No matching names found.", Toast.LENGTH_SHORT).show();
-            Log.d(TAG, "fetchResult: No matching names found.");
-        }
-
-    }
-
-    private static final String TAG = "AroundPlaceActivity";
-    public static ArrayList<Cities> partialMatchSearch(JSONArray jsonArray, String searchName, Comparator<Cities> comparator) {
-        ArrayList<Cities> matches = new ArrayList<>();
-
-        for (int i = 0; i < jsonArray.length(); i++) {
-            try {
-                JSONObject obj = jsonArray.getJSONObject(i);
-                String name = obj.getString("name");
-                String country_name = obj.getString("country_name");
-                if (name.toLowerCase().contains(searchName.toLowerCase()) ||
-                        country_name.toLowerCase().contains(searchName.toLowerCase())) { // Case-insensitive partial match
-                    Cities cities = new Cities();
-                    cities.name = name;
-                    cities.country = country_name;
-                    cities.state = obj.getString("state_name");
-                    cities.latitude = obj.getString("latitude");
-                    cities.longitude = obj.getString("longitude");
-                    matches.add(cities);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return matches;
     }
 
 }
