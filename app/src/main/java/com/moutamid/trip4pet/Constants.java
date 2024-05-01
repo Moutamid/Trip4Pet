@@ -19,6 +19,7 @@ import java.net.URL;
 
 public class Constants {
     public static final String MODEL = "MODEL";
+    public static final String COORDINATES = "COORDINATES";
     public static FirebaseAuth auth() {
         return FirebaseAuth.getInstance();
     }

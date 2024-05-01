@@ -1,8 +1,7 @@
-package com.moutamid.trip4pet;
+package com.moutamid.trip4pet.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,30 +9,30 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.moutamid.trip4pet.activities.WelcomeActivity;
+import com.moutamid.trip4pet.Constants;
+import com.moutamid.trip4pet.R;
+import com.moutamid.trip4pet.databinding.ActivityPlaceAddBinding;
 
-public class SplashActivity extends AppCompatActivity {
-
+public class PlaceAddActivity extends AppCompatActivity {
+    ActivityPlaceAddBinding binding;
+    String COORDINATES;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_splash);
+        binding = ActivityPlaceAddBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        new Handler().postDelayed(() -> {
-            if (Constants.auth().getCurrentUser() == null) {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-                finish();
-            } else {
-                startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));
-                finish();
-            }
-        }, 2000);
+        binding.toolbar.back.setOnClickListener(v -> onBackPressed());
+
+        COORDINATES = getIntent().getStringExtra(Constants.COORDINATES);
+
+        Toast.makeText(this, COORDINATES, Toast.LENGTH_SHORT).show();
 
     }
 }

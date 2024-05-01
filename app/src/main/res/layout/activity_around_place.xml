@@ -73,7 +73,6 @@
                     android:layout_height="wrap_content"
                     android:text="Enter coordinates in decimal" />
 
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -83,6 +82,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/latitude"
+                    style="@style/Widget.Material3.TextInputLayout.FilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:boxBackgroundColor="@color/grey"
@@ -111,6 +111,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/longitude"
+                    style="@style/Widget.Material3.TextInputLayout.FilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:boxBackgroundColor="@color/grey"

@@ -47,17 +47,19 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/email"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:boxBackgroundColor="#E5E5E5"
+                    app:boxBackgroundColor="@color/white"
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusTopStart="12dp"
                     android:layout_marginTop="10dp"
-                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidth="1dp"
                     android:hint="Email"
-                    app:boxStrokeWidthFocused="0dp">
+                    app:boxStrokeColor="@color/blue"
+                    app:boxStrokeWidthFocused="1dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -71,18 +73,19 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/password"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:boxBackgroundColor="#E5E5E5"
+                    app:boxBackgroundColor="@color/white"
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusTopStart="12dp"
                     android:layout_marginTop="10dp"
-                    app:boxStrokeWidth="0dp"
+                    app:boxStrokeWidth="1dp"
                     app:passwordToggleEnabled="true"
                     android:hint="Password"
-                    app:boxStrokeWidthFocused="0dp">
+                    app:boxStrokeWidthFocused="1dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
