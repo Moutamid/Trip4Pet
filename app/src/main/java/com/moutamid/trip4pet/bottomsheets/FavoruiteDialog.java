@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.moutamid.trip4pet.BottomSheetDismissListener;
+import com.moutamid.trip4pet.listener.BottomSheetDismissListener;
 import com.moutamid.trip4pet.databinding.FavoritesLayoutBinding;
 
 public class FavoruiteDialog extends BottomSheetDialogFragment {

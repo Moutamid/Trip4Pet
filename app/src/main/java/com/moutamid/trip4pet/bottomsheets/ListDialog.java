@@ -11,10 +11,9 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.moutamid.trip4pet.BottomSheetDismissListener;
+import com.moutamid.trip4pet.listener.BottomSheetDismissListener;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.adapters.LocationAdapter;
-import com.moutamid.trip4pet.databinding.FilterFragmentBinding;
 import com.moutamid.trip4pet.databinding.ListDialogBinding;
 import com.moutamid.trip4pet.models.LocationsModel;
 

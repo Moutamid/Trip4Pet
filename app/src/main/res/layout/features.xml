@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="15dp"
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardElevation="0dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textStyle="bold"
+            android:text="Activities Nearby"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/text"
+            android:id="@+id/line"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/round" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/line"
+            android:layout_marginVertical="5dp"
+            android:layout_above="@id/apply"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:id="@+id/features"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/apply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Apply" />
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -5,8 +5,8 @@
     <color name="white2">#FFFFFF</color>
     <color name="white">#F7F6F6</color>
     <color name="blue">#068CEB</color>
-    <color name="blue_light">#ACD8F8</color>
     <color name="blue_card">#E3EBFC</color>
+    <color name="blue_light">#ACD8F8</color>
     <color name="grey">#D9D9D9</color>
     <color name="grey3">#EDEDED</color>
     <color name="grey2">#C7C7C7</color>
@@ -15,6 +15,7 @@
     <color name="red">#F44336</color>
     <color name="gold">#FFC107</color>
     <color name="green">#25D89F</color>
+    <color name="green_card">#CEF6E9</color>
     <color name="card_bs">#F7F1F8</color>
     <color name="card_bs2">#F0F0F0</color>
 </resources>

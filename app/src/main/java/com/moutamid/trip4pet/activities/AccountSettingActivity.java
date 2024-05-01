@@ -44,8 +44,8 @@ public class AccountSettingActivity extends AppCompatActivity {
 
         binding.vehicle.setOnClickListener(v  -> startActivity(new Intent(this, VehicleActivity.class)));
         binding.name.setOnClickListener(v  -> startActivity(new Intent(this, NameActivity.class)));
-        binding.social.setOnClickListener(v  -> startActivity(new Intent(this, SocialActivity.class)));
-        binding.code.setOnClickListener(v  -> showCodeDialog());
+//        binding.social.setOnClickListener(v  -> startActivity(new Intent(this, SocialActivity.class)));
+//        binding.code.setOnClickListener(v  -> showCodeDialog());
         binding.password.setOnClickListener(v  -> startActivity(new Intent(this, PasswordActivity.class)));
 
     }

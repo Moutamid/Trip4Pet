@@ -2,6 +2,7 @@ package com.moutamid.trip4pet.activities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -73,6 +75,9 @@ public class DetailActivity extends AppCompatActivity {
             LayoutInflater inflater = getLayoutInflater();
             View customEditTextLayout = inflater.inflate(R.layout.icon, null);
             ImageView image = customEditTextLayout.findViewById(R.id.image);
+            CardView card = customEditTextLayout.findViewById(R.id.card);
+            card.setCardBackgroundColor(getResources().getColor(R.color.green_card));
+            image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
             image.setImageResource(s);
             binding.servicesIcon.addView(customEditTextLayout);
         }

@@ -1,6 +1,7 @@
 package com.moutamid.trip4pet.bottomsheets;
 
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,9 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.moutamid.trip4pet.BottomSheetDismissListener;
+import com.moutamid.trip4pet.listener.BottomSheetDismissListener;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.databinding.FilterFragmentBinding;
 import com.moutamid.trip4pet.models.FilterModel;
@@ -74,6 +76,12 @@ public class FilterDialog extends BottomSheetDialogFragment {
             lock.setVisibility(View.GONE);
             text.setText(s);
             checkbox.setEnabled(true);
+
+            MaterialCardView card = customEditTextLayout.findViewById(R.id.card);
+            card.setOnClickListener(v -> {
+                checkbox.setChecked(!checkbox.isChecked());
+            });
+
             binding.places.addView(customEditTextLayout);
         }
     }
@@ -109,6 +117,8 @@ public class FilterDialog extends BottomSheetDialogFragment {
             ImageView image = customEditTextLayout.findViewById(R.id.image);
             TextView text = customEditTextLayout.findViewById(R.id.text);
 
+            image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+
             image.setImageResource(s.icon);
             text.setText(s.name);
             binding.services.addView(customEditTextLayout);
@@ -139,7 +149,7 @@ public class FilterDialog extends BottomSheetDialogFragment {
 
             ImageView image = customEditTextLayout.findViewById(R.id.image);
             TextView text = customEditTextLayout.findViewById(R.id.text);
-
+            image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
             image.setImageResource(s.icon);
             text.setText(s.name);
             binding.activities.addView(customEditTextLayout);
