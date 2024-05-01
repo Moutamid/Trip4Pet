@@ -26,7 +26,7 @@ public class SplashActivity extends AppCompatActivity {
         });
 
         new Handler().postDelayed(() -> {
-            if (Constants.auth().getCurrentUser() == null) {
+            if (Constants.auth().getCurrentUser() != null) {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();
             } else {
