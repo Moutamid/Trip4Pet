@@ -26,4 +26,9 @@
         <item name="checkedIconTint">@color/grey</item>
     </style>
 
+    <style name="DialogAnim">
+        <item name="android:windowEnterAnimation">@animator/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@animator/slide_out_bottom</item>
+    </style>
+
 </resources>

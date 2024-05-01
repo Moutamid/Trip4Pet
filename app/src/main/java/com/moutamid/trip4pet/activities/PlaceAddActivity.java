@@ -1,40 +1,59 @@
 package com.moutamid.trip4pet.activities;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
+import com.moutamid.trip4pet.adapters.ImageAdapter;
+import com.moutamid.trip4pet.bottomsheets.FilterDialog;
 import com.moutamid.trip4pet.databinding.ActivityPlaceAddBinding;
+import com.moutamid.trip4pet.listener.ImageListener;
 import com.moutamid.trip4pet.models.FilterModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class PlaceAddActivity extends AppCompatActivity {
     ActivityPlaceAddBinding binding;
     String COORDINATES;
     ArrayList<FilterModel> activities = new ArrayList<>();
     ArrayList<FilterModel> services = new ArrayList<>();
+    private final int limit = 10;
+    private static final int PICK_FROM_GALLERY = 1;
+    ImageAdapter adapter;
+    ArrayList<Uri> carImagesList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +65,7 @@ public class PlaceAddActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        carImagesList = new ArrayList<>();
         binding.toolbar.back.setOnClickListener(v -> onBackPressed());
 
         COORDINATES = getIntent().getStringExtra(Constants.COORDINATES);
@@ -60,6 +79,73 @@ public class PlaceAddActivity extends AppCompatActivity {
         addServices();
         addActivities();
 
+        List<String> list = Arrays.asList(FilterDialog.placesList);
+        ArrayAdapter<String> exerciseAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, list);
+        binding.placesList.setAdapter(exerciseAdapter);
+
+        binding.btnAddCarPhoto.setOnClickListener(v -> {
+            if (carImagesList.size() >= limit) {
+                Toast.makeText(this, "Required Number of Images are selected", Toast.LENGTH_SHORT).show();
+            } else {
+                showDialog();
+            }
+        });
+
+        binding.AddPhotoLayout.setOnClickListener(v -> {
+            if (carImagesList.size() >= limit) {
+                Toast.makeText(this, "Required Number of Images are selected", Toast.LENGTH_SHORT).show();
+            } else {
+                showDialog();
+            }
+        });
+
+    }
+
+    private void showDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bs_get_image);
+
+        MaterialButton openCamera = dialog.findViewById(R.id.btnOpenCamera);
+        MaterialButton openGallery = dialog.findViewById(R.id.btnOpenGallery);
+        MaterialButton cancel = dialog.findViewById(R.id.btnCancel);
+
+        cancel.setOnClickListener(v -> {
+            dialog.cancel();
+        });
+
+        openGallery.setOnClickListener(v -> {
+            getImageFromGallery();
+            dialog.cancel();
+        });
+
+        openCamera.setOnClickListener(v -> {
+            getImageFromCamera();
+            dialog.cancel();
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnim;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    private void getImageFromCamera() {
+        ImagePicker.with(this)
+                .cameraOnly()
+                .compress(512)
+                .maxResultSize(1080, 1080)
+                .start();
+    }
+
+    private void getImageFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // intent.setType("image/*");
+        // intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(Intent.createChooser(intent, ""), PICK_FROM_GALLERY);
     }
 
     private void addActivities() {
@@ -136,7 +222,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                     RelativeLayout main = (RelativeLayout) view;
                     MaterialCheckBox checkbox = main.findViewById(R.id.checkbox);
                     TextView text = main.findViewById(R.id.text);
-                    if (check.name.trim().equals(text.getText().toString().trim())){
+                    if (check.name.trim().equals(text.getText().toString().trim())) {
                         checkbox.setChecked(true);
                     }
                 }
@@ -152,7 +238,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                     MaterialCheckBox checkbox = main.findViewById(R.id.checkbox);
                     TextView text = main.findViewById(R.id.text);
                     ImageView image = main.findViewById(R.id.image);
-                    if (checkbox.isChecked()){
+                    if (checkbox.isChecked()) {
                         finalList.add(new FilterModel(text.getText().toString(), (Integer) image.getTag()));
                     }
                 }
@@ -210,4 +296,88 @@ public class PlaceAddActivity extends AppCompatActivity {
         service.add(new FilterModel("Washing for motorhome", R.drawable.soap_solid));
         return service;
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            if (requestCode == PICK_FROM_GALLERY) {
+                try {
+                    if (resultCode == RESULT_OK && data != null && data.getClipData() != null) {
+                        binding.AddPhotoLayout.setVisibility(View.GONE);
+                        binding.AddPhotoLayoutRecycler.setVisibility(View.VISIBLE);
+                        int currentImage = 0;
+
+                        while (currentImage < data.getClipData().getItemCount()) {
+                            if (currentImage < limit) {
+                                carImagesList.add(data.getClipData().getItemAt(currentImage).getUri());
+                            }
+                            currentImage++;
+                        }
+
+                        adapter = new ImageAdapter(this, carImagesList, listener);
+                        binding.RecyclerViewImageList.setAdapter(adapter);
+                    } else {
+                        Toast.makeText(this, "Please Select Multiple Images", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+                    binding.AddPhotoLayout.setVisibility(View.GONE);
+                    binding.AddPhotoLayoutRecycler.setVisibility(View.VISIBLE);
+
+                    carImagesList.add(data.getData());
+
+                    adapter = new ImageAdapter(this, carImagesList, listener);
+                    binding.RecyclerViewImageList.setAdapter(adapter);
+                }
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    ImageListener listener = new ImageListener() {
+        @Override
+        public void onClick(int pos) {
+            showMenu(pos);
+        }
+    };
+
+    private void showMenu(int pos) {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bs_image_menu);
+
+        Button removeImg = dialog.findViewById(R.id.btnRemoveImage);
+
+        removeImg.setOnClickListener(remove -> {
+            try {
+                if (carImagesList.size() == 1) {
+                    carImagesList.remove(pos);
+                    adapter.notifyItemRemoved(pos);
+                    dialog.cancel();
+                    if (carImagesList.isEmpty()) {
+                        binding.AddPhotoLayoutRecycler.setVisibility(View.GONE);
+                        binding.AddPhotoLayout.setVisibility(View.VISIBLE);
+                    }
+                }
+                carImagesList.remove(pos);
+                adapter.notifyItemRemoved(pos);
+                dialog.cancel();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        dialog.getWindow().getAttributes().windowAnimations = R.style.Theme_CarsDealersHub_BottomSheetAnim;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
 }

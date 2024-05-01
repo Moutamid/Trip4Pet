@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class FilterDialog extends BottomSheetDialogFragment {
     FilterFragmentBinding binding;
     private BottomSheetDismissListener listener;
-    String[] placesList = {
+    public static String[] placesList = {
             "Free motorhome area",
             "Paying motorhome area",
             "Private car park for campers",

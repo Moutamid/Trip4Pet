@@ -28,8 +28,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:text="Clear Filters"
+        android:textStyle="bold"
         android:textColor="@color/red"
-        app:backgroundTint="@color/card_bs" />
+        app:backgroundTint="@color/red_bg" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
