@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,26 +24,21 @@ import com.moutamid.trip4pet.databinding.FilterFragmentBinding;
 import com.moutamid.trip4pet.models.FilterModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FilterDialog extends BottomSheetDialogFragment {
     FilterFragmentBinding binding;
     private BottomSheetDismissListener listener;
     public static String[] placesList = {
-            "Free motorhome area",
-            "Paying motorhome area",
-            "Private car park for campers",
-            "MH parking without services",
-            "Homestays accommodation",
-            "Service area without parking",
-            "Picnic area",
-            "Rest area",
-            "Camping",
-            "On the farm (farm, vineyard...)",
-            "Surrounded by nature",
-            "Parking lot day/night",
-            "Daily parking lot only",
-            "Off-road (4x4)",
-            "Extra services"
+            "Park",
+            "Restaurant",
+            "Beach",
+            "Other",
+    };
+    public static String[] vehicleHeight = {
+            "5.10'", "6.2'", "6.6'", "6.10'", "7.2'", "7.6'", "7.10'", "8.2'", "8.6'", "8.10'", "9.2'", "9.6'", "9.10'",
+            "10.2'", "10.6'", "10.10'", "11.2'", "11.6'", "11.10'", "12.2'", "12.6'", "12.10'",
     };
     ArrayList<FilterModel> service = new ArrayList<>();
     ArrayList<FilterModel> activities = new ArrayList<>();
@@ -59,6 +55,10 @@ public class FilterDialog extends BottomSheetDialogFragment {
         addPlaces();
         addActivities();
         addServices();
+
+        List<String> list = Arrays.asList(vehicleHeight);
+        ArrayAdapter<String> exerciseAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_dropdown_item_1line, list);
+        binding.heightList.setAdapter(exerciseAdapter);
 
         return binding.getRoot();
     }
