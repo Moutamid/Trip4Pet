@@ -87,7 +87,8 @@ public class PlaceAddActivity extends AppCompatActivity {
             if (carImagesList.size() >= limit) {
                 Toast.makeText(this, "Required Number of Images are selected", Toast.LENGTH_SHORT).show();
             } else {
-                showDialog();
+//                showDialog();
+                getImageFromGallery();
             }
         });
 
@@ -95,7 +96,8 @@ public class PlaceAddActivity extends AppCompatActivity {
             if (carImagesList.size() >= limit) {
                 Toast.makeText(this, "Required Number of Images are selected", Toast.LENGTH_SHORT).show();
             } else {
-                showDialog();
+//                showDialog();
+                getImageFromGallery();
             }
         });
 
