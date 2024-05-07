@@ -192,7 +192,7 @@ public class PlaceAddActivity extends AppCompatActivity {
 
         String t = b ? "Select All Activities that apply" : "Select All Services that apply";
         textview.setText(t);
-        ArrayList<FilterModel> list = b ? getActivities() : getServices();
+        ArrayList<FilterModel> list = b ? Constants.getActivities() : Constants.getServices();
         int color = b ? R.color.blue : R.color.green;
         for (FilterModel s : list) {
             LayoutInflater inflater = getLayoutInflater();
@@ -260,44 +260,6 @@ public class PlaceAddActivity extends AppCompatActivity {
 
     }
 
-    private ArrayList<FilterModel> getActivities() {
-        ArrayList<FilterModel> activities = new ArrayList<>();
-        activities.add(new FilterModel("Playground", R.drawable.ride));
-        activities.add(new FilterModel("Point of view", R.drawable.binoculars_solid));
-        activities.add(new FilterModel("Swimming possible", R.drawable.person_swimming_solid));
-        activities.add(new FilterModel("Climbing (Sites of)", R.drawable.climbing_with_rope));
-        activities.add(new FilterModel("Canoe/kayak (Base of)", R.drawable.kayak));
-        activities.add(new FilterModel("Fishing spots", R.drawable.fish_fins_solid));
-        activities.add(new FilterModel("Beach fisheries", R.drawable.umbrella_beach_solid));
-        activities.add(new FilterModel("Departure of hikes", R.drawable.person_hiking_solid));
-        activities.add(new FilterModel("Monuments to visit", R.drawable.monument_solid));
-        activities.add(new FilterModel("Mountain bike tracks", R.drawable.bicycle_solid));
-        activities.add(new FilterModel("Windsurf/kitesurf (Spot of)", R.drawable.kitesurf));
-        activities.add(new FilterModel("Beautiful motorcycle rides", R.drawable.motorcycle_solid));
-        return activities;
-    }
-
-    private ArrayList<FilterModel> getServices() {
-        ArrayList<FilterModel> service = new ArrayList<>();
-        service.add(new FilterModel("Electricity (access possible)", R.drawable.plug_circle_check_solid));
-        service.add(new FilterModel("Drinking water", R.drawable.faucet_drip_solid));
-        service.add(new FilterModel("Black water", R.drawable.toilet_solid));
-        service.add(new FilterModel("Wastewater", R.drawable.dumpster_solid));
-        service.add(new FilterModel("Waste container", R.drawable.dumpster_solid));
-        service.add(new FilterModel("Bakery", R.drawable.cake_candles_solid));
-        service.add(new FilterModel("Public toilets", R.drawable.restroom_solid));
-        service.add(new FilterModel("Showers (possible access)", R.drawable.shower_solid));
-        service.add(new FilterModel("Internet access via WiFi", R.drawable.wifi_solid));
-        service.add(new FilterModel("Winter-caravanning", R.drawable.snowman_solid));
-        service.add(new FilterModel("Pets allowed", R.drawable.dog_solid));
-        service.add(new FilterModel("Swimming pool", R.drawable.person_swimming_solid));
-        service.add(new FilterModel("Laundry", R.drawable.jug_detergent_solid));
-        service.add(new FilterModel("LPG station", R.drawable.gas_pump_solid));
-        service.add(new FilterModel("Bottled gas service", R.drawable.fire_flame_simple_solid));
-        service.add(new FilterModel("3G/4G internet", R.drawable.signal_solid));
-        service.add(new FilterModel("Washing for motorhome", R.drawable.soap_solid));
-        return service;
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

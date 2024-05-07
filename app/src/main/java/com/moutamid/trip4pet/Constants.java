@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.moutamid.trip4pet.models.FilterModel;
 import com.moutamid.trip4pet.models.LocationsModel;
 
 import org.json.JSONException;
@@ -33,6 +34,45 @@ public class Constants {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("ChefDarbariApp");
         db.keepSynced(true);
         return db;
+    }
+
+    public static ArrayList<FilterModel> getActivities() {
+        ArrayList<FilterModel> activities = new ArrayList<>();
+        activities.add(new FilterModel("Pet Play Area", R.drawable.ride));
+        activities.add(new FilterModel("Scenic Views", R.drawable.binoculars_solid));
+        activities.add(new FilterModel("Pet-friendly Swimming", R.drawable.person_swimming_solid));
+        activities.add(new FilterModel("Pet-friendly Climbing Sites", R.drawable.climbing_with_rope));
+        activities.add(new FilterModel("Pet-friendly Canoe/Kayak Bases", R.drawable.kayak));
+        activities.add(new FilterModel("Pet-friendly Fishing Spots", R.drawable.fish_fins_solid));
+        activities.add(new FilterModel("Pet-friendly Beaches", R.drawable.umbrella_beach_solid));
+        activities.add(new FilterModel("Pet-friendly Hiking Trails", R.drawable.person_hiking_solid));
+        activities.add(new FilterModel("Pet-friendly Monuments", R.drawable.monument_solid));
+        activities.add(new FilterModel("Pet-friendly Mountain Bike Tracks", R.drawable.bicycle_solid));
+        activities.add(new FilterModel("Pet-friendly Windsurf/Kitesurf Spots", R.drawable.kitesurf));
+        activities.add(new FilterModel("Scenic Motorcycle Rides", R.drawable.motorcycle_solid));
+        return activities;
+    }
+
+    public static ArrayList<FilterModel> getServices() {
+        ArrayList<FilterModel> service = new ArrayList<>();
+        service.add(new FilterModel("Veterinarian", R.drawable.plug_circle_check_solid));  // Placeholder icon
+        service.add(new FilterModel("Pet Sitting", R.drawable.faucet_drip_solid));  // Placeholder icon
+        service.add(new FilterModel("Dog Walking", R.drawable.toilet_solid));  // Placeholder icon
+        service.add(new FilterModel("Pet Boarding", R.drawable.dumpster_solid));  // Placeholder icon
+        service.add(new FilterModel("Pet Grooming", R.drawable.dumpster_solid));  // Placeholder icon (Consider using scissors icon)
+        service.add(new FilterModel("Pet Food Available", R.drawable.cake_candles_solid));  // Placeholder icon
+        service.add(new FilterModel("Dog Park", R.drawable.restroom_solid));  // Placeholder icon
+        service.add(new FilterModel("Pet Waste Disposal", R.drawable.shower_solid));  // Placeholder icon
+        service.add(new FilterModel("Pet-Friendly Amenities", R.drawable.wifi_solid));  // Placeholder icon
+        service.add(new FilterModel("Laundry (for pet items)", R.drawable.jug_detergent_solid));
+        service.add(new FilterModel("Freshwater for Pets", R.drawable.faucet_drip_solid));  // Already appropriate
+        service.add(new FilterModel("Public toilets (for pet waste disposal)", R.drawable.restroom_solid));  // Clarification
+        service.add(new FilterModel("Internet for Booking Services", R.drawable.wifi_solid));  // Already appropriate
+        service.add(new FilterModel("LPG station (for heating)", R.drawable.gas_pump_solid));  // Clarification
+        service.add(new FilterModel("Bottled gas service (for heating)", R.drawable.fire_flame_simple_solid));  // Clarification
+        service.add(new FilterModel("3G/4G internet", R.drawable.signal_solid));  // Already appropriate
+        service.add(new FilterModel("Washing for pets (and items)", R.drawable.soap_solid));  // Clarification
+        return service;
     }
 
     public static ArrayList<LocationsModel> getList(Context context) {
