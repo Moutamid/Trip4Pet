@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +30,7 @@ import com.moutamid.trip4pet.bottomsheets.FavoruiteDialog;
 import com.moutamid.trip4pet.bottomsheets.FilterDialog;
 import com.moutamid.trip4pet.bottomsheets.ListDialog;
 import com.moutamid.trip4pet.databinding.FragmentAroundMeBinding;
+import com.moutamid.trip4pet.models.FilterModel;
 import com.moutamid.trip4pet.models.LocationsModel;
 
 import java.util.ArrayList;
@@ -101,9 +103,25 @@ public class AroundMeFragment extends Fragment {
             } else if (model.typeOfPlace.equals("Beach")) {
                 icon = R.drawable.beach_mark;
             }
+            for (FilterModel filterModel : model.activities){
+                View marker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
+                ImageView iconImage = marker.findViewById(R.id.icon);
+                iconImage.setImageResource(filterModel.icon);
+                googleMap.addMarker(new MarkerOptions()
+                        .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), marker)))
+                        .position(latLng).title(model.name)).setTag(model.id);
+            }
+            for (FilterModel filterModel : model.services){
+                View marker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
+                ImageView iconImage = marker.findViewById(R.id.icon);
+                iconImage.setImageResource(filterModel.icon);
+                googleMap.addMarker(new MarkerOptions()
+                        .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), marker)))
+                        .position(latLng).title(model.name)).setTag(model.id);
+            }
             if (icon != 0) {
                 googleMap.addMarker(new MarkerOptions()
-                        .icon(BitmapDescriptorFactory.fromBitmap(convertVectorToBitmap(requireContext(), icon, widthPx, (model.typeOfPlace.equals("Restaurant") ? heightPx2 : heightPx))))
+                        .icon(BitmapDescriptorFactory.fromBitmap(Constants.convertVectorToBitmap(requireContext(), icon, widthPx, (model.typeOfPlace.equals("Restaurant") ? heightPx2 : heightPx))))
                         .position(latLng).title(model.name)).setTag(model.id);
             } else {
                 googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)).position(latLng).title(model.name)).setTag(model.id);
@@ -152,24 +170,5 @@ public class AroundMeFragment extends Fragment {
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(30.3753, 69.3451)));
 
     };
-
-    public static Bitmap convertVectorToBitmap(Context context, int vectorDrawableId, int width, int height) {
-        // Get the VectorDrawable from the resources
-        Drawable vectorDrawable = context.getDrawable(vectorDrawableId);
-        if (vectorDrawable instanceof VectorDrawable) {
-            // Create a Bitmap with the desired width and height
-            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            // Create a Canvas to draw the vector onto the Bitmap
-            Canvas canvas = new Canvas(bitmap);
-            // Set the bounds for the vector drawable
-            vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-            // Draw the vector onto the Canvas
-            vectorDrawable.draw(canvas);
-            return bitmap;
-        } else {
-            // Return null if the drawable is not a VectorDrawable
-            return null;
-        }
-    }
 
 }

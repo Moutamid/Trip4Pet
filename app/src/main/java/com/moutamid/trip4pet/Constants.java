@@ -2,6 +2,13 @@ package com.moutamid.trip4pet;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
+import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -55,24 +62,56 @@ public class Constants {
 
     public static ArrayList<FilterModel> getServices() {
         ArrayList<FilterModel> service = new ArrayList<>();
-        service.add(new FilterModel("Veterinarian", R.drawable.plug_circle_check_solid));  // Placeholder icon
-        service.add(new FilterModel("Pet Sitting", R.drawable.faucet_drip_solid));  // Placeholder icon
-        service.add(new FilterModel("Dog Walking", R.drawable.toilet_solid));  // Placeholder icon
-        service.add(new FilterModel("Pet Boarding", R.drawable.dumpster_solid));  // Placeholder icon
-        service.add(new FilterModel("Pet Grooming", R.drawable.dumpster_solid));  // Placeholder icon (Consider using scissors icon)
-        service.add(new FilterModel("Pet Food Available", R.drawable.cake_candles_solid));  // Placeholder icon
-        service.add(new FilterModel("Dog Park", R.drawable.restroom_solid));  // Placeholder icon
-        service.add(new FilterModel("Pet Waste Disposal", R.drawable.shower_solid));  // Placeholder icon
-        service.add(new FilterModel("Pet-Friendly Amenities", R.drawable.wifi_solid));  // Placeholder icon
-        service.add(new FilterModel("Laundry (for pet items)", R.drawable.jug_detergent_solid));
-        service.add(new FilterModel("Freshwater for Pets", R.drawable.faucet_drip_solid));  // Already appropriate
-        service.add(new FilterModel("Public toilets (for pet waste disposal)", R.drawable.restroom_solid));  // Clarification
-        service.add(new FilterModel("Internet for Booking Services", R.drawable.wifi_solid));  // Already appropriate
-        service.add(new FilterModel("LPG station (for heating)", R.drawable.gas_pump_solid));  // Clarification
-        service.add(new FilterModel("Bottled gas service (for heating)", R.drawable.fire_flame_simple_solid));  // Clarification
-        service.add(new FilterModel("3G/4G internet", R.drawable.signal_solid));  // Already appropriate
-        service.add(new FilterModel("Washing for pets (and items)", R.drawable.soap_solid));  // Clarification
+        service.add(new FilterModel("Spiaggia senza catelli", R.drawable.spiaggia_senza_cartelli));
+        service.add(new FilterModel("Vetrinario", R.drawable.vet));
+        service.add(new FilterModel("Coffee bar", R.drawable.coffee_bar));
+        service.add(new FilterModel("Ristorante", R.drawable.ristorante));
+        service.add(new FilterModel("Spiaggia per cani", R.drawable.spiaggia_per_cani));
+        service.add(new FilterModel("Pet Store", R.drawable.pet_store));
+        service.add(new FilterModel("Area Cani", R.drawable.area_cani));
+        service.add(new FilterModel("Campeggio", R.drawable.campeggio));
+//        service.add(new FilterModel("Pet-Friendly Amenities", R.drawable.wifi_solid));  // Placeholder icon
+//        service.add(new FilterModel("Laundry (for pet items)", R.drawable.jug_detergent_solid));
+//        service.add(new FilterModel("Freshwater for Pets", R.drawable.faucet_drip_solid));  // Already appropriate
+//        service.add(new FilterModel("Public toilets (for pet waste disposal)", R.drawable.restroom_solid));  // Clarification
+//        service.add(new FilterModel("Internet for Booking Services", R.drawable.wifi_solid));  // Already appropriate
+//        service.add(new FilterModel("LPG station (for heating)", R.drawable.gas_pump_solid));  // Clarification
+//        service.add(new FilterModel("Bottled gas service (for heating)", R.drawable.fire_flame_simple_solid));  // Clarification
+//        service.add(new FilterModel("3G/4G internet", R.drawable.signal_solid));  // Already appropriate
+//        service.add(new FilterModel("Washing for pets (and items)", R.drawable.soap_solid));  // Clarification
         return service;
+    }
+
+    public static Bitmap convertVectorToBitmap(Context context, int vectorDrawableId, int width, int height) {
+        // Get the VectorDrawable from the resources
+        Drawable vectorDrawable = context.getDrawable(vectorDrawableId);
+        if (vectorDrawable instanceof VectorDrawable) {
+            // Create a Bitmap with the desired width and height
+            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            // Create a Canvas to draw the vector onto the Bitmap
+            Canvas canvas = new Canvas(bitmap);
+            // Set the bounds for the vector drawable
+            vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            // Draw the vector onto the Canvas
+            vectorDrawable.draw(canvas);
+            return bitmap;
+        } else {
+            // Return null if the drawable is not a VectorDrawable
+            return null;
+        }
+    }
+
+    public static Bitmap createDrawableFromView(Context context, View view) {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        ((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        view.measure(displayMetrics.widthPixels, displayMetrics.heightPixels);
+        view.layout(0, 0, displayMetrics.widthPixels, displayMetrics.heightPixels);
+        view.buildDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(view.getMeasuredWidth(), view.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        return bitmap;
     }
 
     public static ArrayList<LocationsModel> getList(Context context) {
@@ -81,16 +120,16 @@ public class Constants {
         ArrayList<String> images1 = new ArrayList<>();
         images1.add("https://wpassets.graana.com/blog/wp-content/uploads/2023/08/Shakarparian.jpg");
         images1.add("https://live.staticflickr.com/1573/24289734385_009bb6cc0f_b.jpg");
-        ArrayList<Integer> activities1 = new ArrayList<>();
-        activities1.add(R.drawable.ride);
-        activities1.add(R.drawable.person_hiking_solid);
-        activities1.add(R.drawable.monument_solid);
 
-        ArrayList<Integer> services1 = new ArrayList<>();
-        services1.add(R.drawable.wifi_solid);
-        services1.add(R.drawable.plug_circle_check_solid);
-        services1.add(R.drawable.fire_flame_simple_solid);
-        services1.add(R.drawable.snowman_solid);
+        ArrayList<FilterModel> activities1 = new ArrayList<>();
+        activities1.add(new FilterModel("Pet Play Area", R.drawable.ride));
+        activities1.add(new FilterModel("Scenic Views", R.drawable.binoculars_solid));
+        activities1.add(new FilterModel("Scenic Motorcycle Rides", R.drawable.motorcycle_solid));
+
+        ArrayList<FilterModel> services1 = new ArrayList<>();
+        services1.add(new FilterModel("Spiaggia senza catelli", R.drawable.spiaggia_senza_cartelli));
+        services1.add(new FilterModel("Vetrinario", R.drawable.vet));
+        services1.add(new FilterModel("Campeggio", R.drawable.campeggio));
 
         list.add(new LocationsModel(UUID.randomUUID().toString(),
                 "Garden Avenue", "Pakistan", "Islamabad", context.getResources().getString(R.string.lorem), "free", "+123456789", "Park",
@@ -106,13 +145,13 @@ public class Constants {
         images2.add("https://d3mvlb3hz2g78.cloudfront.net/wp-content/uploads/2018/11/thumb_720_450_dreamstime_l_99978767.jpg");
         images2.add("https://olympic.ca/wp-content/uploads/2011/08/CP127536519.jpg?quality=100&w=1131");
 
-        ArrayList<Integer> activities2 = new ArrayList<>();
-        activities2.add(R.drawable.ride);
-        activities2.add(R.drawable.kayak);
+        ArrayList<FilterModel> activities2 = new ArrayList<>();
+        activities2.add(new FilterModel("Pet-friendly Swimming", R.drawable.person_swimming_solid));
+        activities2.add(new FilterModel("Pet-friendly Climbing Sites", R.drawable.climbing_with_rope));
 
-        ArrayList<Integer> services2 = new ArrayList<>();
-        services2.add(R.drawable.toilet_solid);
-        services2.add(R.drawable.wifi_solid);
+        ArrayList<FilterModel> services2 = new ArrayList<>();
+        services2.add(new FilterModel("Pet Store", R.drawable.pet_store));
+        services2.add(new FilterModel("Area Cani", R.drawable.area_cani));
 
         list.add(new LocationsModel(UUID.randomUUID().toString(),
                 "Sailing", "Pakistan", "Karachi", context.getResources().getString(R.string.lorem), "free", "+123456789", "Restaurant",
@@ -126,11 +165,11 @@ public class Constants {
         ArrayList<String> images3 = new ArrayList<>();
         images3.add("https://upload.wikimedia.org/wikipedia/commons/6/61/Black_Hawk_flying_over_a_valley_in_Bamyan.jpg");
 
-        ArrayList<Integer> activities3 = new ArrayList<>();
-        ArrayList<Integer> services3 = new ArrayList<>();
-        services3.add(R.drawable.plug_circle_check_solid);
-        services3.add(R.drawable.gas_pump_solid);
-        services3.add(R.drawable.restroom_solid);
+        ArrayList<FilterModel> activities3 = new ArrayList<>();
+        ArrayList<FilterModel> services3 = new ArrayList<>();
+        services3.add(new FilterModel("Vetrinario", R.drawable.vet));
+        services3.add(new FilterModel("Coffee bar", R.drawable.coffee_bar));
+        services3.add(new FilterModel("Ristorante", R.drawable.ristorante));
 
         list.add(new LocationsModel(UUID.randomUUID().toString(),
                 "Bamyan", "Afghanistan", "Asian Highway 77", context.getResources().getString(R.string.lorem), "free", "+123456789", "Park",

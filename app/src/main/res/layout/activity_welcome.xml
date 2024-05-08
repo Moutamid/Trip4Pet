@@ -12,14 +12,15 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:scaleType="centerCrop"
-        android:alpha=".6"
-        android:src="@drawable/pets"/>
+        android:alpha=".7"
+        android:src="@drawable/cindy_1"/>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/logo"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="25dp"
+        app:tint="@color/blue_light"
         android:layout_centerHorizontal="true"
         android:src="@drawable/icon" />
 
@@ -29,6 +30,7 @@
         android:orientation="vertical"
         android:layout_below="@id/logo"
         android:layout_marginTop="15dp"
+        android:gravity="bottom"
         android:layout_marginHorizontal="12dp"
         android:layout_above="@id/bottom">
 

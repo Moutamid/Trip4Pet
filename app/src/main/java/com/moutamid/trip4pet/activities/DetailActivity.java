@@ -52,11 +52,11 @@ public class DetailActivity extends AppCompatActivity {
 
         binding.imageSlider.setSliderAdapter(new SliderAdapter(this, model.images));
 
-        for (int s : model.activities) {
+        for (FilterModel s : model.activities) {
             LayoutInflater inflater = getLayoutInflater();
             View customEditTextLayout = inflater.inflate(R.layout.icon, null);
             ImageView image = customEditTextLayout.findViewById(R.id.image);
-            image.setImageResource(s);
+            image.setImageResource(s.icon);
             binding.activitiesIcon.addView(customEditTextLayout);
         }
 
@@ -71,14 +71,14 @@ public class DetailActivity extends AppCompatActivity {
         String address = model.name + ", " + model.city + ", " + model.country;
         binding.location.setText(address);
 
-        for (int s : model.services) {
+        for (FilterModel s : model.services) {
             LayoutInflater inflater = getLayoutInflater();
             View customEditTextLayout = inflater.inflate(R.layout.icon, null);
             ImageView image = customEditTextLayout.findViewById(R.id.image);
             CardView card = customEditTextLayout.findViewById(R.id.card);
             card.setCardBackgroundColor(getResources().getColor(R.color.green_card));
             image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
-            image.setImageResource(s);
+            image.setImageResource(s.icon);
             binding.servicesIcon.addView(customEditTextLayout);
         }
 
