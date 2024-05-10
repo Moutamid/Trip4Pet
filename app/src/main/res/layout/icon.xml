@@ -18,7 +18,6 @@
             android:layout_height="24dp"
             android:id="@+id/image"
             android:layout_margin="8dp"
-            app:tint="@color/blue"
             android:src="@drawable/toilet_solid" />
 
     </androidx.cardview.widget.CardView>

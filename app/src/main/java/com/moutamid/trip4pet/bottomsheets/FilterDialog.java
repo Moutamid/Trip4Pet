@@ -99,7 +99,7 @@ public class FilterDialog extends BottomSheetDialogFragment {
             ImageView image = customEditTextLayout.findViewById(R.id.image);
             TextView text = customEditTextLayout.findViewById(R.id.text);
 
-            image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+         //   image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
 
             image.setImageResource(s.icon);
             text.setText(s.name);

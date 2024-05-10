@@ -70,6 +70,10 @@ public class Constants {
         service.add(new FilterModel("Pet Store", R.drawable.pet_store));
         service.add(new FilterModel("Area Cani", R.drawable.area_cani));
         service.add(new FilterModel("Campeggio", R.drawable.campeggio));
+        service.add(new FilterModel("Albergo", R.drawable.albergo));
+        service.add(new FilterModel("Lavanderia", R.drawable.lavanderia));
+        service.add(new FilterModel("Lavanderia For Pet", R.drawable.lavanderia_for_pet));
+
 //        service.add(new FilterModel("Pet-Friendly Amenities", R.drawable.wifi_solid));  // Placeholder icon
 //        service.add(new FilterModel("Laundry (for pet items)", R.drawable.jug_detergent_solid));
 //        service.add(new FilterModel("Freshwater for Pets", R.drawable.faucet_drip_solid));  // Already appropriate

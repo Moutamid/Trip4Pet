@@ -38,8 +38,7 @@
                     android:id="@+id/image"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/star_solid"
-                    app:tint="@color/green" />
+                    android:src="@drawable/star_solid" />
 
                 <TextView
                     android:id="@+id/text"

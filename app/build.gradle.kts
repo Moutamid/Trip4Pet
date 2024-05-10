@@ -33,17 +33,17 @@ android {
 }
 
 dependencies {
-    implementation("com.fxn769:stash:1.3.2")
-    implementation("com.github.smarteist:autoimageslider:1.4.0")
-    implementation("com.iarcuschin:simpleratingbar:0.1.5")
+    implementation(libs.stash)
+    implementation(libs.autoimageslider)
+    implementation(libs.simpleratingbar)
 
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
-    implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation(libs.play.services.maps)
+    implementation(libs.play.services.location)
 
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    implementation("com.github.dhaval2404:imagepicker:2.1")
+    implementation(libs.glide)
+    implementation(libs.imagepicker)
 
-    implementation(platform("com.google.firebase:firebase-bom:32.8.1"))
+    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-crashlytics")

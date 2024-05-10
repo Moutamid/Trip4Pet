@@ -158,6 +158,7 @@ public class PlaceAddActivity extends AppCompatActivity {
             View customEditTextLayout = inflater.inflate(R.layout.icon, null);
             ImageView image = customEditTextLayout.findViewById(R.id.image);
             image.setImageResource(s.icon);
+            image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
             binding.activitiesIcon.addView(customEditTextLayout);
         }
     }
@@ -171,7 +172,7 @@ public class PlaceAddActivity extends AppCompatActivity {
             ImageView image = customEditTextLayout.findViewById(R.id.image);
             CardView card = customEditTextLayout.findViewById(R.id.card);
             card.setCardBackgroundColor(getResources().getColor(R.color.green_card));
-            image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+            //  image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
             image.setImageResource(s.icon);
             binding.servicesIcon.addView(customEditTextLayout);
         }
@@ -193,7 +194,6 @@ public class PlaceAddActivity extends AppCompatActivity {
         String t = b ? "Select All Activities that apply" : "Select All Services that apply";
         textview.setText(t);
         ArrayList<FilterModel> list = b ? Constants.getActivities() : Constants.getServices();
-        int color = b ? R.color.blue : R.color.green;
         for (FilterModel s : list) {
             LayoutInflater inflater = getLayoutInflater();
             View customEditTextLayout = inflater.inflate(R.layout.filter_check_layout, null);
@@ -207,11 +207,11 @@ public class PlaceAddActivity extends AppCompatActivity {
             lock.setVisibility(View.GONE);
             text.setText(s.name);
             checkbox.setEnabled(true);
-            image.setImageTintList(ColorStateList.valueOf(getResources().getColor(color)));
+            if (b) {
+                image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
+            }
             MaterialCardView card = customEditTextLayout.findViewById(R.id.card);
-            card.setOnClickListener(v -> {
-                checkbox.setChecked(!checkbox.isChecked());
-            });
+            card.setOnClickListener(v -> checkbox.setChecked(!checkbox.isChecked()));
 
             features.addView(customEditTextLayout);
         }

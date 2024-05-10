@@ -39,12 +39,6 @@ public class DetailActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         binding = ActivityDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-//
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
 
         model = (LocationsModel) Stash.getObject(Constants.MODEL, LocationsModel.class);
 
@@ -56,6 +50,7 @@ public class DetailActivity extends AppCompatActivity {
             LayoutInflater inflater = getLayoutInflater();
             View customEditTextLayout = inflater.inflate(R.layout.icon, null);
             ImageView image = customEditTextLayout.findViewById(R.id.image);
+            image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
             image.setImageResource(s.icon);
             binding.activitiesIcon.addView(customEditTextLayout);
         }
@@ -77,7 +72,7 @@ public class DetailActivity extends AppCompatActivity {
             ImageView image = customEditTextLayout.findViewById(R.id.image);
             CardView card = customEditTextLayout.findViewById(R.id.card);
             card.setCardBackgroundColor(getResources().getColor(R.color.green_card));
-            image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+          //  image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
             image.setImageResource(s.icon);
             binding.servicesIcon.addView(customEditTextLayout);
         }
