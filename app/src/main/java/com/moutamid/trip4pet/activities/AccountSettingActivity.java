@@ -13,12 +13,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.fxn.stash.Stash;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.databinding.ActivityAccountSettingBinding;
+import com.moutamid.trip4pet.models.UserModel;
 
 public class AccountSettingActivity extends AppCompatActivity {
     ActivityAccountSettingBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,22 +36,33 @@ public class AccountSettingActivity extends AppCompatActivity {
         });
 
         binding.toolbar.back.setOnClickListener(v -> onBackPressed());
-        binding.toolbar.title.setText("Account Settings");
+        binding.toolbar.title.setText(R.string.account_settings);
 
         binding.logout.setOnClickListener(v -> {
             new MaterialAlertDialogBuilder(this)
-                    .setMessage("Are you sure you want to logout?")
-                    .setPositiveButton("Yes", (dialog, which) -> dialog.dismiss())
-                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                    .setMessage(getString(R.string.are_you_sure_you_want_to_logout))
+                    .setPositiveButton(getString(R.string.yes), (dialog, which) -> dialog.dismiss())
+                    .setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss())
                     .show();
         });
 
-        binding.vehicle.setOnClickListener(v  -> startActivity(new Intent(this, VehicleActivity.class)));
-        binding.name.setOnClickListener(v  -> startActivity(new Intent(this, NameActivity.class)));
+        binding.vehicle.setOnClickListener(v -> startActivity(new Intent(this, VehicleActivity.class)));
+        binding.name.setOnClickListener(v -> startActivity(new Intent(this, NameActivity.class)));
 //        binding.social.setOnClickListener(v  -> startActivity(new Intent(this, SocialActivity.class)));
 //        binding.code.setOnClickListener(v  -> showCodeDialog());
-        binding.password.setOnClickListener(v  -> startActivity(new Intent(this, PasswordActivity.class)));
+        binding.password.setOnClickListener(v -> startActivity(new Intent(this, PasswordActivity.class)));
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        UserModel userModel = (UserModel) Stash.getObject(Constants.STASH_USER, UserModel.class);
+        binding.email.setText(userModel.email);
+        binding.name.setText(userModel.name);
+
+        String vehicle = Stash.getString(Constants.Vehicle, getString(R.string.not_defined));
+        binding.myVehicle.setText(vehicle);
     }
 
     private void showCodeDialog() {

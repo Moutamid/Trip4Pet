@@ -114,6 +114,7 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/google"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Google"
@@ -124,6 +125,7 @@
             app:iconTint="@color/black" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/facebook"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Facebook"

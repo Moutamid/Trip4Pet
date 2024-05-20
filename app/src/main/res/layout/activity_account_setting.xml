@@ -51,7 +51,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="My Name"
+                            android:text="@string/my_name"
                             android:textSize="16sp" />
 
                         <TextView
@@ -99,7 +99,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="My Email"
+                            android:text="@string/my_email"
                             android:textSize="16sp" />
 
                         <TextView
@@ -150,13 +150,13 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Password"
+                            android:text="@string/password"
                             android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Change your password"
+                            android:text="@string/change_your_password"
                             android:textColor="@color/text"
                             android:textSize="13sp" />
 
@@ -198,13 +198,14 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="My Vehicle"
+                            android:text="@string/my_vehicle"
                             android:textSize="16sp" />
 
                         <TextView
+                            android:id="@+id/myVehicle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Not defined"
+                            android:text="@string/not_defined"
                             android:textColor="@color/text"
                             android:textSize="13sp" />
 
@@ -390,13 +391,13 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Delete my personal data"
+                            android:text="@string/delete_my_personal_data"
                             android:textSize="16sp" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="This will delete your whole data"
+                            android:text="@string/this_will_delete_your_whole_data"
                             android:textColor="@color/text"
                             android:textSize="13sp" />
 
@@ -436,7 +437,7 @@
                         android:layout_weight="1"
                         android:textColor="@color/white"
                         android:layout_marginHorizontal="10dp"
-                        android:text="Logout" />
+                        android:text="@string/logout" />
 
                     <ImageView
                         android:layout_width="20dp"

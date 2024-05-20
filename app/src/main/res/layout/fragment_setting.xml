@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="28sp"
-        android:text="Menu"
+        android:text="@string/menu"
         android:layout_marginBottom="12dp"
         android:layout_marginTop="50dp"/>
 
@@ -50,13 +50,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="My Account" />
+                    android:text="@string/my_account" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="13sp"
                     android:textColor="@color/text"
-                    android:text="Manage Your Account" />
+                    android:text="@string/manage_your_account" />
 
             </LinearLayout>
 
@@ -103,13 +103,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="Add Place" />
+                    android:text="@string/add_place" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="13sp"
                     android:textColor="@color/text"
-                    android:text="Mark a New Location" />
+                    android:text="@string/mark_a_new_location" />
 
             </LinearLayout>
 
@@ -156,13 +156,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="Application Setting" />
+                    android:text="@string/application_setting" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="13sp"
                     android:textColor="@color/text"
-                    android:text="Customize Your Experience" />
+                    android:text="@string/customize_your_experience" />
 
             </LinearLayout>
 

@@ -10,14 +10,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.fxn.stash.Stash;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.card.MaterialCardView;
+import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.databinding.ActivityAccountBinding;
+import com.moutamid.trip4pet.models.UserModel;
 
 public class AccountActivity extends AppCompatActivity {
     ActivityAccountBinding binding;
@@ -45,6 +48,13 @@ public class AccountActivity extends AppCompatActivity {
 
         selected = binding.addedPlaces;
         selectedText = binding.addedText;
+
+        UserModel userModel = (UserModel) Stash.getObject(Constants.STASH_USER, UserModel.class);
+        binding.title.setText(userModel.name);
+
+        binding.commentsText.setText(userModel.comments + "\n" + getString(R.string.comments));
+        binding.addedText.setText(userModel.numberOfPlacesAdded + "\n" + getString(R.string.added_places));
+        binding.visitedText.setText(userModel.visitedPlaces + "\n" + getString(R.string.visited_places));
 
         binding.addedPlaces.setOnClickListener(v -> {
             selectedText.setTextColor(getResources().getColor(R.color.text));

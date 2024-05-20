@@ -5,15 +5,22 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.fxn.stash.Stash;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
+import com.moutamid.trip4pet.SplashActivity;
 import com.moutamid.trip4pet.bottomsheets.LanguageDialog;
 import com.moutamid.trip4pet.databinding.ActivitySettingBinding;
+
+import java.util.List;
 
 public class SettingActivity extends AppCompatActivity {
     ActivitySettingBinding binding;
@@ -30,14 +37,35 @@ public class SettingActivity extends AppCompatActivity {
             return insets;
         });
 
-        binding.toolbar.title.setText("Settings");
+        String measure = Stash.getString(Constants.MEASURE, Constants.Metric);
+
+        if (measure.equals(Constants.Metric)){
+            binding.metricChip.setChecked(true);
+        } else {
+            binding.imperialChip.setChecked(true);
+        }
+
+        binding.measureChipGroup.setOnCheckedStateChangeListener(new ChipGroup.OnCheckedStateChangeListener() {
+            @Override
+            public void onCheckedChanged(@NonNull ChipGroup chipGroup, @NonNull List<Integer> list) {
+                String meas = binding.metricChip.isChecked() ? Constants.Metric : Constants.Imperial;
+                Stash.put(Constants.MEASURE, meas);
+            }
+        });
+
+        binding.toolbar.title.setText(R.string.settings);
         binding.toolbar.back.setOnClickListener(v -> onBackPressed());
 
         binding.logout.setOnClickListener(v -> {
             new MaterialAlertDialogBuilder(this)
-                    .setMessage("Are you sure you want to logout?")
-                    .setPositiveButton("Yes", (dialog, which) -> dialog.dismiss())
-                    .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                    .setMessage(getString(R.string.are_you_sure_you_want_to_logout))
+                    .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                        dialog.dismiss();
+                        Constants.auth().signOut();
+                        startActivity(new Intent(this, SplashActivity.class));
+                        finish();
+                    })
+                    .setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss())
                     .show();
         });
 

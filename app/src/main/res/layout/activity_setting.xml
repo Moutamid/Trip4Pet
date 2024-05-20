@@ -8,27 +8,29 @@
     android:background="@color/white"
     tools:context=".activities.SettingActivity">
 
-    <include layout="@layout/toolbar" android:id="@+id/toolbar" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
         android:layout_above="@id/version"
-        android:layout_below="@id/toolbar">
+        android:layout_below="@id/toolbar"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="12dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="12dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:orientation="horizontal"
-                android:padding="12dp"
-                android:gravity="center">
+                android:padding="12dp">
 
                 <ImageView
                     android:layout_width="24dp"
@@ -38,17 +40,17 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:layout_weight="1"
                     android:layout_marginStart="10dp"
-                    android:text="Measuing System" />
+                    android:layout_weight="1"
+                    android:text="@string/measuing_system"
+                    android:textSize="16sp" />
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/grey"
                     app:cardCornerRadius="100dp"
-                    app:cardElevation="0dp"
-                    app:cardBackgroundColor="@color/grey">
+                    app:cardElevation="0dp">
 
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/measureChipGroup"
@@ -64,9 +66,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:checkable="true"
+                            android:checked="true"
                             android:clickable="true"
                             android:focusable="true"
-                            android:checked="true"
                             android:text="Metric (m, Km)"
                             android:textSize="12sp" />
 
@@ -90,19 +92,19 @@
                 android:id="@+id/language"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardBackgroundColor="@color/white"
-                android:clickable="true"
                 android:layout_marginTop="6dp"
-                app:strokeWidth="0dp"
-                app:cardElevation="0dp">
+                android:clickable="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="center"
                     android:orientation="horizontal"
-                    android:padding="12dp"
-                    android:gravity="center">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -112,10 +114,10 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:layout_weight="1"
                         android:layout_marginHorizontal="10dp"
-                        android:text="Language" />
+                        android:layout_weight="1"
+                        android:text="@string/language"
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:layout_width="20dp"
@@ -129,19 +131,19 @@
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardBackgroundColor="@color/white"
-                android:clickable="true"
-                app:strokeWidth="0dp"
                 android:layout_marginTop="6dp"
-                app:cardElevation="0dp">
+                android:clickable="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="center"
                     android:orientation="horizontal"
-                    android:padding="12dp"
-                    android:gravity="center">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="20dp"
@@ -151,10 +153,10 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:layout_weight="1"
                         android:layout_marginHorizontal="10dp"
-                        android:text="Help" />
+                        android:layout_weight="1"
+                        android:text="@string/help"
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:layout_width="20dp"
@@ -169,19 +171,19 @@
                 android:id="@+id/terms"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardBackgroundColor="@color/white"
-                android:clickable="true"
-                app:strokeWidth="0dp"
                 android:layout_marginTop="6dp"
-                app:cardElevation="0dp">
+                android:clickable="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="center"
                     android:orientation="horizontal"
-                    android:padding="12dp"
-                    android:gravity="center">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="20dp"
@@ -191,10 +193,10 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:layout_weight="1"
                         android:layout_marginHorizontal="10dp"
-                        android:text="Terms of Services" />
+                        android:layout_weight="1"
+                        android:text="@string/terms_of_services"
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:layout_width="20dp"
@@ -209,19 +211,19 @@
                 android:id="@+id/privacy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardBackgroundColor="@color/white"
-                android:clickable="true"
                 android:layout_marginTop="6dp"
-                app:strokeWidth="0dp"
-                app:cardElevation="0dp">
+                android:clickable="true"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="center"
                     android:orientation="horizontal"
-                    android:padding="12dp"
-                    android:gravity="center">
+                    android:padding="12dp">
 
                     <ImageView
                         android:layout_width="20dp"
@@ -231,10 +233,10 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:layout_weight="1"
                         android:layout_marginHorizontal="10dp"
-                        android:text="Privacy Policy" />
+                        android:layout_weight="1"
+                        android:text="@string/privacy_policy"
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:layout_width="20dp"
@@ -249,34 +251,34 @@
                 android:id="@+id/logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardBackgroundColor="@color/red"
-                android:clickable="true"
                 android:layout_marginTop="6dp"
-                app:strokeWidth="0dp"
-                app:cardElevation="0dp">
+                android:clickable="true"
+                app:cardBackgroundColor="@color/red"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:gravity="center"
                     android:orientation="horizontal"
-                    android:padding="12dp"
-                    android:gravity="center">
+                    android:padding="12dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:layout_weight="1"
-                        android:textColor="@color/white"
                         android:layout_marginHorizontal="10dp"
-                        android:text="Logout" />
+                        android:layout_weight="1"
+                        android:text="@string/logout"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
 
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        app:tint="@color/white"
-                        android:src="@drawable/logout" />
+                        android:src="@drawable/logout"
+                        app:tint="@color/white" />
 
                 </LinearLayout>
 
@@ -287,12 +289,12 @@
     </androidx.core.widget.NestedScrollView>
 
     <TextView
+        android:id="@+id/version"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="V 1.0.0"
-        android:id="@+id/version"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:text="V 1.0.0" />
 
 </RelativeLayout>

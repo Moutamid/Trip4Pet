@@ -52,12 +52,15 @@
                         <ImageView
                             android:layout_width="50dp"
                             android:layout_height="50dp"
+                            app:tint="@color/blue"
                             android:src="@drawable/no_car" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Not Defined"
+                            android:text="@string/not_defined"
+                            android:textColor="@color/blue"
+                            android:textStyle="bold"
                             android:gravity="center"
                             android:layout_marginTop="5dp" />
 
@@ -92,8 +95,9 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Van"
+                            android:text="@string/van"
                             android:gravity="center"
+                            android:textStyle="bold"
                             android:layout_marginTop="5dp" />
 
                     </LinearLayout>
@@ -135,8 +139,9 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Large Van"
+                            android:text="@string/large_van"
                             android:gravity="center"
+                            android:textStyle="bold"
                             android:layout_marginTop="5dp" />
 
                     </LinearLayout>
@@ -170,8 +175,9 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Mini Van"
+                            android:text="@string/mini_van"
                             android:gravity="center"
+                            android:textStyle="bold"
                             android:layout_marginTop="5dp" />
 
                     </LinearLayout>
@@ -213,7 +219,8 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="4x4"
+                            android:text="@string/_4x4"
+                            android:textStyle="bold"
                             android:gravity="center"
                             android:layout_marginTop="5dp" />
 
@@ -248,7 +255,8 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Overcab Motorhome"
+                            android:text="@string/overcab_motorhome"
+                            android:textStyle="bold"
                             android:gravity="center"
                             android:layout_marginTop="5dp" />
 
@@ -291,8 +299,9 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Low-profile Motorhome"
+                            android:text="@string/low_profile_motorhome"
                             android:gravity="center"
+                            android:textStyle="bold"
                             android:layout_marginTop="5dp" />
 
                     </LinearLayout>
@@ -326,8 +335,9 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="A-class Motorhome"
+                            android:text="@string/a_class_motorhome"
                             android:gravity="center"
+                            android:textStyle="bold"
                             android:layout_marginTop="5dp" />
 
                     </LinearLayout>
@@ -369,8 +379,9 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Motorhome heavyweight"
+                            android:text="@string/motorhome_heavyweight"
                             android:gravity="center"
+                            android:textStyle="bold"
                             android:layout_marginTop="5dp" />
 
                     </LinearLayout>

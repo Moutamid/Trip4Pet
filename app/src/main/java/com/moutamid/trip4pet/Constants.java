@@ -1,14 +1,17 @@
 package com.moutamid.trip4pet;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -31,14 +34,38 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Constants {
+    public static Dialog dialog;
+    public static final String STASH_USER = "STASH_USER";
     public static final String MODEL = "MODEL";
+    public static final String USER = "USER";
     public static final String COORDINATES = "COORDINATES";
+    public static final String Metric = "Metric";
+    public static final String Vehicle = "Vehicle";
+    public static final String Imperial = "Imperial";
+    public static final String MEASURE = "MEASURE";
+
+    public static void initDialog(Context context) {
+        dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.loading_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCancelable(false);
+    }
+
+    public static void showDialog() {
+        dialog.show();
+    }
+
+    public static void dismissDialog() {
+        dialog.dismiss();
+    }
+
     public static FirebaseAuth auth() {
         return FirebaseAuth.getInstance();
     }
 
     public static DatabaseReference databaseReference() {
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("ChefDarbariApp");
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("trip4pet");
         db.keepSynced(true);
         return db;
     }
