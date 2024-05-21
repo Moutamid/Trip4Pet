@@ -59,7 +59,7 @@ public class WelcomeActivity extends AppCompatActivity {
         });
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.web_client_id))
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
@@ -71,10 +71,17 @@ public class WelcomeActivity extends AppCompatActivity {
         });
 
         binding.google.setOnClickListener(v -> {
+            Constants.showDialog();
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Constants.initDialog(this);
     }
 
     @Override
@@ -87,7 +94,6 @@ public class WelcomeActivity extends AppCompatActivity {
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-
                 Log.d("firebaseAuthWithGoogle", "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
@@ -110,6 +116,7 @@ public class WelcomeActivity extends AppCompatActivity {
                             FirebaseUser user = Constants.auth().getCurrentUser();
                             updateUI(user);
                         } else {
+                            Constants.dismissDialog();
                             Toast.makeText(WelcomeActivity.this, "Google sign in failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -121,6 +128,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         Constants.databaseReference().child(Constants.USER).child(user.getUid()).get()
                 .addOnSuccessListener(snapshot -> {
+                    Constants.dismissDialog();
                     if (!snapshot.exists()) {
                         UserModel userDetails = new UserModel();
                         userDetails.id = user.getUid();
@@ -142,6 +150,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         finish();
                     }
                 }).addOnFailureListener(e -> {
+                    Constants.dismissDialog();
                     Toast.makeText(WelcomeActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }

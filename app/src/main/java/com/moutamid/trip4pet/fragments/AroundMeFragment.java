@@ -87,7 +87,7 @@ public class AroundMeFragment extends Fragment {
     }
 
     private void getPlaces() {
-        Constants.databaseReference().child(Constants.PLACE).child(Constants.auth().getCurrentUser().getUid())
+        Constants.databaseReference().child(Constants.PLACE)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -95,8 +95,10 @@ public class AroundMeFragment extends Fragment {
                         if (snapshot.exists()) {
                             places.clear();
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                                LocationsModel model = dataSnapshot.getValue(LocationsModel.class);
-                                places.add(model);
+                                for (DataSnapshot dataSnapshot2 : dataSnapshot.getChildren()) {
+                                    LocationsModel model = dataSnapshot2.getValue(LocationsModel.class);
+                                    places.add(model);
+                                }
                             }
                         }
                         showMap();
