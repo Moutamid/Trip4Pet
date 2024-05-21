@@ -17,6 +17,7 @@ import com.fxn.stash.Stash;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
+import com.moutamid.trip4pet.SplashActivity;
 import com.moutamid.trip4pet.databinding.ActivityAccountSettingBinding;
 import com.moutamid.trip4pet.models.UserModel;
 
@@ -41,7 +42,24 @@ public class AccountSettingActivity extends AppCompatActivity {
         binding.logout.setOnClickListener(v -> {
             new MaterialAlertDialogBuilder(this)
                     .setMessage(getString(R.string.are_you_sure_you_want_to_logout))
-                    .setPositiveButton(getString(R.string.yes), (dialog, which) -> dialog.dismiss())
+                    .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                        dialog.dismiss();
+                        Constants.auth().signOut();
+                        startActivity(new Intent(this, SplashActivity.class));
+                        finish();
+                    })
+                    .setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss())
+                    .show();
+        });
+
+        binding.delete.setOnClickListener(v -> {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle(getString(R.string.warning))
+                    .setMessage(getString(R.string.deleting_data))
+                    .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                        dialog.dismiss();
+                        deleteData();
+                    })
                     .setNegativeButton(getString(R.string.no), (dialog, which) -> dialog.dismiss())
                     .show();
         });
@@ -52,6 +70,10 @@ public class AccountSettingActivity extends AppCompatActivity {
 //        binding.code.setOnClickListener(v  -> showCodeDialog());
         binding.password.setOnClickListener(v -> startActivity(new Intent(this, PasswordActivity.class)));
 
+    }
+
+    private void deleteData() {
+        // TODO
     }
 
     @Override

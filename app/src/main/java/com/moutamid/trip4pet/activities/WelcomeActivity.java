@@ -127,9 +127,6 @@ public class WelcomeActivity extends AppCompatActivity {
                         userDetails.email = user.getEmail();
                         userDetails.name = user.getDisplayName();
                         userDetails.password = "";
-                        userDetails.comments = 0;
-                        userDetails.visitedPlaces = 0;
-                        userDetails.numberOfPlacesAdded = 0;
                         Stash.put(Constants.STASH_USER, userDetails);
                         Constants.databaseReference().child(Constants.USER).child(user.getUid())
                                 .setValue(userDetails).addOnCompleteListener(task -> {

@@ -24,6 +24,11 @@ import java.util.Date;
 public class ListDialog extends BottomSheetDialogFragment {
     ListDialogBinding binding;
     private BottomSheetDismissListener listener;
+    ArrayList<LocationsModel> places;
+    public ListDialog(ArrayList<LocationsModel> places) {
+        this.places = places;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -31,11 +36,10 @@ public class ListDialog extends BottomSheetDialogFragment {
 
         binding.close.setOnClickListener(v -> dismiss());
 
-        ArrayList<LocationsModel> list = Constants.getList(requireContext());
         binding.listRC.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.listRC.setHasFixedSize(false);
 
-        LocationAdapter adapter = new LocationAdapter(requireContext(), list);
+        LocationAdapter adapter = new LocationAdapter(requireContext(), places);
         binding.listRC.setAdapter(adapter);
 
         return binding.getRoot();

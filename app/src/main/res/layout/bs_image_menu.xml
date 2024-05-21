@@ -16,7 +16,7 @@
             android:fontFamily="@font/poppins"
             android:layout_weight="1"
             android:textColor="@color/black"
-            android:text="Edit Photo" />
+            android:text="@string/edit_photo" />
 
     </LinearLayout>
 
@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/blue_card"
-        android:text="Remove"
+        android:text="@string/remove"
         android:drawablePadding="8dp"
         android:textColor="@color/black"
         android:textSize="14sp" />

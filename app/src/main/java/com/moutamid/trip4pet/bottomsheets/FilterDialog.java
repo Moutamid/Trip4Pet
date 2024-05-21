@@ -88,7 +88,7 @@ public class FilterDialog extends BottomSheetDialogFragment {
     }
 
     private void addServices() {
-        service = new ArrayList<>(Constants.getServices());
+        service = new ArrayList<>(Constants.getServices(requireContext()));
         for (FilterModel s : service) {
             LayoutInflater inflater = getLayoutInflater();
             View customEditTextLayout = inflater.inflate(R.layout.filter_check_layout, null);
@@ -108,7 +108,7 @@ public class FilterDialog extends BottomSheetDialogFragment {
     }
 
     private void addActivities() {
-        activities = new ArrayList<>(Constants.getActivities());
+        activities = new ArrayList<>(Constants.getActivities(requireContext()));
 
         for (FilterModel s : activities) {
             LayoutInflater inflater = getLayoutInflater();

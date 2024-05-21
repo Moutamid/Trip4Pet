@@ -2,13 +2,13 @@ package com.moutamid.trip4pet.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.fxn.stash.Stash;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,15 +17,22 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.databinding.ActivityAccountBinding;
+import com.moutamid.trip4pet.models.LocationsModel;
 import com.moutamid.trip4pet.models.UserModel;
+
+import java.util.ArrayList;
 
 public class AccountActivity extends AppCompatActivity {
     ActivityAccountBinding binding;
     MaterialCardView selected;
     TextView selectedText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,20 +48,11 @@ public class AccountActivity extends AppCompatActivity {
         binding.back.setOnClickListener(v -> onBackPressed());
         binding.setting.setOnClickListener(v -> startActivity(new Intent(this, AccountSettingActivity.class)));
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(callback);
-        }
-
         selected = binding.addedPlaces;
         selectedText = binding.addedText;
 
         UserModel userModel = (UserModel) Stash.getObject(Constants.STASH_USER, UserModel.class);
         binding.title.setText(userModel.name);
-
-        binding.commentsText.setText(userModel.comments + "\n" + getString(R.string.comments));
-        binding.addedText.setText(userModel.numberOfPlacesAdded + "\n" + getString(R.string.added_places));
-        binding.visitedText.setText(userModel.visitedPlaces + "\n" + getString(R.string.visited_places));
 
         binding.addedPlaces.setOnClickListener(v -> {
             selectedText.setTextColor(getResources().getColor(R.color.text));
@@ -82,34 +80,80 @@ public class AccountActivity extends AppCompatActivity {
         });
 
     }
-    private OnMapReadyCallback callback = googleMap -> {
 
-        LatLng hungry = new LatLng(47.5333, 21.6333);
-        LatLng parkolo = new LatLng(47.521024288430404, 21.62947502487398);
-        LatLng kossuth = new LatLng(47.531415874646726, 21.624710724874703);
-        LatLng malompark = new LatLng(47.54208223607607, 21.619344651863127);
-        LatLng arena = new LatLng(47.54571354304601, 21.64295856720483);
-        LatLng decathlon = new LatLng(47.543754716462416, 21.593888096040097);
-        LatLng egyetem = new LatLng(47.55174025908643, 21.62166138069917);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Constants.initDialog(this);
+        Constants.showDialog();
 
-        googleMap.addMarker(new MarkerOptions().position(parkolo).title("Vasutallomas parkolo Debrecen"));
-        googleMap.addMarker(new MarkerOptions().position(kossuth).title("kossuth ter tram station Debrecen"));
-        googleMap.addMarker(new MarkerOptions().position(malompark).title("Malompark Debrecen"));
-        googleMap.addMarker(new MarkerOptions().position(arena).title("Fönix Arena Debrecen"));
-        googleMap.addMarker(new MarkerOptions().position(decathlon).title("Decathlon Debrecen"));
-        googleMap.addMarker(new MarkerOptions().position(egyetem).title("Egyetem ter, Debrecen"));
+        getAddedPlaces();
+        getComments();
+        getVisitedPlaces();
 
-        googleMap.setMaxZoomPreference(20f);
-        googleMap.setMinZoomPreference(12f);
+    }
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(hungry));
+    ArrayList<LocationsModel> addedPlaces = new ArrayList<>();
+    ArrayList<LocationsModel> comments = new ArrayList<>();
+    ArrayList<LocationsModel> visitedPlaces = new ArrayList<>();
 
-//        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-//                ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-//            googleMap.setMyLocationEnabled(true);
-//        }
-//        googleMap.getUiSettings().setCompassEnabled(true);
-//        googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+    private void getAddedPlaces() {
+        Constants.databaseReference().child(Constants.PLACE).child(Constants.auth().getCurrentUser().getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Constants.dismissDialog();
+                        if (snapshot.exists()) {
+                            addedPlaces.clear();
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                LocationsModel model = dataSnapshot.getValue(LocationsModel.class);
+                                addedPlaces.add(model);
+                            }
+                        }
+
+                        binding.addedText.setText(addedPlaces.size() + "\n" + getString(R.string.added_places));
+                        binding.commentsText.setText(comments.size() + "\n" + getString(R.string.comments));
+                        binding.visitedText.setText(visitedPlaces.size() + "\n" + getString(R.string.visited_places));
+
+                        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+                        if (mapFragment != null) {
+                            mapFragment.getMapAsync(callbackAddedPlaces);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Constants.dismissDialog();
+                        Toast.makeText(AccountActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void getComments() {
+// TODO
+    }
+
+    private void getVisitedPlaces() {
+        // TODO
+    }
+
+    private static final String TAG = "AccountActivity";
+    private OnMapReadyCallback callbackAddedPlaces = googleMap -> {
+
+        Log.d(TAG, "Size : " + addedPlaces.size());
+
+        for (LocationsModel model : addedPlaces) {
+            Log.d(TAG, "Name: " + model.latitude);
+            googleMap.addMarker(new MarkerOptions().position(new LatLng(model.latitude, model.longitude)).title(model.name));
+        }
+
+        if (!addedPlaces.isEmpty()) {
+            LatLng latLng = new LatLng(addedPlaces.get(0).latitude, addedPlaces.get(0).longitude);
+            //       googleMap.setMaxZoomPreference(20f);
+            googleMap.setMinZoomPreference(4f);
+
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        }
 
     };
 

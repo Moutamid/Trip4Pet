@@ -39,21 +39,28 @@ import com.moutamid.trip4pet.bottomsheets.FilterDialog;
 import com.moutamid.trip4pet.databinding.ActivityPlaceAddBinding;
 import com.moutamid.trip4pet.listener.ImageListener;
 import com.moutamid.trip4pet.models.FilterModel;
+import com.moutamid.trip4pet.models.LocationsModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 public class PlaceAddActivity extends AppCompatActivity {
     ActivityPlaceAddBinding binding;
     String COORDINATES;
+    String PLACE;
     ArrayList<FilterModel> activities = new ArrayList<>();
     ArrayList<FilterModel> services = new ArrayList<>();
-    private final int limit = 10;
+    ArrayList<String> images;
+    private final int limit = 6;
     private static final int PICK_FROM_GALLERY = 1;
     ImageAdapter adapter;
-    ArrayList<Uri> carImagesList;
-
+    ArrayList<Uri> imagesList;
+    String ID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,13 +72,25 @@ public class PlaceAddActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        carImagesList = new ArrayList<>();
+
+        ID = UUID.randomUUID().toString();
+
+        images = new ArrayList<>();
+        imagesList = new ArrayList<>();
         binding.toolbar.back.setOnClickListener(v -> onBackPressed());
 
         COORDINATES = getIntent().getStringExtra(Constants.COORDINATES);
+        PLACE = getIntent().getStringExtra(Constants.PLACE);
+
         String[] cord = COORDINATES.split(", ");
         binding.latitude.getEditText().setText(cord[0]);
         binding.longitude.getEditText().setText(cord[1]);
+
+        String[] place = PLACE.split(", ");
+        if (place.length > 1) {
+            binding.city.getEditText().setText(place[0]);
+            binding.country.getEditText().setText(place[1]);
+        }
 
         binding.addActivity.setOnClickListener(v -> showFeatures(true));
         binding.addServices.setOnClickListener(v -> showFeatures(false));
@@ -84,23 +103,133 @@ public class PlaceAddActivity extends AppCompatActivity {
         binding.placesList.setAdapter(exerciseAdapter);
 
         binding.btnAddCarPhoto.setOnClickListener(v -> {
-            if (carImagesList.size() >= limit) {
-                Toast.makeText(this, "Required Number of Images are selected", Toast.LENGTH_SHORT).show();
+            if (imagesList.size() >= limit) {
+                Toast.makeText(this, getString(R.string.required_number_of_images_are_selected), Toast.LENGTH_SHORT).show();
             } else {
-//                showDialog();
                 getImageFromGallery();
             }
         });
 
         binding.AddPhotoLayout.setOnClickListener(v -> {
-            if (carImagesList.size() >= limit) {
-                Toast.makeText(this, "Required Number of Images are selected", Toast.LENGTH_SHORT).show();
+            if (imagesList.size() >= limit) {
+                Toast.makeText(this, getString(R.string.required_number_of_images_are_selected), Toast.LENGTH_SHORT).show();
             } else {
-//                showDialog();
                 getImageFromGallery();
             }
         });
 
+        binding.addPlace.setOnClickListener(v -> {
+            if (valid()) {
+                Constants.showDialog();
+                uploadImages();
+            }
+        });
+
+    }
+
+    private void uploadImages() {
+        for (Uri uri : imagesList) {
+            Constants.storageReference().child("images").child(new SimpleDateFormat("ddMMyyyyhhmmss", Locale.getDefault()).format(new Date().getTime()))
+                    .putFile(uri).addOnSuccessListener(taskSnapshot -> {
+                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(link -> {
+                            images.add(link.toString());
+                            uploadData();
+                        });
+                    })
+                    .addOnFailureListener(e -> {
+                        Constants.dismissDialog();
+                        Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                    });
+        }
+    }
+
+    private void uploadData() {
+        LocationsModel model = new LocationsModel();
+        model.id = this.ID;
+        model.userID = Constants.auth().getCurrentUser().getUid();
+        model.name = binding.name.getEditText().getText().toString();
+        model.contact = binding.contact.getEditText().getText().toString();
+        model.typeOfPlace = binding.place.getEditText().getText().toString();
+        model.description = binding.desc.getEditText().getText().toString();
+        model.address = binding.location.getEditText().getText().toString();
+        model.city = binding.city.getEditText().getText().toString();
+        model.country = binding.country.getEditText().getText().toString();
+        model.latitude = Double.parseDouble(binding.latitude.getEditText().getText().toString());
+        model.longitude = Double.parseDouble(binding.longitude.getEditText().getText().toString());
+        model.images = new ArrayList<>(images);
+        model.activities = new ArrayList<>(activities);
+        model.services = new ArrayList<>(services);
+        model.isAccessibleToAnimals = binding.isAccessible.isChecked();
+        model.timestamp = new Date().getTime();
+
+        Constants.databaseReference().child(Constants.PLACE).child(Constants.auth().getCurrentUser().getUid()).child(model.id)
+                .setValue(model).addOnSuccessListener(unused -> {
+                    Constants.dismissDialog();
+                    Toast.makeText(this, "Place Added Successfully", Toast.LENGTH_SHORT).show();
+                    getOnBackPressedDispatcher().onBackPressed();
+                }).addOnFailureListener(e -> {
+                    Constants.dismissDialog();
+                    Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                });
+
+    }
+
+    private boolean valid() {
+        if (imagesList.isEmpty()) {
+            Toast.makeText(this, "Add images", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (binding.name.getEditText().getText().toString().isEmpty()) {
+            Toast.makeText(this, "Name is Empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (binding.contact.getEditText().getText().toString().isEmpty()) {
+            Toast.makeText(this, "Contact is Empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (binding.place.getEditText().getText().toString().isEmpty()) {
+            Toast.makeText(this, "Type of place is Empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (binding.desc.getEditText().getText().toString().isEmpty()) {
+            Toast.makeText(this, "Description is Empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (binding.location.getEditText().getText().toString().isEmpty()) {
+            Toast.makeText(this, "Address is Empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (binding.city.getEditText().getText().toString().isEmpty()) {
+            Toast.makeText(this, "City is Empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (binding.country.getEditText().getText().toString().isEmpty()) {
+            Toast.makeText(this, "Country is Empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (binding.latitude.getEditText().getText().toString().isEmpty()) {
+            Toast.makeText(this, "Latitude is Empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (binding.longitude.getEditText().getText().toString().isEmpty()) {
+            Toast.makeText(this, "Longitude is Empty", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (activities.isEmpty()) {
+            Toast.makeText(this, "Add Activities", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (services.isEmpty()) {
+            Toast.makeText(this, "Add Services", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Constants.initDialog(this);
     }
 
     private void showDialog() {
@@ -152,7 +281,7 @@ public class PlaceAddActivity extends AppCompatActivity {
 
     private void addActivities() {
         binding.activitiesIcon.removeAllViews();
-        binding.totalActivity.setText(activities.size() + " Activities");
+        binding.totalActivity.setText(activities.size() + " " + getString(R.string.activities));
         for (FilterModel s : activities) {
             LayoutInflater inflater = getLayoutInflater();
             View customEditTextLayout = inflater.inflate(R.layout.icon, null);
@@ -165,7 +294,7 @@ public class PlaceAddActivity extends AppCompatActivity {
 
     private void addServices() {
         binding.servicesIcon.removeAllViews();
-        binding.totalServices.setText(services.size() + " Services");
+        binding.totalServices.setText(services.size() + " " + getString(R.string.services));
         for (FilterModel s : services) {
             LayoutInflater inflater = getLayoutInflater();
             View customEditTextLayout = inflater.inflate(R.layout.icon, null);
@@ -191,9 +320,9 @@ public class PlaceAddActivity extends AppCompatActivity {
         LinearLayout features = dialog.findViewById(R.id.features);
         MaterialButton apply = dialog.findViewById(R.id.apply);
 
-        String t = b ? "Select All Activities that apply" : "Select All Services that apply";
+        String t = b ? getString(R.string.select_all_activities_that_apply) : getString(R.string.select_all_services_that_apply);
         textview.setText(t);
-        ArrayList<FilterModel> list = b ? Constants.getActivities() : Constants.getServices();
+        ArrayList<FilterModel> list = b ? Constants.getActivities(PlaceAddActivity.this) : Constants.getServices(PlaceAddActivity.this);
         for (FilterModel s : list) {
             LayoutInflater inflater = getLayoutInflater();
             View customEditTextLayout = inflater.inflate(R.layout.filter_check_layout, null);
@@ -274,15 +403,15 @@ public class PlaceAddActivity extends AppCompatActivity {
 
                         while (currentImage < data.getClipData().getItemCount()) {
                             if (currentImage < limit) {
-                                carImagesList.add(data.getClipData().getItemAt(currentImage).getUri());
+                                imagesList.add(data.getClipData().getItemAt(currentImage).getUri());
                             }
                             currentImage++;
                         }
 
-                        adapter = new ImageAdapter(this, carImagesList, listener);
+                        adapter = new ImageAdapter(this, imagesList, listener);
                         binding.RecyclerViewImageList.setAdapter(adapter);
                     } else {
-                        Toast.makeText(this, "Please Select Multiple Images", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.please_select_multiple_images), Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception e) {
                     Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -292,9 +421,9 @@ public class PlaceAddActivity extends AppCompatActivity {
                     binding.AddPhotoLayout.setVisibility(View.GONE);
                     binding.AddPhotoLayoutRecycler.setVisibility(View.VISIBLE);
 
-                    carImagesList.add(data.getData());
+                    imagesList.add(data.getData());
 
-                    adapter = new ImageAdapter(this, carImagesList, listener);
+                    adapter = new ImageAdapter(this, imagesList, listener);
                     binding.RecyclerViewImageList.setAdapter(adapter);
                 }
             }
@@ -319,16 +448,16 @@ public class PlaceAddActivity extends AppCompatActivity {
 
         removeImg.setOnClickListener(remove -> {
             try {
-                if (carImagesList.size() == 1) {
-                    carImagesList.remove(pos);
+                if (imagesList.size() == 1) {
+                    imagesList.remove(pos);
                     adapter.notifyItemRemoved(pos);
                     dialog.cancel();
-                    if (carImagesList.isEmpty()) {
+                    if (imagesList.isEmpty()) {
                         binding.AddPhotoLayoutRecycler.setVisibility(View.GONE);
                         binding.AddPhotoLayout.setVisibility(View.VISIBLE);
                     }
                 }
-                carImagesList.remove(pos);
+                imagesList.remove(pos);
                 adapter.notifyItemRemoved(pos);
                 dialog.cancel();
             } catch (Exception e) {

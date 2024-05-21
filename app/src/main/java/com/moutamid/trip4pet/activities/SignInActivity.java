@@ -50,10 +50,7 @@ public class SignInActivity extends AppCompatActivity {
                     userDetails.id = Constants.auth().getCurrentUser().getUid();
                     userDetails.email = binding.email.getEditText().getText().toString();
                     userDetails.name = binding.name.getEditText().getText().toString();
-                    userDetails.password = binding.email.getEditText().getText().toString();
-                    userDetails.comments = 0;
-                    userDetails.visitedPlaces = 0;
-                    userDetails.numberOfPlacesAdded = 0;
+                    userDetails.password = binding.password.getEditText().getText().toString();
                     Stash.put(Constants.STASH_USER, userDetails);
                     Constants.databaseReference().child(Constants.USER).child(Constants.auth().getCurrentUser().getUid())
                             .setValue(userDetails).addOnCompleteListener(task -> {

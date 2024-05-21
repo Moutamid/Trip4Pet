@@ -29,7 +29,6 @@ public class AddPlaceActivity extends AppCompatActivity {
     ActivityAddPlaceBinding binding;
     private FusedLocationProviderClient fusedLocationClient;
     boolean isGiven = false;
-    boolean isCoordinates = false;
     String name = "";
     GoogleMap mMap;
     @Override
@@ -45,14 +44,10 @@ public class AddPlaceActivity extends AppCompatActivity {
 //        });
 
         isGiven = getIntent().getBooleanExtra("GIVEN", false);
-        isCoordinates = getIntent().getBooleanExtra("GIVEN", false);
-        name = getIntent().getStringExtra("COORDINATES");
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(callback);
-        }
+        name = getIntent().getStringExtra(Constants.COORDINATES);
+        String place = getIntent().getStringExtra(Constants.PLACE);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         binding.back.setOnClickListener(v -> onBackPressed());
         binding.setting.setOnClickListener(v -> {
             startActivity(new Intent(this, AroundPlaceActivity.class));
@@ -64,9 +59,19 @@ public class AddPlaceActivity extends AppCompatActivity {
             double latitude = centerOfMap.latitude;
             double longitude = centerOfMap.longitude;
             String COORDINATES = latitude + ", " + longitude;
-            startActivity(new Intent(this, PlaceAddActivity.class).putExtra(Constants.COORDINATES, COORDINATES));
+            startActivity(new Intent(this, PlaceAddActivity.class).putExtra(Constants.COORDINATES, COORDINATES).putExtra(Constants.PLACE, place));
+            finish();
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(callback);
+        }
     }
 
     private OnMapReadyCallback callback = googleMap -> {
@@ -90,11 +95,6 @@ public class AddPlaceActivity extends AppCompatActivity {
             String[] cord = name.split(", ");
             LatLng currentLatLng = new LatLng(Double.parseDouble(cord[0]), Double.parseDouble(cord[1])); // lat, long
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f));
-//            if (isCoordinates) {
-//
-//            } else {
-//                // City name is provided
-//            }
         }
         mMap.setMaxZoomPreference(20f);
 //        googleMap.setMinZoomPreference(12f);
