@@ -1,5 +1,6 @@
 package com.moutamid.trip4pet.models;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class LocationsModel {
@@ -11,6 +12,8 @@ public class LocationsModel {
     public long timestamp;
     public double rating;
     public boolean isAccessibleToAnimals;
+    public ArrayList<CommentModel> comments;
+
     public LocationsModel() {
     }
 

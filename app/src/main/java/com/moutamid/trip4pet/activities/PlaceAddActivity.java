@@ -161,6 +161,7 @@ public class PlaceAddActivity extends AppCompatActivity {
         model.services = new ArrayList<>(services);
         model.isAccessibleToAnimals = binding.isAccessible.isChecked();
         model.timestamp = new Date().getTime();
+        model.comments = new ArrayList<>();
 
         Constants.databaseReference().child(Constants.PLACE).child(Constants.auth().getCurrentUser().getUid()).child(model.id)
                 .setValue(model).addOnSuccessListener(unused -> {
@@ -213,14 +214,6 @@ public class PlaceAddActivity extends AppCompatActivity {
         }
         if (binding.longitude.getEditText().getText().toString().isEmpty()) {
             Toast.makeText(this, "Longitude is Empty", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (activities.isEmpty()) {
-            Toast.makeText(this, "Add Activities", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (services.isEmpty()) {
-            Toast.makeText(this, "Add Services", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

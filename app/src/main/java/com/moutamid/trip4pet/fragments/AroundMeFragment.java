@@ -1,11 +1,6 @@
 package com.moutamid.trip4pet.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.VectorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
-import com.moutamid.trip4pet.activities.AccountActivity;
 import com.moutamid.trip4pet.activities.DetailActivity;
 import com.moutamid.trip4pet.bottomsheets.FavoruiteDialog;
 import com.moutamid.trip4pet.bottomsheets.FilterDialog;
@@ -41,7 +35,6 @@ import com.moutamid.trip4pet.models.LocationsModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class AroundMeFragment extends Fragment {
     FragmentAroundMeBinding binding;
@@ -49,7 +42,9 @@ public class AroundMeFragment extends Fragment {
     public AroundMeFragment() {
         // Required empty public constructor
     }
+
     ArrayList<LocationsModel> places = new ArrayList<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -58,25 +53,25 @@ public class AroundMeFragment extends Fragment {
         binding.filter.setOnClickListener(v -> {
             FilterDialog filterDialog = new FilterDialog();
             filterDialog.setListener(() -> {
-                // dialog is dismissed
+                Toast.makeText(requireContext(), "Resumes", Toast.LENGTH_SHORT).show();
             });
             filterDialog.show(requireActivity().getSupportFragmentManager(), filterDialog.getTag());
         });
 
         binding.star.setOnClickListener(v -> {
-            FavoruiteDialog filterDialog = new FavoruiteDialog();
-            filterDialog.setListener(() -> {
+            FavoruiteDialog favoruiteDialog = new FavoruiteDialog();
+            favoruiteDialog.setListener(() -> {
                 // dialog is dismissed
             });
-            filterDialog.show(requireActivity().getSupportFragmentManager(), filterDialog.getTag());
+            favoruiteDialog.show(requireActivity().getSupportFragmentManager(), favoruiteDialog.getTag());
         });
         binding.list.setOnClickListener(v -> {
             binding.mapIcon.setImageResource(R.drawable.map);
-            ListDialog filterDialog = new ListDialog(places);
-            filterDialog.setListener(() -> {
+            ListDialog listDialog = new ListDialog(places);
+            listDialog.setListener(() -> {
                 binding.mapIcon.setImageResource(R.drawable.list_solid);
             });
-            filterDialog.show(requireActivity().getSupportFragmentManager(), filterDialog.getTag());
+            listDialog.show(requireActivity().getSupportFragmentManager(), listDialog.getTag());
         });
 
         Constants.initDialog(requireContext());
@@ -125,6 +120,12 @@ public class AroundMeFragment extends Fragment {
         showMap();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+    }
+
     private OnMapReadyCallback callback = googleMap -> {
         float density = getResources().getDisplayMetrics().density;
         int widthPx = (int) (20 * density);
@@ -135,28 +136,32 @@ public class AroundMeFragment extends Fragment {
         for (LocationsModel model : places) {
             LatLng latLng = new LatLng(model.latitude, model.longitude);
             int icon = 0;
-            if (model.typeOfPlace.equals("Park")) {
-                icon = R.drawable.tree_mark;
-            } else if (model.typeOfPlace.equals("Restaurant")) {
-                icon = R.drawable.resturant_mark;
-            } else if (model.typeOfPlace.equals("Beach")) {
-                icon = R.drawable.beach_mark;
+//            if (model.typeOfPlace.equals("Park")) {
+//                icon = R.drawable.tree_mark;
+//            } else if (model.typeOfPlace.equals("Restaurant")) {
+//                icon = R.drawable.resturant_mark;
+//            } else if (model.typeOfPlace.equals("Beach")) {
+//                icon = R.drawable.beach_mark;
+//            }
+            if (model.activities != null) {
+                for (FilterModel filterModel : model.activities) {
+                    View marker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
+                    ImageView iconImage = marker.findViewById(R.id.icon);
+                    iconImage.setImageResource(filterModel.icon);
+                    googleMap.addMarker(new MarkerOptions()
+                            .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), marker)))
+                            .position(latLng).title(model.name)).setTag(model.id);
+                }
             }
-            for (FilterModel filterModel : model.activities){
-                View marker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
-                ImageView iconImage = marker.findViewById(R.id.icon);
-                iconImage.setImageResource(filterModel.icon);
-                googleMap.addMarker(new MarkerOptions()
-                        .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), marker)))
-                        .position(latLng).title(model.name)).setTag(model.id);
-            }
-            for (FilterModel filterModel : model.services){
-                View marker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
-                ImageView iconImage = marker.findViewById(R.id.icon);
-                iconImage.setImageResource(filterModel.icon);
-                googleMap.addMarker(new MarkerOptions()
-                        .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), marker)))
-                        .position(latLng).title(model.name)).setTag(model.id);
+            if (model.services != null) {
+                for (FilterModel filterModel : model.services) {
+                    View marker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
+                    ImageView iconImage = marker.findViewById(R.id.icon);
+                    iconImage.setImageResource(filterModel.icon);
+                    googleMap.addMarker(new MarkerOptions()
+                            .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), marker)))
+                            .position(latLng).title(model.name)).setTag(model.id);
+                }
             }
             if (icon != 0) {
                 googleMap.addMarker(new MarkerOptions()

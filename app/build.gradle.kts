@@ -52,6 +52,10 @@ dependencies {
 
     implementation(libs.play.services.auth)
 
+    implementation(libs.billing)
+    implementation(libs.preference)
+    implementation(libs.library)
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

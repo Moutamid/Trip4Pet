@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.moutamid.trip4pet.R;
+import com.moutamid.trip4pet.SubscriptionActivity;
 import com.moutamid.trip4pet.activities.AccountActivity;
 import com.moutamid.trip4pet.activities.AddPlaceActivity;
 import com.moutamid.trip4pet.activities.SettingActivity;
@@ -31,6 +32,10 @@ public class SettingFragment extends Fragment {
         binding.setting.setOnClickListener(v -> startActivity(new Intent(requireContext(), SettingActivity.class)));
         binding.account.setOnClickListener(v -> startActivity(new Intent(requireContext(), AccountActivity.class)));
         binding.add.setOnClickListener(v -> startActivity(new Intent(requireContext(), AddPlaceActivity.class)));
+        binding.buy.setOnClickListener(v -> {
+            startActivity(new Intent(requireContext(), SubscriptionActivity.class));
+            requireActivity().finish();
+        });
 
         return binding.getRoot();
     }

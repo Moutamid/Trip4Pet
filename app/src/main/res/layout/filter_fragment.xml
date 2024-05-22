@@ -67,11 +67,14 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/rating4_7"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:enabled="false"/>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/ratingCard47"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/card_bs"
@@ -101,6 +104,7 @@
                             android:textSize="14sp" />
 
                         <ImageView
+                            android:id="@+id/lock1"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:src="@drawable/lock_solid"
@@ -120,11 +124,14 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/rating4_0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:enabled="false"/>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/ratingCard4"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/card_bs"
@@ -154,6 +161,7 @@
                             android:textSize="14sp" />
 
                         <ImageView
+                            android:id="@+id/lock2"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:src="@drawable/lock_solid"
@@ -173,11 +181,14 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.radiobutton.MaterialRadioButton
+                    android:id="@+id/rating3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     android:enabled="false"/>
 
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/ratingCard3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/card_bs"
@@ -207,6 +218,7 @@
                             android:textSize="14sp" />
 
                         <ImageView
+                            android:id="@+id/lock3"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:src="@drawable/lock_solid"

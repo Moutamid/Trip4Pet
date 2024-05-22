@@ -75,6 +75,7 @@
                     android:padding="12dp">
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/directions"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -109,7 +110,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="Directions"
+                                android:text="@string/directions"
                                 android:textSize="14sp" />
 
                         </LinearLayout>
@@ -117,6 +118,7 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/favorites"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -150,7 +152,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="Favorites"
+                                android:text="@string/favorites"
                                 android:textSize="14sp" />
 
                         </LinearLayout>
@@ -158,6 +160,7 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/contacts"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -191,7 +194,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="Contact"
+                                android:text="@string/contact"
                                 android:textSize="14sp" />
 
                         </LinearLayout>
@@ -233,7 +236,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="More"
+                                android:text="@string/more"
                                 android:textSize="14sp" />
 
                         </LinearLayout>
@@ -273,7 +276,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Total Rating"
+                    android:text="@string/total_rating"
                     android:textColor="@color/text"
                     android:textSize="14sp" />
 
@@ -326,7 +329,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Activities"
+                        android:text="@string/activities"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -378,7 +381,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Services"
+                        android:text="@string/services"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -419,7 +422,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:textStyle="bold"
-                android:text="Location"
+                android:text="@string/location"
                 android:textSize="14sp" />
 
             <View
@@ -498,7 +501,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textStyle="bold"
-                android:text="Comments"
+                android:text="@string/comments"
                 android:textSize="14sp" />
 
             <View
@@ -508,14 +511,21 @@
                 android:background="@drawable/round" />
 
             <TextView
+                android:id="@+id/noComments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No Comments Available"
+                android:text="@string/no_comments_available"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:textColor="@color/text"
                 android:textSize="14sp" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:listitem="@layout/comment_item"
+                android:visibility="gone"
+                android:id="@+id/commentsRC" />
 
         </LinearLayout>
 

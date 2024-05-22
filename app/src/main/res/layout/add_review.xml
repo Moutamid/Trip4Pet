@@ -23,7 +23,7 @@
             android:textColor="@color/blue"
             android:textSize="13sp"
             android:textStyle="bold"
-            android:text="Add a feedback to help other users" />
+            android:text="@string/add_a_feedback_to_help_other_users" />
 
         <TextView
             android:id="@+id/name"
@@ -31,9 +31,10 @@
             android:layout_height="wrap_content"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:text="Rate this Place" />
+            android:text="@string/rate_this_place" />
 
         <com.iarcuschin.simpleratingbar.SimpleRatingBar
+            android:id="@+id/rating"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:srb_starSize="30dp"
@@ -41,7 +42,7 @@
             app:srb_numberOfStars="5"
             app:srb_rating="0"
             android:layout_gravity="center"
-            app:srb_stepSize="0.5"
+            app:srb_stepSize="1"
             app:srb_borderColor="@color/gold"
             app:srb_fillColor="@color/gold" />
 
@@ -56,7 +57,7 @@
             app:boxCornerRadiusTopStart="12dp"
             app:boxStrokeWidth="0dp"
             android:textColorHint="@color/text"
-            android:hint="Add your comment"
+            android:hint="@string/add_your_comment"
             app:boxStrokeWidthFocused="0dp">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -73,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="Submit"
+            android:text="@string/submit"
             app:cornerRadius="12dp"
             android:textSize="16sp" />
 

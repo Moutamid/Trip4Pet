@@ -40,13 +40,20 @@ public class Constants {
     public static final String STASH_USER = "STASH_USER";
     public static final String MODEL = "MODEL";
     public static final String CITIES = "CITIES";
+    public static final String FILTERS = "FILTERS";
+    public static final String ISVIP = "ISVIP";
     public static final String PLACE = "PLACE";
+    public static final String VISITED = "VISITED";
     public static final String USER = "USER";
     public static final String COORDINATES = "COORDINATES";
     public static final String Metric = "Metric";
     public static final String Vehicle = "Vehicle";
     public static final String Imperial = "Imperial";
     public static final String MEASURE = "MEASURE";
+    public static final int FAVORITE_SIZE = 200;
+    public static final String LICENSE_KEY = "";
+    public static final String VIP_MONTH = "vip.month.com.moutamid.trip4pet";
+    public static final String VIP_YEAR = "vip.year.com.moutamid.trip4pet";
 
     public static void initDialog(Context context) {
         dialog = new Dialog(context);

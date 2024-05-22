@@ -46,6 +46,9 @@ public class AddPlaceActivity extends AppCompatActivity {
         isGiven = getIntent().getBooleanExtra("GIVEN", false);
         name = getIntent().getStringExtra(Constants.COORDINATES);
         String place = getIntent().getStringExtra(Constants.PLACE);
+        if (place == null){
+            place = ",";
+        }
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         binding.back.setOnClickListener(v -> onBackPressed());
@@ -54,12 +57,13 @@ public class AddPlaceActivity extends AppCompatActivity {
             finish();
         });
 
+        String finalPlace = place;
         binding.pick.setOnClickListener(v -> {
             LatLng centerOfMap = mMap.getCameraPosition().target;
             double latitude = centerOfMap.latitude;
             double longitude = centerOfMap.longitude;
             String COORDINATES = latitude + ", " + longitude;
-            startActivity(new Intent(this, PlaceAddActivity.class).putExtra(Constants.COORDINATES, COORDINATES).putExtra(Constants.PLACE, place));
+            startActivity(new Intent(this, PlaceAddActivity.class).putExtra(Constants.COORDINATES, COORDINATES).putExtra(Constants.PLACE, finalPlace));
             finish();
         });
 
