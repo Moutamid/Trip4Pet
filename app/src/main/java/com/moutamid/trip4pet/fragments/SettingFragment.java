@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fxn.stash.Stash;
+import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.SubscriptionActivity;
 import com.moutamid.trip4pet.activities.AccountActivity;
@@ -23,12 +25,16 @@ public class SettingFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Constants.setLocale(requireContext(), Stash.getString(Constants.LANGUAGE, "en"));
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentSettingBinding.inflate(getLayoutInflater(), container, false);
-
         binding.setting.setOnClickListener(v -> startActivity(new Intent(requireContext(), SettingActivity.class)));
         binding.account.setOnClickListener(v -> startActivity(new Intent(requireContext(), AccountActivity.class)));
         binding.add.setOnClickListener(v -> startActivity(new Intent(requireContext(), AddPlaceActivity.class)));

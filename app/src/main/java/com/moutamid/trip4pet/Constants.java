@@ -3,6 +3,7 @@ package com.moutamid.trip4pet;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
@@ -33,6 +34,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 public class Constants {
@@ -50,7 +52,11 @@ public class Constants {
     public static final String Vehicle = "Vehicle";
     public static final String Imperial = "Imperial";
     public static final String MEASURE = "MEASURE";
+    public static final String EDIT = "EDIT";
     public static final int FAVORITE_SIZE = 200;
+    public static final String LANGUAGE = "LANGUAGE";
+    public static final String FAVORITE = "FAVORITE";
+    public static final String FAVORITE_FOLDER = "FAVORITE_FOLDER";
     public static final String LICENSE_KEY = "";
     public static final String VIP_MONTH = "vip.month.com.moutamid.trip4pet";
     public static final String VIP_YEAR = "vip.year.com.moutamid.trip4pet";
@@ -69,6 +75,14 @@ public class Constants {
 
     public static void dismissDialog() {
         dialog.dismiss();
+    }
+
+    public static void setLocale(Context context, String lng) {
+        Locale locale = new Locale(lng);
+        Locale.setDefault(locale);
+        Configuration configuration = new Configuration();
+        configuration.locale = locale;
+        context.getResources().updateConfiguration(configuration, context.getResources().getDisplayMetrics());
     }
 
     public static FirebaseAuth auth() {

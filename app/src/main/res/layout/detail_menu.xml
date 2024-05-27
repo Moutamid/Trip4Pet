@@ -18,6 +18,7 @@
             android:backgroundTint="@color/white"
             android:gravity="start|center"
             android:paddingStart="20dp"
+            android:paddingEnd="20dp"
             android:text="Report Errors"
             android:textColor="@color/black"
             app:cornerRadius="12dp"
@@ -33,6 +34,7 @@
             android:backgroundTint="@color/white"
             android:gravity="start|center"
             android:paddingStart="20dp"
+            android:paddingEnd="20dp"
             android:text="@string/add_a_review"
             android:textColor="@color/black"
             app:cornerRadius="12dp"
@@ -47,6 +49,7 @@
             android:backgroundTint="@color/white"
             android:gravity="start|center"
             android:paddingStart="20dp"
+            android:paddingEnd="20dp"
             android:text="@string/i_m_here"
             android:textColor="@color/black"
             app:cornerRadius="12dp"
@@ -61,8 +64,10 @@
             android:backgroundTint="@color/white"
             android:gravity="start|center"
             android:paddingStart="20dp"
+            android:paddingEnd="20dp"
             android:text="@string/add_a_photo"
             android:textColor="@color/black"
+            android:visibility="gone"
             app:cornerRadius="12dp"
             app:icon="@drawable/images_solid"
             app:iconPadding="20dp"
@@ -75,27 +80,13 @@
             android:backgroundTint="@color/white"
             android:gravity="start|center"
             android:paddingStart="20dp"
+            android:paddingEnd="20dp"
             android:text="@string/edit_this_place"
             android:textColor="@color/black"
             app:cornerRadius="12dp"
             app:icon="@drawable/pen_to_square_solid"
             app:iconPadding="20dp"
             app:iconTint="@color/black" />
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:gravity="start|center"
-            android:visibility="gone"
-            android:paddingStart="20dp"
-            android:text="Share this place"
-            android:textColor="@color/black"
-            app:cornerRadius="12dp"
-            app:icon="@drawable/share_solid"
-            app:iconPadding="20dp"
-            app:iconTint="@color/black" />
-
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

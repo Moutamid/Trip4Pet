@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.listener.ImageListener;
 
@@ -35,7 +36,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
 
     @Override
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
-        holder.carImageView.setImageURI(list.get(holder.getAdapterPosition()));
+        Glide.with(context).load(list.get(holder.getAdapterPosition())).into(holder.imageView);
         holder.itemView.setOnClickListener(v -> imageListener.onClick(holder.getAdapterPosition()));
     }
 
@@ -45,11 +46,10 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHol
     }
 
     public class ImageViewHolder extends RecyclerView.ViewHolder {
-        ImageView carImageView;
-
+        ImageView imageView;
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
-            carImageView = itemView.findViewById(R.id.carImageView);
+            imageView = itemView.findViewById(R.id.imageView);
         }
 
     }

@@ -29,7 +29,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.fxn.stash.Stash;
-import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
@@ -37,7 +36,7 @@ import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.adapters.ImageAdapter;
 import com.moutamid.trip4pet.bottomsheets.FilterDialog;
-import com.moutamid.trip4pet.databinding.ActivityPlaceAddBinding;
+import com.moutamid.trip4pet.databinding.ActivityEditPlaceBinding;
 import com.moutamid.trip4pet.listener.ImageListener;
 import com.moutamid.trip4pet.models.FilterModel;
 import com.moutamid.trip4pet.models.LocationsModel;
@@ -48,61 +47,43 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 
-public class PlaceAddActivity extends AppCompatActivity {
-    ActivityPlaceAddBinding binding;
+public class EditPlaceActivity extends AppCompatActivity {
+    ActivityEditPlaceBinding binding;
     String COORDINATES;
     String PLACE;
     ArrayList<FilterModel> activities = new ArrayList<>();
     ArrayList<FilterModel> services = new ArrayList<>();
-    ArrayList<String> images;
     private final int limit = 6;
     private static final int PICK_FROM_GALLERY = 1;
     ImageAdapter adapter;
+    ArrayList<String> images;
     ArrayList<Uri> imagesList;
+    ArrayList<Uri> editedList;
     String ID;
+    LocationsModel model;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        binding = ActivityPlaceAddBinding.inflate(getLayoutInflater());
+        binding = ActivityEditPlaceBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        ID = UUID.randomUUID().toString();
+        model = (LocationsModel) Stash.getObject(Constants.EDIT, LocationsModel.class);
+
+        ID = model.id;
 
         images = new ArrayList<>();
         imagesList = new ArrayList<>();
+        editedList = new ArrayList<>();
+
         binding.toolbar.back.setOnClickListener(v -> onBackPressed());
-
-        COORDINATES = getIntent().getStringExtra(Constants.COORDINATES);
-        PLACE = getIntent().getStringExtra(Constants.PLACE);
-
-        String[] cord = COORDINATES.split(", ");
-        binding.latitude.getEditText().setText(cord[0]);
-        binding.longitude.getEditText().setText(cord[1]);
-
-        String[] place = PLACE.split(", ");
-        if (place.length > 1) {
-            binding.city.getEditText().setText(place[0]);
-            binding.country.getEditText().setText(place[1]);
-        }
-
-        binding.addActivity.setOnClickListener(v -> showFeatures(true));
-        binding.addServices.setOnClickListener(v -> showFeatures(false));
-
-        addServices();
-        addActivities();
-
-        List<String> list = Arrays.asList(FilterDialog.placesList);
-        ArrayAdapter<String> exerciseAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, list);
-        binding.placesList.setAdapter(exerciseAdapter);
 
         binding.btnAddCarPhoto.setOnClickListener(v -> {
             if (imagesList.size() >= limit) {
@@ -120,6 +101,15 @@ public class PlaceAddActivity extends AppCompatActivity {
             }
         });
 
+        List<String> list = Arrays.asList(FilterDialog.placesList);
+        ArrayAdapter<String> exerciseAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, list);
+        binding.placesList.setAdapter(exerciseAdapter);
+
+        binding.addActivity.setOnClickListener(v -> showFeatures(true));
+        binding.addServices.setOnClickListener(v -> showFeatures(false));
+
+        updateViews();
+
         binding.addPlace.setOnClickListener(v -> {
             if (valid()) {
                 Constants.showDialog();
@@ -127,6 +117,37 @@ public class PlaceAddActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void updateViews() {
+        binding.name.getEditText().setText(model.name);
+        binding.contact.getEditText().setText(model.contact);
+        binding.place.getEditText().setText(model.typeOfPlace);
+        binding.desc.getEditText().setText(model.description);
+        binding.location.getEditText().setText(model.address);
+        binding.isAccessible.setChecked(model.isAccessibleToAnimals);
+        binding.city.getEditText().setText(model.city);
+        binding.country.getEditText().setText(model.country);
+        binding.latitude.getEditText().setText(String.valueOf(model.latitude));
+        binding.longitude.getEditText().setText(String.valueOf(model.longitude));
+
+        if (model.activities != null) activities = new ArrayList<>(model.activities);
+        if (model.services != null) services = new ArrayList<>(model.services);
+        addServices();
+        addActivities();
+
+        images = new ArrayList<>(model.images);
+
+        for (String link : model.images) {
+            imagesList.add(Uri.parse(link));
+        }
+        if (!imagesList.isEmpty()) {
+            binding.AddPhotoLayoutRecycler.setVisibility(View.VISIBLE);
+            binding.AddPhotoLayout.setVisibility(View.GONE);
+        }
+        adapter = new ImageAdapter(this, imagesList, listener);
+        binding.RecyclerViewImageList.setAdapter(adapter);
     }
 
     private void uploadImages() {
@@ -148,7 +169,7 @@ public class PlaceAddActivity extends AppCompatActivity {
     private void uploadData() {
         LocationsModel model = new LocationsModel();
         model.id = this.ID;
-        model.userID = Constants.auth().getCurrentUser().getUid();
+        model.userID = this.model.userID;
         model.name = binding.name.getEditText().getText().toString();
         model.contact = binding.contact.getEditText().getText().toString();
         model.typeOfPlace = binding.place.getEditText().getText().toString();
@@ -163,7 +184,7 @@ public class PlaceAddActivity extends AppCompatActivity {
         model.services = new ArrayList<>(services);
         model.isAccessibleToAnimals = binding.isAccessible.isChecked();
         model.timestamp = new Date().getTime();
-        model.comments = new ArrayList<>();
+        model.comments = new ArrayList<>(this.model.comments);
 
         Constants.databaseReference().child(Constants.PLACE).child(Constants.auth().getCurrentUser().getUid()).child(model.id)
                 .setValue(model).addOnSuccessListener(unused -> {
@@ -224,44 +245,7 @@ public class PlaceAddActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Constants.initDialog(this);
-    }
-
-    private void showDialog() {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.bs_get_image);
-
-        MaterialButton openCamera = dialog.findViewById(R.id.btnOpenCamera);
-        MaterialButton openGallery = dialog.findViewById(R.id.btnOpenGallery);
-        MaterialButton cancel = dialog.findViewById(R.id.btnCancel);
-
-        cancel.setOnClickListener(v -> {
-            dialog.cancel();
-        });
-
-        openGallery.setOnClickListener(v -> {
-            getImageFromGallery();
-            dialog.cancel();
-        });
-
-        openCamera.setOnClickListener(v -> {
-            getImageFromCamera();
-            dialog.cancel();
-        });
-
-        dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnim;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
-    }
-
-    private void getImageFromCamera() {
-        ImagePicker.with(this)
-                .cameraOnly()
-                .compress(512)
-                .maxResultSize(1080, 1080)
-                .start();
+        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
     }
 
     private void getImageFromGallery() {
@@ -316,7 +300,7 @@ public class PlaceAddActivity extends AppCompatActivity {
 
         String t = b ? getString(R.string.select_all_activities_that_apply) : getString(R.string.select_all_services_that_apply);
         textview.setText(t);
-        ArrayList<FilterModel> list = b ? Constants.getActivities(PlaceAddActivity.this) : Constants.getServices(PlaceAddActivity.this);
+        ArrayList<FilterModel> list = b ? Constants.getActivities(this) : Constants.getServices(this);
         for (FilterModel s : list) {
             LayoutInflater inflater = getLayoutInflater();
             View customEditTextLayout = inflater.inflate(R.layout.filter_check_layout, null);
@@ -398,6 +382,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                         while (currentImage < data.getClipData().getItemCount()) {
                             if (currentImage < limit) {
                                 imagesList.add(data.getClipData().getItemAt(currentImage).getUri());
+                                editedList.add(data.getClipData().getItemAt(currentImage).getUri());
                             }
                             currentImage++;
                         }
@@ -416,6 +401,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                     binding.AddPhotoLayoutRecycler.setVisibility(View.VISIBLE);
 
                     imagesList.add(data.getData());
+                    editedList.add(data.getData());
 
                     adapter = new ImageAdapter(this, imagesList, listener);
                     binding.RecyclerViewImageList.setAdapter(adapter);

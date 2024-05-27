@@ -1,182 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="21dp">
+    android:fillViewport="true">
 
-    <View
-        android:layout_width="50dp"
-        android:layout_height="6dp"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/border"
-        android:background="@drawable/round" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/border"
-        android:text="Favorites"
-        android:textSize="20sp" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/close"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="50dp"
-        android:layout_below="@id/border"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="15dp"
-        android:layout_alignParentEnd="true"
-        app:cardBackgroundColor="@color/card_bs"
-        app:cardElevation="6dp"
-        app:strokeWidth="0dp">
-
-        <ImageView
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:src="@drawable/round_close_24"
-            android:layout_margin="10dp"
-            app:tint="@color/black" />
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_below="@id/close">
+        android:layout_height="match_parent"
+        android:padding="21dp">
+
+        <View
+            android:id="@+id/border"
+            android:layout_width="50dp"
+            android:layout_height="6dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/round" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_below="@id/border"
-            android:text="Default folders"
-            android:textSize="18sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@drawable/round" />
+            android:layout_marginTop="10dp"
+            android:text="Favorites"
+            android:textSize="20sp" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/myFavorites"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            android:layout_marginTop="6dp"
-            android:clickable="true"
-            app:cardBackgroundColor="@color/blue_card"
-            app:strokeWidth="0dp"
-            app:cardElevation="0dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    app:tint="@color/gold"
-                    android:src="@drawable/star_solid" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="10dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:text="My Favorites" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="13sp"
-                        android:textColor="@color/text"
-                        android:text="(0/200)" />
-
-                </LinearLayout>
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/arrow_right" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <TextView
+            android:id="@+id/close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_below="@id/border"
-            android:text="User folders"
-            android:textSize="18sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@drawable/round" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            android:layout_marginTop="6dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
             app:cardBackgroundColor="@color/card_bs"
-            android:clickable="true"
-            app:strokeWidth="0dp"
-            app:cardElevation="0dp">
+            app:cardCornerRadius="50dp"
+            app:cardElevation="6dp"
+            app:strokeWidth="0dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="12dp"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    app:tint="@color/gold"
-                    android:src="@drawable/lock_solid" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="10dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:text="Unlock favorites folder with Trip4Pet+" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_margin="10dp"
+                android:src="@drawable/round_close_24"
+                app:tint="@color/black" />
 
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.button.MaterialButton
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="21dp"
-            android:enabled="false"
-            android:text="Create a new folder" />
+            android:layout_below="@id/close"
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/border"
+                android:layout_marginTop="10dp"
+                android:text="Default folders"
+                android:textSize="18sp" />
 
-</RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/round" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/myFavorites"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:clickable="true"
+                app:cardBackgroundColor="@color/blue_card"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/star_solid"
+                        app:tint="@color/gold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="My Favorites"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/size"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="(0/200)"
+                            android:textColor="@color/text"
+                            android:textSize="13sp" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/arrow_right" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/border"
+                android:layout_marginTop="10dp"
+                android:text="User folders"
+                android:textSize="18sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/round" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/unlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:clickable="true"
+                app:cardBackgroundColor="@color/card_bs"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/lock_solid"
+                        app:tint="@color/gold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Unlock favorites folder with Trip4Pet+"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:id="@+id/buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/create"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:enabled="false"
+                android:padding="21dp"
+                android:text="Create a new folder" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.PurchaseInfo;
+import com.fxn.stash.Stash;
 import com.google.android.material.card.MaterialCardView;
 import com.moutamid.trip4pet.databinding.ActivitySubscriptionBinding;
 
@@ -28,6 +29,7 @@ public class SubscriptionActivity extends AppCompatActivity implements BillingPr
         EdgeToEdge.enable(this);
         binding = ActivitySubscriptionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

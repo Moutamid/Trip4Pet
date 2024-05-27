@@ -117,7 +117,7 @@ public class WelcomeActivity extends AppCompatActivity {
                             updateUI(user);
                         } else {
                             Constants.dismissDialog();
-                            Toast.makeText(WelcomeActivity.this, "Google sign in failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(WelcomeActivity.this, "Google sign in failed: Error Code - " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                         }

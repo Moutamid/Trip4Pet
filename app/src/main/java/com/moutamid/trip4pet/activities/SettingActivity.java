@@ -79,6 +79,12 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
+    }
+
     private void openLink(String url) {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
     }

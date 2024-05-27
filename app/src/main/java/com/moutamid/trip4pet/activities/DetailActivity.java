@@ -12,7 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -22,12 +24,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.fxn.stash.Stash;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.adapters.CommentsAdapter;
 import com.moutamid.trip4pet.adapters.SliderAdapter;
+import com.moutamid.trip4pet.bottomsheets.ListDialog;
 import com.moutamid.trip4pet.databinding.ActivityDetailBinding;
 import com.moutamid.trip4pet.models.CommentModel;
 import com.moutamid.trip4pet.models.FilterModel;
@@ -42,7 +46,8 @@ import java.util.UUID;
 public class DetailActivity extends AppCompatActivity {
     ActivityDetailBinding binding;
     LocationsModel model;
-
+    boolean isFavorite = false;
+    int index = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +71,15 @@ public class DetailActivity extends AppCompatActivity {
                 binding.activitiesIcon.addView(customEditTextLayout);
             }
         }
+        ArrayList<LocationsModel> favorite = Stash.getArrayList(Constants.FAVORITE, LocationsModel.class);
+        for (int i = 0; i < favorite.size(); i++) {
+            LocationsModel favoriteModel = favorite.get(i);
+            if (model.id.equals(favoriteModel.id)){
+                isFavorite = true;
+                index = i;
+                break;
+            }
+        }
 
         binding.contacts.setOnClickListener(v -> {
             Intent dialIntent = new Intent(Intent.ACTION_DIAL);
@@ -83,8 +97,9 @@ public class DetailActivity extends AppCompatActivity {
         });
 
         binding.favorites.setOnClickListener(v -> {
-
+            showFavoriteDialog();
         });
+        
         int activitySize = model.activities == null ? 0 : model.activities.size();
         int servicesSize = model.services == null ? 0 : model.services.size();
 
@@ -128,10 +143,25 @@ public class DetailActivity extends AppCompatActivity {
             popupWindow.showAsDropDown(v);
             MaterialButton review = customView.findViewById(R.id.review);
             MaterialButton imHere = customView.findViewById(R.id.imHere);
+            MaterialButton edit = customView.findViewById(R.id.edit);
+            MaterialButton addPhoto = customView.findViewById(R.id.addPhoto);
+
             review.setOnClickListener(v1 -> {
                 popupWindow.dismiss();
                 showReviewDialog();
             });
+
+            edit.setOnClickListener(v1 -> {
+                popupWindow.dismiss();
+                Stash.put(Constants.EDIT, model);
+                startActivity(new Intent(this, EditPlaceActivity.class));
+            });
+
+            addPhoto.setOnClickListener(v1 -> {
+                popupWindow.dismiss();
+                showReviewDialog();
+            });
+
             imHere.setOnClickListener(v1 -> {
                 popupWindow.dismiss();
                 Constants.showDialog();
@@ -148,6 +178,84 @@ public class DetailActivity extends AppCompatActivity {
             });
         });
 
+    }
+
+    private void showFavoriteDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.select_folder);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
+
+        MaterialCardView myFavorites = dialog.findViewById(R.id.myFavorites);
+        MaterialCardView unlock = dialog.findViewById(R.id.unlock);
+        TextView favoriteSize = dialog.findViewById(R.id.size);
+        LinearLayout buttons = dialog.findViewById(R.id.buttons);
+
+        ArrayList<LocationsModel> favorite = Stash.getArrayList(Constants.FAVORITE, LocationsModel.class);
+        favoriteSize.setText(favorite.size() + "/" + Constants.FAVORITE_SIZE);
+        myFavorites.setOnClickListener(v -> {
+            dialog.dismiss();
+            if (!isFavorite){
+                if (favorite.size() < Constants.FAVORITE_SIZE){
+                    favorite.add(model);
+                    Stash.put(Constants.FAVORITE, favorite);
+                    Toast.makeText(this, "Added to Favorite", Toast.LENGTH_SHORT).show();
+                    isFavorite = true;
+                    index = favorite.size()-1;
+                }
+            } else {
+                favorite.remove(index);
+                Stash.put(Constants.FAVORITE, favorite);
+                Toast.makeText(this, "Removed from Favorites", Toast.LENGTH_SHORT).show();
+                isFavorite = false;
+                index = 0;
+            }
+        });
+
+        buttons.removeAllViews();
+        if (Stash.getBoolean(Constants.ISVIP)) {
+            unlock.setVisibility(View.GONE);
+            ArrayList<String> folders = Stash.getArrayList(Constants.FAVORITE_FOLDER, String.class);
+            for (String folder : folders) {
+                LayoutInflater inf = getLayoutInflater();
+                View customLayout = inf.inflate(R.layout.favorite_folders, null);
+                TextView name = customLayout.findViewById(R.id.name);
+                TextView size = customLayout.findViewById(R.id.size);
+                MaterialCardView favorites = customLayout.findViewById(R.id.myFavorites);
+                name.setText(folder);
+                ArrayList<LocationsModel> locations = Stash.getArrayList(folder.replace(" ", "_"), LocationsModel.class);
+                size.setText("Total: " + locations.size());
+                favorites.setOnClickListener(v -> {
+                    dialog.dismiss();
+                    int id=0;
+                    boolean isFvrt = false;
+                    for (int i = 0; i < locations.size(); i++) {
+                        LocationsModel favoriteModel = locations.get(i);
+                        if (model.id.equals(favoriteModel.id)){
+                            isFvrt = true;
+                            id = i;
+                            break;
+                        }
+                    }
+                    if (!isFvrt){
+                        locations.add(model);
+                        Stash.put(folder.replace(" ", "_"), locations);
+                        Toast.makeText(this, "Added to Favorite", Toast.LENGTH_SHORT).show();
+                    } else {
+                        locations.remove(id);
+                        Stash.put(folder.replace(" ", "_"), locations);
+                        Toast.makeText(this, "Removed from Favorites", Toast.LENGTH_SHORT).show();
+                    }
+
+                });
+                buttons.addView(customLayout);
+            }
+        } else {
+            unlock.setVisibility(View.VISIBLE);
+        }
     }
 
     private void showReviewDialog() {
@@ -214,5 +322,6 @@ public class DetailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Constants.initDialog(this);
+        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
     }
 }

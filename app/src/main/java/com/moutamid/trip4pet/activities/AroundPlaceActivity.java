@@ -42,6 +42,7 @@ public class AroundPlaceActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
     }
 
     @Override
@@ -124,7 +125,6 @@ public class AroundPlaceActivity extends AppCompatActivity {
                     if (s.toString().length() > 3) {
                         adapter.filter(s.toString());
                     }
-
                 }
             }
         });

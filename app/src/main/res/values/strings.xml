@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Trip4Pet</string>
-    <string name="terms">By signing in you are agree with or <b><u>Term of Services</u></b> &amp; <b><u>Privacy Policy</u></b></string>
-    <string name="to_trip4pets">to <font color="#ACD8F8">Trip4Pets</font></string>
-    <string name="trip4pet">\@Trip4Pet</string>
-    <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus error, itaque maxime rem totam voluptatum?</string>
+    <string name="terms" translatable="false">By signing in you are agree with or <b><u>Term of Services</u></b> &amp; <b><u>Privacy Policy</u></b></string>
+    <string name="to_trip4pets" translatable="false">to <font color="#ACD8F8">Trip4Pets</font></string>
+    <string name="trip4pet" translatable="false">\@Trip4Pet</string>
+    <string name="lorem" translatable="false">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus error, itaque maxime rem totam voluptatum?</string>
 
     <string name="settings">Settings</string>
     <string name="are_you_sure_you_want_to_logout">Are you sure you want to logout?</string>
@@ -119,4 +119,5 @@
     <string name="rate_this_place">Rate this Place</string>
     <string name="add_your_comment">Add your comment</string>
     <string name="submit">Submit</string>
+    <string name="nothing_found">Nothing Found</string>
 </resources>

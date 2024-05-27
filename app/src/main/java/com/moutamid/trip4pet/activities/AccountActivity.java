@@ -29,6 +29,8 @@ import com.moutamid.trip4pet.models.LocationsModel;
 import com.moutamid.trip4pet.models.UserModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AccountActivity extends AppCompatActivity {
     ActivityAccountBinding binding;
@@ -95,6 +97,7 @@ public class AccountActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
         Constants.initDialog(this);
         getAddedPlaces();
     }
@@ -134,56 +137,91 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void showAddedPlaces() {
+        Map<String, LocationsModel> addedMap = new HashMap<>();
         for (Marker marker : currentMarkers) {
             marker.remove();
         }
         currentMarkers.clear();
         for (LocationsModel model : addedPlaces) {
-            Marker marker = mMap.addMarker(new MarkerOptions()
+            MarkerOptions markerOptions = new MarkerOptions()
                     .position(new LatLng(model.latitude, model.longitude))
-                    .title(model.name));
+                    .title(model.name);
+            Marker marker = mMap.addMarker(markerOptions);
+            marker.setTag(model.id);
+            addedMap.put(model.id, model);
             currentMarkers.add(marker);
         }
         if (!addedPlaces.isEmpty()) {
             LatLng latLng = new LatLng(addedPlaces.get(0).latitude, addedPlaces.get(0).longitude);
             mMap.setMinZoomPreference(4f);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+            mMap.setOnMarkerClickListener(marker -> {
+                LocationsModel model = addedMap.get(marker.getTag());
+                Stash.put(Constants.MODEL, model);
+                startActivity(new Intent(AccountActivity.this, DetailActivity.class));
+                return false;
+            });
         }
     }
 
     private void showCommentsPlaces() {
+        Map<String, LocationsModel> commentsMap = new HashMap<>();
         for (Marker marker : currentMarkers) {
             marker.remove();
         }
         currentMarkers.clear();
         for (LocationsModel model : comments) {
-            Marker marker = mMap.addMarker(new MarkerOptions()
+            MarkerOptions markerOptions = new MarkerOptions()
                     .position(new LatLng(model.latitude, model.longitude))
-                    .title(model.name));
+                    .title(model.name);
+            Marker marker = mMap.addMarker(markerOptions);
+            marker.setTag(model.id);
+            commentsMap.put(model.id, model);
             currentMarkers.add(marker);
         }
         if (!comments.isEmpty()) {
             LatLng latLng = new LatLng(comments.get(0).latitude, comments.get(0).longitude);
             mMap.setMinZoomPreference(4f);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+            mMap.setOnMarkerClickListener(marker -> {
+                LocationsModel model = commentsMap.get(marker.getTag());
+                Stash.put(Constants.MODEL, model);
+                startActivity(new Intent(AccountActivity.this, DetailActivity.class));
+                return false;
+            });
+
         }
     }
 
     private void showVisitedPlaces() {
+        Map<String, LocationsModel> visitedMap = new HashMap<>();
         for (Marker marker : currentMarkers) {
             marker.remove();
         }
         currentMarkers.clear();
         for (LocationsModel model : visitedPlaces) {
-            Marker marker = mMap.addMarker(new MarkerOptions()
+            MarkerOptions markerOptions = new MarkerOptions()
                     .position(new LatLng(model.latitude, model.longitude))
-                    .title(model.name));
+                    .title(model.name);
+            Marker marker = mMap.addMarker(markerOptions);
+            marker.setTag(model.id);
+            visitedMap.put(model.id, model);
             currentMarkers.add(marker);
         }
         if (!visitedPlaces.isEmpty()) {
             LatLng latLng = new LatLng(visitedPlaces.get(0).latitude, visitedPlaces.get(0).longitude);
             mMap.setMinZoomPreference(4f);
             mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+
+            mMap.setOnMarkerClickListener(marker -> {
+                LocationsModel model = visitedMap.get(marker.getTag());
+                Stash.put(Constants.MODEL, model);
+                startActivity(new Intent(AccountActivity.this, DetailActivity.class));
+                return false;
+            });
+
         }
     }
 
@@ -225,7 +263,9 @@ public class AccountActivity extends AppCompatActivity {
                     }
                 });
     }
+
     ArrayList<String> visited = new ArrayList<>();
+
     private void getVisitedPlaces() {
         Constants.showDialog();
         Constants.databaseReference().child(Constants.VISITED).child(Constants.auth().getCurrentUser().getUid())
@@ -256,8 +296,8 @@ public class AccountActivity extends AppCompatActivity {
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                 for (DataSnapshot dataSnapshot2 : dataSnapshot.getChildren()) {
                                     LocationsModel model = dataSnapshot2.getValue(LocationsModel.class);
-                                    for (String visited : visited){
-                                        if (visited.equals(model.id)){
+                                    for (String visited : visited) {
+                                        if (visited.equals(model.id)) {
                                             visitedPlaces.add(model);
                                         }
                                     }

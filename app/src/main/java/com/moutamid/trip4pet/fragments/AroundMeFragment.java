@@ -49,7 +49,7 @@ public class AroundMeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentAroundMeBinding.inflate(getLayoutInflater(), container, false);
-
+        Constants.setLocale(requireContext(), Stash.getString(Constants.LANGUAGE, "en"));
         binding.filter.setOnClickListener(v -> {
             FilterDialog filterDialog = new FilterDialog();
             filterDialog.setListener(() -> {
@@ -126,7 +126,7 @@ public class AroundMeFragment extends Fragment {
 
     }
 
-    private OnMapReadyCallback callback = googleMap -> {
+    private final OnMapReadyCallback callback = googleMap -> {
         float density = getResources().getDisplayMetrics().density;
         int widthPx = (int) (20 * density);
         int heightPx = (int) (32 * density);
@@ -145,8 +145,8 @@ public class AroundMeFragment extends Fragment {
 //            }
             if (model.activities != null) {
                 for (FilterModel filterModel : model.activities) {
-                    View marker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
-                    ImageView iconImage = marker.findViewById(R.id.icon);
+                    View marker = getLayoutInflater().inflate(R.layout.marker, null, false);
+                    ImageView iconImage = marker.findViewById(R.id.image);
                     iconImage.setImageResource(filterModel.icon);
                     googleMap.addMarker(new MarkerOptions()
                             .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), marker)))
@@ -163,13 +163,16 @@ public class AroundMeFragment extends Fragment {
                             .position(latLng).title(model.name)).setTag(model.id);
                 }
             }
-            if (icon != 0) {
-                googleMap.addMarker(new MarkerOptions()
-                        .icon(BitmapDescriptorFactory.fromBitmap(Constants.convertVectorToBitmap(requireContext(), icon, widthPx, (model.typeOfPlace.equals("Restaurant") ? heightPx2 : heightPx))))
-                        .position(latLng).title(model.name)).setTag(model.id);
-            } else {
+            if (model.typeOfPlace.equals("Other")) {
                 googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)).position(latLng).title(model.name)).setTag(model.id);
             }
+//            if (icon != 0) {
+//                googleMap.addMarker(new MarkerOptions()
+//                        .icon(BitmapDescriptorFactory.fromBitmap(Constants.convertVectorToBitmap(requireContext(), icon, widthPx, (model.typeOfPlace.equals("Restaurant") ? heightPx2 : heightPx))))
+//                        .position(latLng).title(model.name)).setTag(model.id);
+//            } else {
+//                googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)).position(latLng).title(model.name)).setTag(model.id);
+//            }
             map.put(model.id, model);
         }
 

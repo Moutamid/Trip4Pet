@@ -49,6 +49,22 @@
         android:layout_height="match_parent"
         android:layout_below="@id/close"
         tools:listitem="@layout/list_items"
+        android:visibility="gone"
         android:id="@+id/listRC" />
+
+    <LinearLayout
+        android:id="@+id/noLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/close"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nothing_found" />
+
+    </LinearLayout>
 
 </RelativeLayout>

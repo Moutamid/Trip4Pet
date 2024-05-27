@@ -79,6 +79,7 @@ public class AccountSettingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
         UserModel userModel = (UserModel) Stash.getObject(Constants.STASH_USER, UserModel.class);
         binding.email.setText(userModel.email);
         binding.name.setText(userModel.name);

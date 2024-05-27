@@ -52,7 +52,7 @@ public class FilterDialog extends BottomSheetDialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FilterFragmentBinding.inflate(getLayoutInflater(), container, false);
-
+        Constants.setLocale(requireContext(), Stash.getString(Constants.LANGUAGE, "en"));
         binding.apply.setOnClickListener(v -> {
             getList();
         });
