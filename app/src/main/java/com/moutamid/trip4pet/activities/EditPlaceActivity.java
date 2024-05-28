@@ -45,8 +45,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class EditPlaceActivity extends AppCompatActivity {
     ActivityEditPlaceBinding binding;
@@ -62,7 +64,7 @@ public class EditPlaceActivity extends AppCompatActivity {
     ArrayList<Uri> editedList;
     String ID;
     LocationsModel model;
-
+    Map<Integer, Integer> positionMap = new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +115,11 @@ public class EditPlaceActivity extends AppCompatActivity {
         binding.addPlace.setOnClickListener(v -> {
             if (valid()) {
                 Constants.showDialog();
-                uploadImages();
+                if (editedList.isEmpty()) {
+                    uploadData();
+                } else {
+                    uploadImages();
+                }
             }
         });
 
@@ -151,7 +157,7 @@ public class EditPlaceActivity extends AppCompatActivity {
     }
 
     private void uploadImages() {
-        for (Uri uri : imagesList) {
+        for (Uri uri : editedList) {
             Constants.storageReference().child("images").child(new SimpleDateFormat("ddMMyyyyhhmmss", Locale.getDefault()).format(new Date().getTime()))
                     .putFile(uri).addOnSuccessListener(taskSnapshot -> {
                         taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(link -> {
@@ -184,13 +190,14 @@ public class EditPlaceActivity extends AppCompatActivity {
         model.services = new ArrayList<>(services);
         model.isAccessibleToAnimals = binding.isAccessible.isChecked();
         model.timestamp = new Date().getTime();
-        model.comments = new ArrayList<>(this.model.comments);
-
-        Constants.databaseReference().child(Constants.PLACE).child(Constants.auth().getCurrentUser().getUid()).child(model.id)
+        if (this.model.comments != null) {
+            model.comments = new ArrayList<>(this.model.comments);
+        }
+        Constants.databaseReference().child(Constants.PLACE).child(model.userID).child(model.id)
                 .setValue(model).addOnSuccessListener(unused -> {
                     Constants.dismissDialog();
+                    Stash.put(Constants.MODEL, model);
                     Toast.makeText(this, "Place Added Successfully", Toast.LENGTH_SHORT).show();
-                    getOnBackPressedDispatcher().onBackPressed();
                 }).addOnFailureListener(e -> {
                     Constants.dismissDialog();
                     Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -383,6 +390,8 @@ public class EditPlaceActivity extends AppCompatActivity {
                             if (currentImage < limit) {
                                 imagesList.add(data.getClipData().getItemAt(currentImage).getUri());
                                 editedList.add(data.getClipData().getItemAt(currentImage).getUri());
+                                int pos = imagesList.size() - 1;
+                                positionMap.put(pos, editedList.size() - 1);
                             }
                             currentImage++;
                         }
@@ -402,6 +411,8 @@ public class EditPlaceActivity extends AppCompatActivity {
 
                     imagesList.add(data.getData());
                     editedList.add(data.getData());
+                    int pos = imagesList.size() - 1;
+                    positionMap.put(pos, editedList.size() - 1);
 
                     adapter = new ImageAdapter(this, imagesList, listener);
                     binding.RecyclerViewImageList.setAdapter(adapter);
@@ -428,6 +439,17 @@ public class EditPlaceActivity extends AppCompatActivity {
 
         removeImg.setOnClickListener(remove -> {
             try {
+                if (positionMap.containsKey(pos)) {
+                    int editedPos = positionMap.remove(pos);
+                    editedList.remove(editedPos);
+
+                    // Update editedList positions in the map
+                    for (Map.Entry<Integer, Integer> entry : positionMap.entrySet()) {
+                        if (entry.getValue() > editedPos) {
+                            positionMap.put(entry.getKey(), entry.getValue() - 1);
+                        }
+                    }
+                }
                 if (imagesList.size() == 1) {
                     imagesList.remove(pos);
                     adapter.notifyItemRemoved(pos);
@@ -437,8 +459,21 @@ public class EditPlaceActivity extends AppCompatActivity {
                         binding.AddPhotoLayout.setVisibility(View.VISIBLE);
                     }
                 }
+                if (pos < images.size()) {
+                    images.remove(pos);
+                }
                 imagesList.remove(pos);
                 adapter.notifyItemRemoved(pos);
+
+                Map<Integer, Integer> newPositionMap = new HashMap<>();
+                for (Map.Entry<Integer, Integer> entry : positionMap.entrySet()) {
+                    if (entry.getKey() > pos) {
+                        newPositionMap.put(entry.getKey() - 1, entry.getValue());
+                    } else {
+                        newPositionMap.put(entry.getKey(), entry.getValue());
+                    }
+                }
+                positionMap = newPositionMap;
                 dialog.cancel();
             } catch (Exception e) {
                 e.printStackTrace();

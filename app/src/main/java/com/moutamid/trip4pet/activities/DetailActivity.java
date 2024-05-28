@@ -40,6 +40,7 @@ import com.moutamid.trip4pet.models.UserModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -55,31 +56,7 @@ public class DetailActivity extends AppCompatActivity {
         binding = ActivityDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        model = (LocationsModel) Stash.getObject(Constants.MODEL, LocationsModel.class);
-
         binding.back.setOnClickListener(v -> onBackPressed());
-
-        binding.imageSlider.setSliderAdapter(new SliderAdapter(this, model.images));
-
-        if (model.activities != null) {
-            for (FilterModel s : model.activities) {
-                LayoutInflater inflater = getLayoutInflater();
-                View customEditTextLayout = inflater.inflate(R.layout.icon, null);
-                ImageView image = customEditTextLayout.findViewById(R.id.image);
-                image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
-                image.setImageResource(s.icon);
-                binding.activitiesIcon.addView(customEditTextLayout);
-            }
-        }
-        ArrayList<LocationsModel> favorite = Stash.getArrayList(Constants.FAVORITE, LocationsModel.class);
-        for (int i = 0; i < favorite.size(); i++) {
-            LocationsModel favoriteModel = favorite.get(i);
-            if (model.id.equals(favoriteModel.id)){
-                isFavorite = true;
-                index = i;
-                break;
-            }
-        }
 
         binding.contacts.setOnClickListener(v -> {
             Intent dialIntent = new Intent(Intent.ACTION_DIAL);
@@ -99,42 +76,6 @@ public class DetailActivity extends AppCompatActivity {
         binding.favorites.setOnClickListener(v -> {
             showFavoriteDialog();
         });
-        
-        int activitySize = model.activities == null ? 0 : model.activities.size();
-        int servicesSize = model.services == null ? 0 : model.services.size();
-
-        binding.totalActivity.setText(activitySize + " " + getString(R.string.activities));
-        binding.totalServices.setText(servicesSize + " " + getString(R.string.services));
-        binding.name.setText(model.name);
-        binding.typeOfPlace.setText(model.typeOfPlace);
-        binding.desc.setText(model.description);
-        binding.rating.setText(model.rating + "");
-        String cord = model.latitude + ", " + model.longitude + " (lat, long)";
-        binding.coordinates.setText(cord);
-        String address = model.name + ", " + model.city + ", " + model.country;
-        binding.location.setText(address);
-
-        if (model.services != null) {
-            for (FilterModel s : model.services) {
-                LayoutInflater inflater = getLayoutInflater();
-                View customEditTextLayout = inflater.inflate(R.layout.icon, null);
-                ImageView image = customEditTextLayout.findViewById(R.id.image);
-                CardView card = customEditTextLayout.findViewById(R.id.card);
-                card.setCardBackgroundColor(getResources().getColor(R.color.green_card));
-                //  image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
-                image.setImageResource(s.icon);
-                binding.servicesIcon.addView(customEditTextLayout);
-            }
-        }
-
-//        if (model.services == null) {
-//            binding.services.setVisibility(View.GONE);
-//        }
-//        if (model.activities == null) {
-//            binding.activities.setVisibility(View.GONE);
-//        }
-
-        updateRecycler();
 
         binding.more.setOnClickListener(v -> {
             LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -177,8 +118,8 @@ public class DetailActivity extends AppCompatActivity {
                         });
             });
         });
-
     }
+
 
     private void showFavoriteDialog() {
         Dialog dialog = new Dialog(this);
@@ -301,13 +242,14 @@ public class DetailActivity extends AppCompatActivity {
 
     private void updateRecycler() {
         if (model.comments != null) {
-
             float rating = 0;
             for (CommentModel commentModel : model.comments){
                 rating += commentModel.rating;
             }
-            float total = rating/5;
-            binding.rating.setText(String.valueOf(total));
+            float total = rating/model.comments.size();
+            String rate = String.format(Locale.getDefault(),"%.2f", total) + " (" + model.comments.size() + ")";
+            if (model.comments.size() > 1) binding.rating.setText(rate);
+            else binding.rating.setText(model.comments.get(0).rating + " (1)");
 
             binding.noComments.setVisibility(View.GONE);
             binding.commentsRC.setVisibility(View.VISIBLE);
@@ -323,5 +265,59 @@ public class DetailActivity extends AppCompatActivity {
         super.onResume();
         Constants.initDialog(this);
         Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
+
+        model = (LocationsModel) Stash.getObject(Constants.MODEL, LocationsModel.class);
+        binding.imageSlider.setSliderAdapter(new SliderAdapter(this, model.images));
+
+        if (model.activities != null) {
+            for (FilterModel s : model.activities) {
+                LayoutInflater inflater = getLayoutInflater();
+                View customEditTextLayout = inflater.inflate(R.layout.icon, null);
+                ImageView image = customEditTextLayout.findViewById(R.id.image);
+                image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
+                image.setImageResource(s.icon);
+                binding.activitiesIcon.addView(customEditTextLayout);
+            }
+        }
+        ArrayList<LocationsModel> favorite = Stash.getArrayList(Constants.FAVORITE, LocationsModel.class);
+        for (int i = 0; i < favorite.size(); i++) {
+            LocationsModel favoriteModel = favorite.get(i);
+            if (model.id.equals(favoriteModel.id)){
+                isFavorite = true;
+                index = i;
+                break;
+            }
+        }
+
+        int activitySize = model.activities == null ? 0 : model.activities.size();
+        int servicesSize = model.services == null ? 0 : model.services.size();
+
+        binding.totalActivity.setText(activitySize + " " + getString(R.string.activities));
+        binding.totalServices.setText(servicesSize + " " + getString(R.string.services));
+        binding.name.setText(model.name);
+        binding.typeOfPlace.setText(model.typeOfPlace);
+        binding.desc.setText(model.description);
+        int size = model.comments != null ? model.comments.size() : 0;
+        binding.rating.setText(model.rating + " (" + size + ")");
+        String cord = model.latitude + ", " + model.longitude + " (lat, long)";
+        binding.coordinates.setText(cord);
+        String address = model.name + ", " + model.city + ", " + model.country;
+        binding.location.setText(address);
+
+        if (model.services != null) {
+            for (FilterModel s : model.services) {
+                LayoutInflater inflater = getLayoutInflater();
+                View customEditTextLayout = inflater.inflate(R.layout.icon, null);
+                ImageView image = customEditTextLayout.findViewById(R.id.image);
+                CardView card = customEditTextLayout.findViewById(R.id.card);
+                card.setCardBackgroundColor(getResources().getColor(R.color.green_card));
+                //  image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+                image.setImageResource(s.icon);
+                binding.servicesIcon.addView(customEditTextLayout);
+            }
+        }
+
+        updateRecycler();
+
     }
 }

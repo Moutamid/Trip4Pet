@@ -41,10 +41,6 @@ public class FilterDialog extends BottomSheetDialogFragment {
             "Beach",
             "Other",
     };
-    public static String[] vehicleHeight = {
-            "5.10'", "6.2'", "6.6'", "6.10'", "7.2'", "7.6'", "7.10'", "8.2'", "8.6'", "8.10'", "9.2'", "9.6'", "9.10'",
-            "10.2'", "10.6'", "10.10'", "11.2'", "11.6'", "11.10'", "12.2'", "12.6'", "12.10'",
-    };
     ArrayList<FilterModel> service = new ArrayList<>();
     ArrayList<FilterModel> activities = new ArrayList<>();
 
@@ -95,10 +91,6 @@ public class FilterDialog extends BottomSheetDialogFragment {
             dismiss();
         });
 
-        List<String> list = Arrays.asList(vehicleHeight);
-        ArrayAdapter<String> exerciseAdapter = new ArrayAdapter<>(requireActivity(), android.R.layout.simple_dropdown_item_1line, list);
-        binding.heightList.setAdapter(exerciseAdapter);
-
         return binding.getRoot();
     }
 
@@ -111,7 +103,6 @@ public class FilterDialog extends BottomSheetDialogFragment {
                 MaterialCheckBox checkbox = main.findViewById(R.id.checkbox);
                 TextView text = main.findViewById(R.id.text);
                 if (checkbox.isChecked()) {
-                    Toast.makeText(requireContext(), text.getText().toString(), Toast.LENGTH_SHORT).show();
                     filters.add(text.getText().toString());
                 }
             }
@@ -138,8 +129,6 @@ public class FilterDialog extends BottomSheetDialogFragment {
                 }
             }
         }
-        if (!binding.height.getEditText().getText().toString().isEmpty())
-            filters.add(binding.height.getEditText().getText().toString());
 
         if (Stash.getBoolean(Constants.ISVIP, false)) {
             if (binding.rating47.isChecked()){
@@ -152,7 +141,7 @@ public class FilterDialog extends BottomSheetDialogFragment {
                 filters.add("3");
             }
         }
-
+        Stash.put(Constants.FILTERS, filters);
         dismiss();
     }
 

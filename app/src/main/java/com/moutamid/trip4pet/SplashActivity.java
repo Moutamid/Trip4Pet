@@ -10,6 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.fxn.stash.Stash;
 import com.moutamid.trip4pet.activities.WelcomeActivity;
 
 public class SplashActivity extends AppCompatActivity {
@@ -24,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        Stash.clear(Constants.FILTERS);
         new Handler().postDelayed(() -> {
             if (Constants.auth().getCurrentUser() != null) {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));

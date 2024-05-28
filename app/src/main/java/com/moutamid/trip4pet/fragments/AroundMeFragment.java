@@ -14,10 +14,12 @@ import androidx.fragment.app.Fragment;
 
 import com.fxn.stash.Stash;
 import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,6 +31,7 @@ import com.moutamid.trip4pet.bottomsheets.FavoruiteDialog;
 import com.moutamid.trip4pet.bottomsheets.FilterDialog;
 import com.moutamid.trip4pet.bottomsheets.ListDialog;
 import com.moutamid.trip4pet.databinding.FragmentAroundMeBinding;
+import com.moutamid.trip4pet.models.CommentModel;
 import com.moutamid.trip4pet.models.FilterModel;
 import com.moutamid.trip4pet.models.LocationsModel;
 
@@ -38,6 +41,8 @@ import java.util.Map;
 
 public class AroundMeFragment extends Fragment {
     FragmentAroundMeBinding binding;
+    GoogleMap mMap;
+    private ArrayList<Marker> currentMarkers = new ArrayList<>();
 
     public AroundMeFragment() {
         // Required empty public constructor
@@ -53,7 +58,7 @@ public class AroundMeFragment extends Fragment {
         binding.filter.setOnClickListener(v -> {
             FilterDialog filterDialog = new FilterDialog();
             filterDialog.setListener(() -> {
-                Toast.makeText(requireContext(), "Resumes", Toast.LENGTH_SHORT).show();
+                filterPlaces();
             });
             filterDialog.show(requireActivity().getSupportFragmentManager(), filterDialog.getTag());
         });
@@ -76,9 +81,105 @@ public class AroundMeFragment extends Fragment {
 
         Constants.initDialog(requireContext());
         Constants.showDialog();
-        getPlaces();
+
 
         return binding.getRoot();
+    }
+
+    private void filterPlaces() {
+        ArrayList<String> filters = Stash.getArrayList(Constants.FILTERS, String.class);
+        for (Marker marker : currentMarkers) {
+            marker.remove();
+        }
+        currentMarkers.clear();
+        if (filters.isEmpty()) {
+            showAll();
+        } else {
+            Map<String, LocationsModel> map = new HashMap<>();
+            for (LocationsModel model : places) {
+                for (String filter : filters) {
+                    float total = 0;
+                    if (model.comments != null) {
+                        float rating = 0;
+                        for (CommentModel commentModel : model.comments) {
+                            rating += commentModel.rating;
+                        }
+                        total = rating / model.comments.size();
+                    }
+                    if (model.typeOfPlace.contains(filter) || (model.rating == total && total != 0) || getFilter(model, filter)) {
+                        LatLng latLng = new LatLng(model.latitude, model.longitude);
+                        if (model.activities != null) {
+                            for (FilterModel filterModel : model.activities) {
+                                View customMarker = getLayoutInflater().inflate(R.layout.marker, null, false);
+                                ImageView iconImage = customMarker.findViewById(R.id.image);
+                                iconImage.setImageResource(filterModel.icon);
+                                MarkerOptions markerOptions = new MarkerOptions()
+                                        .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
+                                        .position(latLng).title(model.name);
+                                Marker marker = mMap.addMarker(markerOptions);
+                                marker.setTag(model.id);
+                                currentMarkers.add(marker);
+                            }
+                        }
+                        if (model.services != null) {
+                            for (FilterModel filterModel : model.services) {
+                                View customMarker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
+                                ImageView iconImage = customMarker.findViewById(R.id.icon);
+                                iconImage.setImageResource(filterModel.icon);
+                                MarkerOptions markerOptions = new MarkerOptions()
+                                        .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
+                                        .position(latLng).title(model.name);
+                                Marker marker = mMap.addMarker(markerOptions);
+                                marker.setTag(model.id);
+                                currentMarkers.add(marker);
+
+                            }
+                        }
+                        if (model.typeOfPlace.equals("Other")) {
+                            MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)).position(latLng).title(model.name);
+                            Marker marker = mMap.addMarker(markerOptions);
+                            marker.setTag(model.id);
+                            currentMarkers.add(marker);
+                        }
+                        map.put(model.id, model);
+                    }
+
+                    mMap.setOnMarkerClickListener(marker -> {
+                        LocationsModel location = map.get(marker.getTag());
+                        Stash.put(Constants.MODEL, location);
+                        startActivity(new Intent(requireContext(), DetailActivity.class));
+                        return true;
+                    });
+
+                    mMap.setMinZoomPreference(4f);
+                    if (!places.isEmpty()) {
+                        LatLng latLng = new LatLng(places.get(0).latitude, places.get(0).longitude);
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean getFilter(LocationsModel model, String filter) {
+        boolean service = false, activity = false;
+        if (model.services != null) {
+            for (FilterModel ser : model.services) {
+                if (ser.name.contains(filter)) {
+                    service = true;
+                    break;
+                }
+            }
+        }
+        if (model.activities != null) {
+            for (FilterModel act : model.activities) {
+                if (act.name.contains(filter)) {
+                    activity = true;
+                    break;
+                }
+            }
+        }
+        return service || activity;
     }
 
     private void getPlaces() {
@@ -96,7 +197,7 @@ public class AroundMeFragment extends Fragment {
                                 }
                             }
                         }
-                        showMap();
+                        showAll();
                     }
 
                     @Override
@@ -107,31 +208,38 @@ public class AroundMeFragment extends Fragment {
                 });
     }
 
-    private void showMap() {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        showMap();
+        getPlaces();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
     private final OnMapReadyCallback callback = googleMap -> {
-        float density = getResources().getDisplayMetrics().density;
+        mMap = googleMap;
+    };
+
+    /*
+    *         float density = getResources().getDisplayMetrics().density;
         int widthPx = (int) (20 * density);
         int heightPx = (int) (32 * density);
         int heightPx2 = (int) (25 * density);
+        *
+        * */
 
+    private void showAll() {
+        for (Marker marker : currentMarkers) {
+            marker.remove();
+        }
+        currentMarkers.clear();
         Map<String, LocationsModel> map = new HashMap<>();
         for (LocationsModel model : places) {
             LatLng latLng = new LatLng(model.latitude, model.longitude);
@@ -145,50 +253,52 @@ public class AroundMeFragment extends Fragment {
 //            }
             if (model.activities != null) {
                 for (FilterModel filterModel : model.activities) {
-                    View marker = getLayoutInflater().inflate(R.layout.marker, null, false);
-                    ImageView iconImage = marker.findViewById(R.id.image);
+                    View customMarker = getLayoutInflater().inflate(R.layout.marker, null, false);
+                    ImageView iconImage = customMarker.findViewById(R.id.image);
                     iconImage.setImageResource(filterModel.icon);
-                    googleMap.addMarker(new MarkerOptions()
-                            .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), marker)))
-                            .position(latLng).title(model.name)).setTag(model.id);
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
+                            .position(latLng).title(model.name);
+                    Marker marker = mMap.addMarker(markerOptions);
+                    marker.setTag(model.id);
+                    currentMarkers.add(marker);
                 }
             }
             if (model.services != null) {
                 for (FilterModel filterModel : model.services) {
-                    View marker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
-                    ImageView iconImage = marker.findViewById(R.id.icon);
+                    View customMarker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
+                    ImageView iconImage = customMarker.findViewById(R.id.icon);
                     iconImage.setImageResource(filterModel.icon);
-                    googleMap.addMarker(new MarkerOptions()
-                            .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), marker)))
-                            .position(latLng).title(model.name)).setTag(model.id);
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
+                            .position(latLng).title(model.name);
+                    Marker marker = mMap.addMarker(markerOptions);
+                    marker.setTag(model.id);
+                    currentMarkers.add(marker);
+
                 }
             }
             if (model.typeOfPlace.equals("Other")) {
-                googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)).position(latLng).title(model.name)).setTag(model.id);
+                MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)).position(latLng).title(model.name);
+                Marker marker = mMap.addMarker(markerOptions);
+                marker.setTag(model.id);
+                currentMarkers.add(marker);
             }
-//            if (icon != 0) {
-//                googleMap.addMarker(new MarkerOptions()
-//                        .icon(BitmapDescriptorFactory.fromBitmap(Constants.convertVectorToBitmap(requireContext(), icon, widthPx, (model.typeOfPlace.equals("Restaurant") ? heightPx2 : heightPx))))
-//                        .position(latLng).title(model.name)).setTag(model.id);
-//            } else {
-//                googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)).position(latLng).title(model.name)).setTag(model.id);
-//            }
             map.put(model.id, model);
         }
 
-        googleMap.setOnMarkerClickListener(marker -> {
+        mMap.setOnMarkerClickListener(marker -> {
             LocationsModel model = map.get(marker.getTag());
             Stash.put(Constants.MODEL, model);
             startActivity(new Intent(requireContext(), DetailActivity.class));
             return true;
         });
 
-        googleMap.setMinZoomPreference(4f);
+        mMap.setMinZoomPreference(4f);
         if (!places.isEmpty()) {
             LatLng latLng = new LatLng(places.get(0).latitude, places.get(0).longitude);
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         }
-
-    };
+    }
 
 }
