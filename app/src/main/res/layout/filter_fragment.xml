@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/border"
         android:layout_marginTop="10dp"
-        android:text="Filters"
+        android:text="@string/filters"
         android:textSize="20sp" />
 
     <com.google.android.material.button.MaterialButton
@@ -27,7 +27,7 @@
         android:layout_below="@id/border"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
-        android:text="Clear Filters"
+        android:text="@string/clear_filters"
         android:textStyle="bold"
         android:textColor="@color/red"
         app:backgroundTint="@color/red_bg" />
@@ -49,7 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/border"
                 android:layout_marginTop="10dp"
-                android:text="Filter By Ratings"
+                android:text="@string/filter_by_ratings"
                 android:textStyle="bold"
                 android:textSize="16sp" />
 
@@ -100,7 +100,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="10dp"
                             android:layout_weight="1"
-                            android:text="Rating greater than or equal to 4.75"
+                            android:text="@string/rating_greater_than_or_equal_to_4_75"
                             android:textSize="14sp" />
 
                         <ImageView
@@ -157,7 +157,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="10dp"
                             android:layout_weight="1"
-                            android:text="Rating greater than or equal to 4"
+                            android:text="@string/rating_greater_than_or_equal_to_4"
                             android:textSize="14sp" />
 
                         <ImageView
@@ -214,7 +214,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="10dp"
                             android:layout_weight="1"
-                            android:text="Rating greater than or equal to 3"
+                            android:text="@string/rating_greater_than_or_equal_to_3"
                             android:textSize="14sp" />
 
                         <ImageView
@@ -235,7 +235,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textStyle="bold"
-                android:text="Filter types of places:"
+                android:text="@string/filter_types_of_places"
                 android:textSize="16sp" />
 
             <View
@@ -258,7 +258,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textStyle="bold"
-                android:text="NearBy Services:"
+                android:text="@string/nearby_services"
                 android:textSize="16sp" />
 
             <View
@@ -282,7 +282,7 @@
                 android:layout_below="@id/border"
                 android:layout_marginTop="10dp"
                 android:textStyle="bold"
-                android:text="Activities Nearby"
+                android:text="@string/activities_nearby"
                 android:textSize="16sp" />
 
             <View
@@ -309,6 +309,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="Apply Filters" />
+        android:text="@string/apply_filters" />
 
 </RelativeLayout>

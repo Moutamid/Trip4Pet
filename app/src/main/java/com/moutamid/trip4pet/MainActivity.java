@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.PurchaseInfo;
@@ -18,6 +19,7 @@ import com.anjlab.android.iab.v3.SkuDetails;
 import com.fxn.stash.Stash;
 import com.moutamid.trip4pet.databinding.ActivityMainBinding;
 import com.moutamid.trip4pet.fragments.AroundMeFragment;
+import com.moutamid.trip4pet.fragments.AroundPlaceFragment;
 import com.moutamid.trip4pet.fragments.SettingFragment;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler {
     ActivityMainBinding binding;
     BillingProcessor bp;
+    public ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,43 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         binding.tabLayout.setupWithViewPager(binding.viewPager);
         // Optionally, you can set icons for the tabs
         binding.tabLayout.getTabAt(0).setIcon(R.drawable.compass);
-        binding.tabLayout.getTabAt(1).setIcon(R.drawable.bars);
+        binding.tabLayout.getTabAt(1).setIcon(R.drawable.location_crosshairs_solid);
+        binding.tabLayout.getTabAt(2).setIcon(R.drawable.bars);
+
+        viewPager = binding.viewPager;
+    }
+
+    public class PagerAdapter extends FragmentPagerAdapter {
+
+        public PagerAdapter(@NonNull FragmentManager fm) {
+            super(fm);
+        }
+
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0:
+                    return new AroundMeFragment();
+                case 1:
+                    return new AroundPlaceFragment();
+                case 2:
+                    return new SettingFragment();
+                default:
+                    return null;
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            // Return tab titles here if needed
+            return null;
+        }
     }
 
     private void requestLocationPermission() {
@@ -110,36 +149,4 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
     public void onBillingInitialized() {
 
     }
-
-    public class PagerAdapter extends FragmentPagerAdapter {
-
-        public PagerAdapter(@NonNull FragmentManager fm) {
-            super(fm);
-        }
-
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new AroundMeFragment(); // Replace with your MapFragment
-                case 1:
-                    return new SettingFragment(); // Replace with your MenuFragment
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 2; // Number of tabs
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            // Return tab titles here if needed
-            return null;
-        }
-    }
-
 }

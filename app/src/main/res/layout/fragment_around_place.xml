@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
-    tools:context=".activities.AroundPlaceActivity">
+    android:padding="12dp"
+    tools:context=".fragments.AroundPlaceFragment">
 
-    <include layout="@layout/toolbar" android:id="@+id/toolbar" />
+    <TextView
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="28sp"
+        android:text="@string/around_place"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="40dp"/>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -20,8 +27,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="12dp">
+            android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/search"
@@ -67,62 +73,6 @@
                 android:visibility="gone"
                 android:layout_marginTop="6dp"
                 android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:text="@string/city"
-                    android:textSize="16sp" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/city"
-                    style="@style/Widget.Material3.TextInputLayout.FilledBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:boxBackgroundColor="@color/grey"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusTopStart="12dp"
-                    android:textColorHint="@color/text"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:inputType="numberDecimal|numberSigned" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:text="@string/country"
-                    android:textSize="16sp" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/country"
-                    style="@style/Widget.Material3.TextInputLayout.FilledBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:boxBackgroundColor="@color/grey"
-                    app:boxCornerRadiusBottomEnd="12dp"
-                    app:boxCornerRadiusBottomStart="12dp"
-                    app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusTopStart="12dp"
-                    android:textColorHint="@color/text"
-                    app:boxStrokeWidth="0dp"
-                    app:boxStrokeWidthFocused="0dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:inputType="numberDecimal|numberSigned" />
-
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -200,8 +150,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="100dp"
+        android:layout_marginHorizontal="10dp"
         android:padding="12dp"
         android:text="@string/confirm" />
 

@@ -71,6 +71,7 @@ public class EditPlaceActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         binding = ActivityEditPlaceBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -197,7 +198,7 @@ public class EditPlaceActivity extends AppCompatActivity {
                 .setValue(model).addOnSuccessListener(unused -> {
                     Constants.dismissDialog();
                     Stash.put(Constants.MODEL, model);
-                    Toast.makeText(this, "Place Added Successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.place_added_successfully, Toast.LENGTH_SHORT).show();
                 }).addOnFailureListener(e -> {
                     Constants.dismissDialog();
                     Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -205,44 +206,44 @@ public class EditPlaceActivity extends AppCompatActivity {
     }
 
     private boolean valid() {
-        if (imagesList.isEmpty()) {
-            Toast.makeText(this, "Add images", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        if (imagesList.isEmpty()) {
+//            Toast.makeText(this, "Add images", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
         if (binding.name.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Name is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.name_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.contact.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Contact is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.contact_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.place.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Type of place is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.type_of_place_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.desc.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Description is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.description_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.location.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Address is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.address_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.city.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "City is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.city_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.country.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Country is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.country_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.latitude.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Latitude is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.latitude_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.longitude.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Longitude is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.longitude_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -252,7 +253,6 @@ public class EditPlaceActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Constants.initDialog(this);
-        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
     }
 
     private void getImageFromGallery() {

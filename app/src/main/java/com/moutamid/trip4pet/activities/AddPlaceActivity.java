@@ -38,6 +38,7 @@ public class AddPlaceActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         binding = ActivityAddPlaceBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
 //        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
 //            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -73,7 +74,6 @@ public class AddPlaceActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
@@ -91,10 +91,10 @@ public class AddPlaceActivity extends AppCompatActivity {
                     .addOnSuccessListener(this, location -> {
                         if (location != null) {
                             LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f));
                         } else {
                             // Location not found, handle the case where there is no last known location
-                            Toast.makeText(this, "Location not found!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, getString(R.string.location_not_found), Toast.LENGTH_SHORT).show();
                         }
                     });
         } else {
@@ -111,6 +111,7 @@ public class AddPlaceActivity extends AppCompatActivity {
             // Use latitude and longitude as needed
             Log.d(TAG, "lat & long:  " + latitude + "  " + longitude);
         });
+        mMap.setMyLocationEnabled(true);
     };
     private static final String TAG = "AddPlaceActivity";
 }

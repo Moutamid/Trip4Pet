@@ -26,6 +26,7 @@ public class SplashActivity extends AppCompatActivity {
             return insets;
         });
         Stash.clear(Constants.FILTERS);
+        Stash.clear(Constants.AROUND_PLACE);
         new Handler().postDelayed(() -> {
             if (Constants.auth().getCurrentUser() != null) {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));

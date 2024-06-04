@@ -38,6 +38,7 @@ import java.util.Locale;
 import java.util.UUID;
 
 public class Constants {
+    public static final String DUMMY_IMAGE = "https://firebasestorage.googleapis.com/v0/b/multistreamz-10cba.appspot.com/o/trip4pet%2Fimages%2F01062024113321?alt=media&token=f2840b63-8f4d-48b8-a04a-db72ca4d9de9";
     public static Dialog dialog;
     public static final String STASH_USER = "STASH_USER";
     public static final String MODEL = "MODEL";
@@ -51,6 +52,7 @@ public class Constants {
     public static final String Metric = "Metric";
     public static final String Vehicle = "Vehicle";
     public static final String Imperial = "Imperial";
+    public static final String AROUND_PLACE = "AROUND_PLACE";
     public static final String MEASURE = "MEASURE";
     public static final String EDIT = "EDIT";
     public static final int FAVORITE_SIZE = 200;
@@ -117,17 +119,17 @@ public class Constants {
 
     public static ArrayList<FilterModel> getServices(Context context) {
         ArrayList<FilterModel> service = new ArrayList<>();
-        service.add(new FilterModel("Spiaggia senza catelli", R.drawable.spiaggia_senza_cartelli));
-        service.add(new FilterModel("Vetrinario", R.drawable.vet));
-        service.add(new FilterModel("Coffee bar", R.drawable.coffee_bar));
-        service.add(new FilterModel("Ristorante", R.drawable.ristorante));
-        service.add(new FilterModel("Spiaggia per cani", R.drawable.spiaggia_per_cani));
-        service.add(new FilterModel("Pet Store", R.drawable.pet_store));
-        service.add(new FilterModel("Area Cani", R.drawable.area_cani));
-        service.add(new FilterModel("Campeggio", R.drawable.campeggio));
-        service.add(new FilterModel("Albergo", R.drawable.albergo));
-        service.add(new FilterModel("Lavanderia", R.drawable.lavanderia));
-        service.add(new FilterModel("Lavanderia For Pet", R.drawable.lavanderia_for_pet));
+        service.add(new FilterModel(context.getString(R.string.beach_without_signs), R.drawable.spiaggia_senza_cartelli));
+        service.add(new FilterModel(context.getString(R.string.veterinarian), R.drawable.vet));
+        service.add(new FilterModel(context.getString(R.string.coffee_bar), R.drawable.coffee_bar));
+        service.add(new FilterModel(context.getString(R.string.ristorante), R.drawable.ristorante));
+        service.add(new FilterModel(context.getString(R.string.dog_beach), R.drawable.spiaggia_per_cani));
+        service.add(new FilterModel(context.getString(R.string.pet_store), R.drawable.pet_store));
+        service.add(new FilterModel(context.getString(R.string.dog_area), R.drawable.area_cani));
+        service.add(new FilterModel(context.getString(R.string.camping), R.drawable.campeggio));
+        service.add(new FilterModel(context.getString(R.string.albergo), R.drawable.albergo));
+        service.add(new FilterModel(context.getString(R.string.laundry), R.drawable.lavanderia));
+        service.add(new FilterModel(context.getString(R.string.laundry_for_pets), R.drawable.lavanderia_for_pet));
 
 //        service.add(new FilterModel("Pet-Friendly Amenities", R.drawable.wifi_solid));  // Placeholder icon
 //        service.add(new FilterModel("Laundry (for pet items)", R.drawable.jug_detergent_solid));

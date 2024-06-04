@@ -33,7 +33,7 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         binding.toolbar.back.setOnClickListener(v -> onBackPressed());
-        binding.toolbar.title.setText("Create Account");
+        binding.toolbar.title.setText(R.string.create_account);
 
         binding.login.setOnClickListener(v -> {
             startActivity(new Intent(this, LoginActivity.class));
@@ -72,27 +72,27 @@ public class SignInActivity extends AppCompatActivity {
 
     private boolean valid() {
         if (binding.name.getEditText().getText().toString().isEmpty()){
-            Toast.makeText(this, "Name is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.name_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.email.getEditText().getText().toString().isEmpty()){
-            Toast.makeText(this, "Email is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.email_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (!Patterns.EMAIL_ADDRESS.matcher(binding.email.getEditText().getText().toString()).matches()){
-            Toast.makeText(this, "Email is not valid", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.email_is_not_valid, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.password.getEditText().getText().toString().isEmpty()){
-            Toast.makeText(this, "Password is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.password_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.rePassword.getEditText().getText().toString().isEmpty()){
-            Toast.makeText(this, "Password is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.password_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (!binding.rePassword.getEditText().getText().toString().equals(binding.password.getEditText().getText().toString())){
-            Toast.makeText(this, "Password is not matched", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.password_is_not_matched, Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

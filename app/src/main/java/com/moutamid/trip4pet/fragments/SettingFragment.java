@@ -35,7 +35,10 @@ public class SettingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentSettingBinding.inflate(getLayoutInflater(), container, false);
-        binding.setting.setOnClickListener(v -> startActivity(new Intent(requireContext(), SettingActivity.class)));
+        binding.setting.setOnClickListener(v -> {
+            startActivity(new Intent(requireContext(), SettingActivity.class));
+            requireActivity().finish();
+        });
         binding.account.setOnClickListener(v -> startActivity(new Intent(requireContext(), AccountActivity.class)));
         binding.add.setOnClickListener(v -> startActivity(new Intent(requireContext(), AddPlaceActivity.class)));
         binding.buy.setOnClickListener(v -> {

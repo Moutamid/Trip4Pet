@@ -1,29 +1,34 @@
-package com.moutamid.trip4pet.activities;
+package com.moutamid.trip4pet.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.fxn.stash.Stash;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.moutamid.trip4pet.Constants;
+import com.moutamid.trip4pet.MainActivity;
 import com.moutamid.trip4pet.R;
+import com.moutamid.trip4pet.activities.AroundPlaceActivity;
 import com.moutamid.trip4pet.adapters.CitiesAdapter;
-import com.moutamid.trip4pet.databinding.ActivityAroundPlaceBinding;
+import com.moutamid.trip4pet.databinding.FragmentAroundPlaceBinding;
 import com.moutamid.trip4pet.listener.CityClick;
 import com.moutamid.trip4pet.models.Cities;
 
@@ -34,70 +39,45 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public class AroundPlaceActivity extends AppCompatActivity {
-    ActivityAroundPlaceBinding binding;
-    ArrayList<Cities> list = new ArrayList<>();
-    private static final String TAG = "AroundPlaceActivity";
+public class AroundPlaceFragment extends Fragment {
+    FragmentAroundPlaceBinding binding;
     CitiesAdapter adapter;
-
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private static final String TAG = "AroundPlaceFragment";
+    ArrayList<Cities> list = new ArrayList<>();
+    public AroundPlaceFragment() {
+        // Required empty public constructor
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        binding = ActivityAroundPlaceBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        binding.cities.setLayoutManager(new LinearLayoutManager(this));
-        binding.cities.setHasFixedSize(false);
-
-        Constants.initDialog(this);
+    public void onResume() {
+        super.onResume();
+        Constants.setLocale(requireContext(), Stash.getString(Constants.LANGUAGE, "en"));
+        Constants.initDialog(requireContext());
         Constants.showDialog();
+        list.clear();
         MyTask task = new MyTask();
         task.execute();
-//        list = Stash.getArrayList(Constants.CITIES, Cities.class);
-//        if (list.isEmpty()) {
-//            Constants.showDialog();
-//            MyTask task = new MyTask();
-//            task.execute();
-//        } else {
-//            adapter = new CitiesAdapter(AroundPlaceActivity.this, list);
-//            binding.cities.setAdapter(adapter);
-//        }
+    }
 
-        binding.toolbar.title.setText(getString(R.string.add_a_place));
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentAroundPlaceBinding.inflate(getLayoutInflater(), container, false);
 
-        binding.toolbar.back.setOnClickListener(v -> {
-            startActivity(new Intent(this, AddPlaceActivity.class));
-            finish();
-        });
-
-        binding.confirm.setOnClickListener(v -> {
-            if (binding.gps.isChecked()) {
-                Intent intent = new Intent(this, AddPlaceActivity.class);
-                intent.putExtra("GIVEN", true);
-                String COORDINATES = binding.latitude.getEditText().getText().toString() + ", " + binding.longitude.getEditText().getText().toString();
-                String PLACE = binding.city.getEditText().getText().toString() + ", " + binding.country.getEditText().getText().toString();
-                intent.putExtra(Constants.COORDINATES, COORDINATES);
-                intent.putExtra(Constants.PLACE, PLACE);
-                startActivity(intent);
-                finish();
-            }
-        });
+        binding.cities.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.cities.setHasFixedSize(false);
 
         binding.gps.setOnCheckedChangeListener((buttonView, isChecked) -> {
             int v = isChecked ? View.VISIBLE : View.GONE;
             binding.gpsLayout.setVisibility(v);
+        });
+
+        binding.confirm.setOnClickListener(v -> {
+            Cities cities = new Cities();
+            cities.latitude = Double.parseDouble(binding.latitude.getEditText().getText().toString());
+            cities.longitude = Double.parseDouble(binding.longitude.getEditText().getText().toString());
+            Stash.put(Constants.AROUND_PLACE, cities);
+            startActivity(new Intent(requireContext(), MainActivity.class));
+            requireActivity().finish();
         });
 
         binding.search.getEditText().addTextChangedListener(new TextWatcher() {
@@ -130,6 +110,7 @@ public class AroundPlaceActivity extends AppCompatActivity {
             }
         });
 
+        return binding.getRoot();
     }
 
     public class MyTask extends AsyncTask<Void, Void, ArrayList<Cities>> {
@@ -138,7 +119,7 @@ public class AroundPlaceActivity extends AppCompatActivity {
         protected ArrayList<Cities> doInBackground(Void... voids) {
             try {
                 Log.d(TAG, "doInBackground: Reading json");
-                AssetManager assetManager = AroundPlaceActivity.this.getAssets();
+                AssetManager assetManager = requireContext().getAssets();
                 InputStream inputStream = assetManager.open("cities.json");
                 Reader reader = new InputStreamReader(inputStream, "UTF-8"); // Replace "UTF-8" with appropriate encoding if known
 
@@ -171,22 +152,24 @@ public class AroundPlaceActivity extends AppCompatActivity {
             super.onPostExecute(dataArray);
             list = new ArrayList<>(dataArray);
             Constants.dismissDialog();
-           // Stash.put(Constants.CITIES, list);
+            // Stash.put(Constants.CITIES, list);
             Log.d(TAG, "onPostExecute: LIST SIZE  " + list.size());
-            adapter = new CitiesAdapter(AroundPlaceActivity.this, list, cityClick);
+            adapter = new CitiesAdapter(requireActivity(), list, cityClick);
             binding.cities.setAdapter(adapter);
         }
     }
 
     CityClick cityClick = cities -> {
-        Intent intent = new Intent(AroundPlaceActivity.this, AddPlaceActivity.class);
-        intent.putExtra("GIVEN", true);
-        String COORDINATES = cities.latitude + ", " + cities.longitude;
-        String PLACE = cities.name + ", " + cities.country_name;
-        intent.putExtra(Constants.COORDINATES, COORDINATES);
-        intent.putExtra(Constants.PLACE, PLACE);
-        startActivity(intent);
-        finish();
+        View view = getView();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        }
+        Stash.put(Constants.AROUND_PLACE, cities);
+        startActivity(new Intent(requireContext(), MainActivity.class));
+        requireActivity().finish();
     };
 
 }

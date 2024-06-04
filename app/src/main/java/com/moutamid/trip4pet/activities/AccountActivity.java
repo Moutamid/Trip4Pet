@@ -45,6 +45,7 @@ public class AccountActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         binding = ActivityAccountBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
 //        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
 //            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
 //            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -58,7 +59,9 @@ public class AccountActivity extends AppCompatActivity {
         selectedText = binding.addedText;
 
         UserModel userModel = (UserModel) Stash.getObject(Constants.STASH_USER, UserModel.class);
-        binding.title.setText(userModel.name);
+        if (userModel != null) {
+            binding.title.setText(userModel.name);
+        }
 
         binding.addedPlaces.setOnClickListener(v -> {
             selectedText.setTextColor(getResources().getColor(R.color.text));
@@ -97,7 +100,6 @@ public class AccountActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
         Constants.initDialog(this);
         getAddedPlaces();
     }

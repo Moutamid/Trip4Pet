@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.moutamid.trip4pet.Constants;
+import com.moutamid.trip4pet.listener.CityClick;
 import com.moutamid.trip4pet.models.Cities;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.activities.AddPlaceActivity;
@@ -27,10 +28,11 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.CitiesVH> 
     Activity context;
     ArrayList<Cities> list;
     ArrayList<Cities> currentItems;
-
-    public CitiesAdapter(Activity context, ArrayList<Cities> list) {
+    CityClick cityClick;
+    public CitiesAdapter(Activity context, ArrayList<Cities> list, CityClick cityClick) {
         this.context = context;
         this.list = list;
+        this.cityClick = cityClick;
         this.currentItems = new ArrayList<>(list.subList(0, 20));
     }
 
@@ -45,18 +47,7 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.CitiesVH> 
         Cities cities = currentItems.get(holder.getAdapterPosition());
         String name = cities.name + ", " + cities.state_name + ", " + cities.country_name;
         holder.name.setText(name);
-
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, AddPlaceActivity.class);
-            intent.putExtra("GIVEN", true);
-            String COORDINATES = cities.latitude + ", " + cities.longitude;
-            String PLACE = cities.name + ", " + cities.country_name;
-            intent.putExtra(Constants.COORDINATES, COORDINATES);
-            intent.putExtra(Constants.PLACE, PLACE);
-            context.startActivity(intent);
-            context.finish();
-        });
-
+        holder.itemView.setOnClickListener(v -> cityClick.onClick(cities));
     }
 
     @Override

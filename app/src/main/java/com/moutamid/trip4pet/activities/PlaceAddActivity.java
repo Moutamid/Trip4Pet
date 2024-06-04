@@ -62,6 +62,7 @@ public class PlaceAddActivity extends AppCompatActivity {
     ImageAdapter adapter;
     ArrayList<Uri> imagesList;
     String ID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,7 +124,8 @@ public class PlaceAddActivity extends AppCompatActivity {
         binding.addPlace.setOnClickListener(v -> {
             if (valid()) {
                 Constants.showDialog();
-                uploadImages();
+                if (imagesList.isEmpty()) uploadData();
+                else uploadImages();
             }
         });
 
@@ -168,7 +170,7 @@ public class PlaceAddActivity extends AppCompatActivity {
         Constants.databaseReference().child(Constants.PLACE).child(Constants.auth().getCurrentUser().getUid()).child(model.id)
                 .setValue(model).addOnSuccessListener(unused -> {
                     Constants.dismissDialog();
-                    Toast.makeText(this, "Place Added Successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.place_added_successfully, Toast.LENGTH_SHORT).show();
                     getOnBackPressedDispatcher().onBackPressed();
                 }).addOnFailureListener(e -> {
                     Constants.dismissDialog();
@@ -177,44 +179,44 @@ public class PlaceAddActivity extends AppCompatActivity {
     }
 
     private boolean valid() {
-        if (imagesList.isEmpty()) {
-            Toast.makeText(this, "Add images", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        if (imagesList.isEmpty()) {
+//            Toast.makeText(this, "Add images", Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
         if (binding.name.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Name is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.name_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.contact.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Contact is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.contact_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.place.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Type of place is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.type_of_place_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.desc.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Description is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.description_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.location.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Address is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.address_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.city.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "City is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.city_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.country.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Country is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.country_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.latitude.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Latitude is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.latitude_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.longitude.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Longitude is Empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.longitude_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

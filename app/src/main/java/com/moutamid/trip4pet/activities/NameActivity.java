@@ -39,7 +39,7 @@ public class NameActivity extends AppCompatActivity {
         binding.name.getEditText().setText(userModel.name);
 
         binding.toolbar.back.setOnClickListener(v -> onBackPressed());
-        binding.toolbar.title.setText("Change Name");
+        binding.toolbar.title.setText(R.string.change_name);
 
         binding.change.setOnClickListener(v -> {
             if (!binding.name.getEditText().getText().toString().isEmpty()) {
@@ -50,14 +50,14 @@ public class NameActivity extends AppCompatActivity {
                     Constants.dismissDialog();
                     userModel.name = binding.name.getEditText().getText().toString();
                     Stash.put(Constants.STASH_USER, userModel);
-                    Toast.makeText(this, "Name updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.name_updated, Toast.LENGTH_SHORT).show();
                     onBackPressed();
                 }).addOnFailureListener(e -> {
                     Constants.dismissDialog();
                     Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 });
             } else {
-                Toast.makeText(this, "Name is Empty", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.name_is_empty, Toast.LENGTH_SHORT).show();
             }
         });
     }

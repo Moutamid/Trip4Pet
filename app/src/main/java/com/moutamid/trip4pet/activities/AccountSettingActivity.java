@@ -30,6 +30,7 @@ public class AccountSettingActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         binding = ActivityAccountSettingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -79,13 +80,14 @@ public class AccountSettingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
         UserModel userModel = (UserModel) Stash.getObject(Constants.STASH_USER, UserModel.class);
-        binding.email.setText(userModel.email);
-        binding.name.setText(userModel.name);
+       if (userModel != null){
+           binding.email.setText(userModel.email);
+           binding.name.setText(userModel.name);
 
-        String vehicle = Stash.getString(Constants.Vehicle, getString(R.string.not_defined));
-        binding.myVehicle.setText(vehicle);
+           String vehicle = Stash.getString(Constants.Vehicle, getString(R.string.not_defined));
+           binding.myVehicle.setText(vehicle);
+       }
     }
 
     private void showCodeDialog() {

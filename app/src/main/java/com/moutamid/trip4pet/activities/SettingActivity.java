@@ -15,10 +15,12 @@ import com.fxn.stash.Stash;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.moutamid.trip4pet.Constants;
+import com.moutamid.trip4pet.MainActivity;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.SplashActivity;
 import com.moutamid.trip4pet.bottomsheets.LanguageDialog;
 import com.moutamid.trip4pet.databinding.ActivitySettingBinding;
+import com.moutamid.trip4pet.listener.BottomSheetDismissListener;
 
 import java.util.List;
 
@@ -31,6 +33,7 @@ public class SettingActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         binding = ActivitySettingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -74,15 +77,25 @@ public class SettingActivity extends AppCompatActivity {
 
         binding.language.setOnClickListener(v -> {
             LanguageDialog languageDialog = new LanguageDialog();
+            languageDialog.setListener(() -> {
+                startActivity(new Intent(this, MainActivity.class));
+                finish();
+            });
             languageDialog.show(getSupportFragmentManager(), languageDialog.getTag());
         });
 
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
     }
 
     private void openLink(String url) {

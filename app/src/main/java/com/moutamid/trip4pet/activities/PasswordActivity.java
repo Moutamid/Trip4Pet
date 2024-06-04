@@ -55,7 +55,7 @@ public class PasswordActivity extends AppCompatActivity {
                                     Constants.dismissDialog();
                                     userModel.password = binding.newPassword.getEditText().getText().toString();
                                     Stash.put(Constants.STASH_USER, userModel);
-                                    Toast.makeText(this, "Password Updated successfully", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(this, R.string.password_updated_successfully, Toast.LENGTH_SHORT).show();
                                     onBackPressed();
                                 }).addOnFailureListener(e -> {
                                     Constants.dismissDialog();
@@ -68,7 +68,7 @@ public class PasswordActivity extends AppCompatActivity {
                             });
                 }).addOnFailureListener(e -> {
                     Constants.dismissDialog();
-                    Toast.makeText(this, "Current Password Doesn't Match", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.current_password_doesn_t_match, Toast.LENGTH_SHORT).show();
                 });
             }
         });
@@ -83,19 +83,19 @@ public class PasswordActivity extends AppCompatActivity {
 
     private boolean valid() {
         if (binding.oldPassword.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Old Password is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.old_password_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.newPassword.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "New Password is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.new_password_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (binding.rePassword.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, "Password is empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.password_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (!binding.rePassword.getEditText().getText().toString().equals(binding.newPassword.getEditText().getText().toString())) {
-            Toast.makeText(this, "Password is not matched", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.password_is_not_matched, Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

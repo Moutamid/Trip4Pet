@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/border"
             android:layout_marginTop="10dp"
-            android:text="Favorites"
+            android:text="@string/favorites"
             android:textSize="20sp" />
 
         <com.google.android.material.card.MaterialCardView
@@ -58,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/border"
                 android:layout_marginTop="10dp"
-                android:text="Default folders"
+                android:text="@string/default_folders"
                 android:textSize="18sp" />
 
             <View
@@ -100,7 +100,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="My Favorites"
+                            android:text="@string/my_favorites"
                             android:textSize="16sp" />
 
                         <TextView
@@ -127,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/border"
                 android:layout_marginTop="10dp"
-                android:text="User folders"
+                android:text="@string/user_folders"
                 android:textSize="18sp" />
 
             <View
@@ -169,7 +169,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Unlock favorites folder with Trip4Pet+"
+                            android:text="@string/unlock_favorites_folder_with_trip4pet"
                             android:textSize="16sp" />
 
                     </LinearLayout>
@@ -191,7 +191,7 @@
                 android:layout_marginTop="5dp"
                 android:enabled="false"
                 android:padding="21dp"
-                android:text="Create a new folder" />
+                android:text="@string/create_a_new_folder" />
 
         </LinearLayout>
 

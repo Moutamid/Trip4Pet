@@ -1,5 +1,6 @@
 package com.moutamid.trip4pet.bottomsheets;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,20 +17,20 @@ import com.google.android.material.card.MaterialCardView;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.databinding.LanguageSelectionBinding;
+import com.moutamid.trip4pet.listener.BottomSheetDismissListener;
 
 public class LanguageDialog extends BottomSheetDialogFragment {
 
     LanguageSelectionBinding binding;
     MaterialCardView selected;
     String language;
+    private BottomSheetDismissListener listener;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = LanguageSelectionBinding.inflate(getLayoutInflater(), container, false);
-
         language = Stash.getString(Constants.LANGUAGE, "en");
-
         switch (language) {
             case "en":
                 selected = binding.english;
@@ -112,6 +113,18 @@ public class LanguageDialog extends BottomSheetDialogFragment {
             getDialog().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             BottomSheetBehavior.from((View) getView().getParent()).setState(BottomSheetBehavior.STATE_EXPANDED);
         }
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (listener != null) {
+            listener.onBottomSheetDismissed();
+        }
+    }
+
+    public void setListener(BottomSheetDismissListener listener) {
+        this.listener = listener;
     }
 
 }

@@ -98,7 +98,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                Toast.makeText(this, "Google sign in failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.google_sign_in_failed) + " " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.w("firebaseAuthWithGoogle", "Google sign in failed", e);
             }
         }
@@ -117,7 +117,7 @@ public class WelcomeActivity extends AppCompatActivity {
                             updateUI(user);
                         } else {
                             Constants.dismissDialog();
-                            Toast.makeText(WelcomeActivity.this, "Google sign in failed: Error Code - " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(WelcomeActivity.this, getString(R.string.google_sign_in_failed_error_code) + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                         }

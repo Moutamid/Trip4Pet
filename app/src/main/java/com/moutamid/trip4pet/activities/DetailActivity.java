@@ -31,7 +31,6 @@ import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.adapters.CommentsAdapter;
 import com.moutamid.trip4pet.adapters.SliderAdapter;
-import com.moutamid.trip4pet.bottomsheets.ListDialog;
 import com.moutamid.trip4pet.databinding.ActivityDetailBinding;
 import com.moutamid.trip4pet.models.CommentModel;
 import com.moutamid.trip4pet.models.FilterModel;
@@ -39,22 +38,24 @@ import com.moutamid.trip4pet.models.LocationsModel;
 import com.moutamid.trip4pet.models.UserModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 
 public class DetailActivity extends AppCompatActivity {
     ActivityDetailBinding binding;
     LocationsModel model;
     boolean isFavorite = false;
     int index = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         binding = ActivityDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
 
         binding.back.setOnClickListener(v -> onBackPressed());
 
@@ -111,7 +112,7 @@ public class DetailActivity extends AppCompatActivity {
                 Constants.databaseReference().child(Constants.VISITED).child(Constants.auth().getCurrentUser().getUid()).child(model.id)
                         .updateChildren(map).addOnSuccessListener(unused -> {
                             Constants.dismissDialog();
-                            Toast.makeText(this, "Added to your visited place", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, R.string.added_to_your_visited_place, Toast.LENGTH_SHORT).show();
                         }).addOnFailureListener(e -> {
                             Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                             Constants.dismissDialog();
@@ -139,18 +140,18 @@ public class DetailActivity extends AppCompatActivity {
         favoriteSize.setText(favorite.size() + "/" + Constants.FAVORITE_SIZE);
         myFavorites.setOnClickListener(v -> {
             dialog.dismiss();
-            if (!isFavorite){
-                if (favorite.size() < Constants.FAVORITE_SIZE){
+            if (!isFavorite) {
+                if (favorite.size() < Constants.FAVORITE_SIZE) {
                     favorite.add(model);
                     Stash.put(Constants.FAVORITE, favorite);
-                    Toast.makeText(this, "Added to Favorite", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.added_to_favorite, Toast.LENGTH_SHORT).show();
                     isFavorite = true;
-                    index = favorite.size()-1;
+                    index = favorite.size() - 1;
                 }
             } else {
                 favorite.remove(index);
                 Stash.put(Constants.FAVORITE, favorite);
-                Toast.makeText(this, "Removed from Favorites", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.removed_from_favorites, Toast.LENGTH_SHORT).show();
                 isFavorite = false;
                 index = 0;
             }
@@ -171,24 +172,24 @@ public class DetailActivity extends AppCompatActivity {
                 size.setText("Total: " + locations.size());
                 favorites.setOnClickListener(v -> {
                     dialog.dismiss();
-                    int id=0;
+                    int id = 0;
                     boolean isFvrt = false;
                     for (int i = 0; i < locations.size(); i++) {
                         LocationsModel favoriteModel = locations.get(i);
-                        if (model.id.equals(favoriteModel.id)){
+                        if (model.id.equals(favoriteModel.id)) {
                             isFvrt = true;
                             id = i;
                             break;
                         }
                     }
-                    if (!isFvrt){
+                    if (!isFvrt) {
                         locations.add(model);
                         Stash.put(folder.replace(" ", "_"), locations);
-                        Toast.makeText(this, "Added to Favorite", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.added_to_favorite, Toast.LENGTH_SHORT).show();
                     } else {
                         locations.remove(id);
                         Stash.put(folder.replace(" ", "_"), locations);
-                        Toast.makeText(this, "Removed from Favorites", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.removed_from_favorites, Toast.LENGTH_SHORT).show();
                     }
 
                 });
@@ -229,7 +230,7 @@ public class DetailActivity extends AppCompatActivity {
             Constants.databaseReference().child(Constants.PLACE).child(model.userID).child(model.id).updateChildren(map).addOnSuccessListener(unused -> {
                 dialog.dismiss();
                 updateRecycler();
-                Toast.makeText(this, "Comment Added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.comment_added, Toast.LENGTH_SHORT).show();
                 Constants.dismissDialog();
             }).addOnFailureListener(e -> {
                 dialog.dismiss();
@@ -243,11 +244,11 @@ public class DetailActivity extends AppCompatActivity {
     private void updateRecycler() {
         if (model.comments != null) {
             float rating = 0;
-            for (CommentModel commentModel : model.comments){
+            for (CommentModel commentModel : model.comments) {
                 rating += commentModel.rating;
             }
-            float total = rating/model.comments.size();
-            String rate = String.format(Locale.getDefault(),"%.2f", total) + " (" + model.comments.size() + ")";
+            float total = rating / model.comments.size();
+            String rate = String.format(Locale.getDefault(), "%.2f", total) + " (" + model.comments.size() + ")";
             if (model.comments.size() > 1) binding.rating.setText(rate);
             else binding.rating.setText(model.comments.get(0).rating + " (1)");
 
@@ -264,10 +265,16 @@ public class DetailActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Constants.initDialog(this);
-        Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
-
         model = (LocationsModel) Stash.getObject(Constants.MODEL, LocationsModel.class);
-        binding.imageSlider.setSliderAdapter(new SliderAdapter(this, model.images));
+        if (model.images != null) {
+            if (!model.images.isEmpty()) {
+                binding.imageSlider.setSliderAdapter(new SliderAdapter(this, model.images));
+            } else {
+                binding.imageSlider.setSliderAdapter(new SliderAdapter(this, new ArrayList<>(Arrays.asList(Constants.DUMMY_IMAGE))));
+            }
+        } else {
+            binding.imageSlider.setSliderAdapter(new SliderAdapter(this, new ArrayList<>(Arrays.asList(Constants.DUMMY_IMAGE))));
+        }
 
         if (model.activities != null) {
             for (FilterModel s : model.activities) {
@@ -282,7 +289,7 @@ public class DetailActivity extends AppCompatActivity {
         ArrayList<LocationsModel> favorite = Stash.getArrayList(Constants.FAVORITE, LocationsModel.class);
         for (int i = 0; i < favorite.size(); i++) {
             LocationsModel favoriteModel = favorite.get(i);
-            if (model.id.equals(favoriteModel.id)){
+            if (model.id.equals(favoriteModel.id)) {
                 isFavorite = true;
                 index = i;
                 break;
