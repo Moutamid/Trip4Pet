@@ -69,6 +69,22 @@ public class AddPlaceActivity extends AppCompatActivity {
             finish();
         });
 
+        binding.aroundMe.setOnClickListener(v -> {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, location -> {
+                        if (location != null) {
+                            LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f));
+                        } else {
+                            Toast.makeText(this, getString(R.string.location_not_found), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        });
+
     }
 
     @Override
@@ -91,7 +107,7 @@ public class AddPlaceActivity extends AppCompatActivity {
                     .addOnSuccessListener(this, location -> {
                         if (location != null) {
                             LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 8f));
                         } else {
                             // Location not found, handle the case where there is no last known location
                             Toast.makeText(this, getString(R.string.location_not_found), Toast.LENGTH_SHORT).show();
@@ -100,7 +116,7 @@ public class AddPlaceActivity extends AppCompatActivity {
         } else {
             String[] cord = name.split(", ");
             LatLng currentLatLng = new LatLng(Double.parseDouble(cord[0]), Double.parseDouble(cord[1])); // lat, long
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 8f));
         }
         mMap.setMaxZoomPreference(20f);
 //        googleMap.setMinZoomPreference(12f);

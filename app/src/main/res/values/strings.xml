@@ -54,7 +54,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="warning">Warning!</string>
     <string name="deleting_data">Deleting your data is permanent and cannot be undone. Are you absolutely sure you want to proceed?</string>
-    <string name="add_upto_6_pictures">Add Upto 6 Pictures</string>
+    <string name="add_upto_6_pictures">Add Up to 6 Pictures</string>
     <string name="add_more_photos">Add more Photos</string>
     <string name="name">Name</string>
     <string name="west_beach">West Beach</string>
@@ -62,7 +62,7 @@
     <string name="type_of_place">Type of place</string>
     <string name="is_it_accessible_to_animals">Is it accessible to animals</string>
     <string name="description">Description</string>
-    <string name="breif_description">Breif description</string>
+    <string name="breif_description">Brief description</string>
     <string name="address">Address</string>
     <string name="location">Location</string>
     <string name="latitude">Latitude</string>
@@ -184,4 +184,6 @@
     <string name="enter_gps_coordinates">Enter GPS coordinates</string>
     <string name="enter_coordinates_in_decimal">Enter coordinates in decimal</string>
     <string name="confirm">Confirm</string>
+    <string name="around_me">Around me</string>
+    <string name="it_s_here">It\'s here!</string>
 </resources>
