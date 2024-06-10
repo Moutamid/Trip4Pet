@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -112,7 +113,6 @@ public class AroundMeFragment extends Fragment {
     }
 
     private void filterPlaces() {
-
         float density = getResources().getDisplayMetrics().density;
         int widthPx = (int) (20 * density);
         int heightPx = (int) (32 * density);
@@ -128,14 +128,14 @@ public class AroundMeFragment extends Fragment {
         } else {
             Map<String, LocationsModel> map = new HashMap<>();
             for (LocationsModel model : places) {
-                int icon = 0;
-                if (model.typeOfPlace.equals("Park")) {
-                    icon = R.drawable.tree_mark;
-                } else if (model.typeOfPlace.equals("Restaurant")) {
-                    icon = R.drawable.resturant_mark;
-                } else if (model.typeOfPlace.equals("Beach")) {
-                    icon = R.drawable.beach_mark;
-                }
+//                int icon = 0;
+//                if (model.typeOfPlace.equals("Park")) {
+//                    icon = R.drawable.tree_mark;
+//                } else if (model.typeOfPlace.equals("Restaurant")) {
+//                    icon = R.drawable.resturant_mark;
+//                } else if (model.typeOfPlace.equals("Beach")) {
+//                    icon = R.drawable.beach_mark;
+//                }
                 for (String filter : filters) {
                     float total = 0;
                     if (model.comments != null) {
@@ -160,10 +160,13 @@ public class AroundMeFragment extends Fragment {
                                 currentMarkers.add(marker);
                             }
                         }
+
                         if (model.services != null) {
                             for (FilterModel filterModel : model.services) {
-                                View customMarker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
-                                ImageView iconImage = customMarker.findViewById(R.id.icon);
+                                View customMarker = getLayoutInflater().inflate(R.layout.marker, null, false);
+                                ImageView iconImage = customMarker.findViewById(R.id.image);
+                                CardView card = customMarker.findViewById(R.id.card);
+                                card.setCardBackgroundColor(getResources().getColor(R.color.green));
                                 iconImage.setImageResource(filterModel.icon);
                                 MarkerOptions markerOptions = new MarkerOptions()
                                         .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
@@ -171,25 +174,34 @@ public class AroundMeFragment extends Fragment {
                                 Marker marker = mMap.addMarker(markerOptions);
                                 marker.setTag(model.id);
                                 currentMarkers.add(marker);
-
                             }
                         }
 
-                        if (model.typeOfPlace.equals("Other")) {
-                            MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)).position(latLng).title(model.name);
-                            Marker marker = mMap.addMarker(markerOptions);
-                            marker.setTag(model.id);
-                            currentMarkers.add(marker);
-                        }
+//                        if (model.typeOfPlace.equals("Other")) {
+//                            MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)).position(latLng).title(model.name);
+//                            Marker marker = mMap.addMarker(markerOptions);
+//                            marker.setTag(model.id);
+//                            currentMarkers.add(marker);
+//                        }
 
-                        if (model.activities == null && model.services == null) {
-                            if (icon != 0) {
-                                MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(Constants.convertVectorToBitmap(getContext(), icon, widthPx, heightPx))).position(latLng).title(model.name);
-                                Marker marker = mMap.addMarker(markerOptions);
-                                marker.setTag(model.id);
-                                currentMarkers.add(marker);
-                            }
-                        }
+//                        if (model.activities == null && model.services == null) {
+//                            if (icon != 0) {
+//                                MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(Constants.convertVectorToBitmap(getContext(), icon, widthPx, heightPx))).position(latLng).title(model.name);
+//                                Marker marker = mMap.addMarker(markerOptions);
+//                                marker.setTag(model.id);
+//                                currentMarkers.add(marker);
+//                            }
+//                        }
+
+                        View customMarker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
+                        ImageView iconImage = customMarker.findViewById(R.id.icon);
+                        iconImage.setImageResource(Constants.getTypeOfPlace(requireContext(), model.typeOfPlace));
+                        MarkerOptions markerOptions = new MarkerOptions()
+                                .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
+                                .position(latLng).title(model.name);
+                        Marker marker = mMap.addMarker(markerOptions);
+                        marker.setTag(model.id);
+                        currentMarkers.add(marker);
 
                         map.put(model.id, model);
                     }
@@ -309,7 +321,6 @@ public class AroundMeFragment extends Fragment {
     };
 
     private void showAll() {
-
         float density = getResources().getDisplayMetrics().density;
         int widthPx = (int) (20 * density);
         int heightPx = (int) (32 * density);
@@ -322,55 +333,68 @@ public class AroundMeFragment extends Fragment {
         Map<String, LocationsModel> map = new HashMap<>();
         for (LocationsModel model : places) {
             LatLng latLng = new LatLng(model.latitude, model.longitude);
-            int icon = 0;
-            if (model.typeOfPlace.equals("Park")) {
-                icon = R.drawable.tree_mark;
-            } else if (model.typeOfPlace.equals("Restaurant")) {
-                icon = R.drawable.resturant_mark;
-            } else if (model.typeOfPlace.equals("Beach")) {
-                icon = R.drawable.beach_mark;
-            }
-            if (model.activities != null) {
-                for (FilterModel filterModel : model.activities) {
-                    View customMarker = getLayoutInflater().inflate(R.layout.marker, null, false);
-                    ImageView iconImage = customMarker.findViewById(R.id.image);
-                    iconImage.setImageResource(filterModel.icon);
-                    MarkerOptions markerOptions = new MarkerOptions()
-                            .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
-                            .position(latLng).title(model.name);
-                    Marker marker = mMap.addMarker(markerOptions);
-                    marker.setTag(model.id);
-                    currentMarkers.add(marker);
-                }
-            }
-            if (model.services != null) {
-                for (FilterModel filterModel : model.services) {
-                    View customMarker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
-                    ImageView iconImage = customMarker.findViewById(R.id.icon);
-                    iconImage.setImageResource(filterModel.icon);
-                    MarkerOptions markerOptions = new MarkerOptions()
-                            .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
-                            .position(latLng).title(model.name);
-                    Marker marker = mMap.addMarker(markerOptions);
-                    marker.setTag(model.id);
-                    currentMarkers.add(marker);
-                }
-            }
-            if (model.typeOfPlace.equals("Other")) {
-                MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)).position(latLng).title(model.name);
-                Marker marker = mMap.addMarker(markerOptions);
-                marker.setTag(model.id);
-                currentMarkers.add(marker);
-            }
 
-            if (model.activities == null && model.services == null) {
-                if (icon != 0) {
-                    MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(Constants.convertVectorToBitmap(getContext(), icon, widthPx, heightPx))).position(latLng).title(model.name);
-                    Marker marker = mMap.addMarker(markerOptions);
-                    marker.setTag(model.id);
-                    currentMarkers.add(marker);
-                }
-            }
+            View customMarker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
+            ImageView iconImage = customMarker.findViewById(R.id.icon);
+            iconImage.setImageResource(Constants.getTypeOfPlace(requireContext(), model.typeOfPlace));
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
+                    .position(latLng).title(model.name);
+            Marker marker = mMap.addMarker(markerOptions);
+            marker.setTag(model.id);
+            currentMarkers.add(marker);
+
+//            int icon = 0;
+//            if (model.typeOfPlace.equals("Park")) {
+//                icon = R.drawable.tree_mark;
+//            } else if (model.typeOfPlace.equals("Restaurant")) {
+//                icon = R.drawable.resturant_mark;
+//            } else if (model.typeOfPlace.equals("Beach")) {
+//                icon = R.drawable.beach_mark;
+//            }
+//            if (model.activities != null) {
+//                for (FilterModel filterModel : model.activities) {
+//                    View customMarker = getLayoutInflater().inflate(R.layout.marker, null, false);
+//                    ImageView iconImage = customMarker.findViewById(R.id.image);
+//                    iconImage.setImageResource(filterModel.icon);
+//                    MarkerOptions markerOptions = new MarkerOptions()
+//                            .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
+//                            .position(latLng).title(model.name);
+//                    Marker marker = mMap.addMarker(markerOptions);
+//                    marker.setTag(model.id);
+//                    currentMarkers.add(marker);
+//                }
+//            }
+//            if (model.services != null) {
+//                for (FilterModel filterModel : model.services) {
+//                    View customMarker = getLayoutInflater().inflate(R.layout.marker, null, false);
+//                    ImageView iconImage = customMarker.findViewById(R.id.image);
+//                    CardView card = customMarker.findViewById(R.id.card);
+//                    card.setCardBackgroundColor(getResources().getColor(R.color.green));
+//                    iconImage.setImageResource(filterModel.icon);
+//                    MarkerOptions markerOptions = new MarkerOptions()
+//                            .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
+//                            .position(latLng).title(model.name);
+//                    Marker marker = mMap.addMarker(markerOptions);
+//                    marker.setTag(model.id);
+//                    currentMarkers.add(marker);
+//                }
+//            }
+//            if (model.typeOfPlace.equals("Other")) {
+//                MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)).position(latLng).title(model.name);
+//                Marker marker = mMap.addMarker(markerOptions);
+//                marker.setTag(model.id);
+//                currentMarkers.add(marker);
+//            }
+
+//            if (model.activities == null && model.services == null) {
+//                if (icon != 0) {
+//                    MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(Constants.convertVectorToBitmap(getContext(), icon, widthPx, heightPx))).position(latLng).title(model.name);
+//                    Marker marker = mMap.addMarker(markerOptions);
+//                    marker.setTag(model.id);
+//                    currentMarkers.add(marker);
+//                }
+//            }
             map.put(model.id, model);
         }
 

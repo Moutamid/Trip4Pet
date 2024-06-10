@@ -53,10 +53,11 @@ public class AroundPlaceFragment extends Fragment {
         super.onResume();
         Constants.setLocale(requireContext(), Stash.getString(Constants.LANGUAGE, "en"));
         Constants.initDialog(requireContext());
-        Constants.showDialog();
-        list.clear();
-        MyTask task = new MyTask();
-        task.execute();
+        if (list.isEmpty()) {
+            Constants.showDialog();
+            MyTask task = new MyTask();
+            task.execute();
+        }
     }
 
     @Override
@@ -72,12 +73,16 @@ public class AroundPlaceFragment extends Fragment {
         });
 
         binding.confirm.setOnClickListener(v -> {
-            Cities cities = new Cities();
-            cities.latitude = Double.parseDouble(binding.latitude.getEditText().getText().toString());
-            cities.longitude = Double.parseDouble(binding.longitude.getEditText().getText().toString());
-            Stash.put(Constants.AROUND_PLACE, cities);
-            startActivity(new Intent(requireContext(), MainActivity.class));
-            requireActivity().finish();
+            if (!binding.latitude.getEditText().getText().toString().isEmpty() && !binding.longitude.getEditText().getText().toString().isEmpty()) {
+                Cities cities = new Cities();
+                cities.latitude = Double.parseDouble(binding.latitude.getEditText().getText().toString());
+                cities.longitude = Double.parseDouble(binding.longitude.getEditText().getText().toString());
+                Stash.put(Constants.AROUND_PLACE, cities);
+                startActivity(new Intent(requireContext(), MainActivity.class));
+                requireActivity().finish();
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.choose_location_first), Toast.LENGTH_SHORT).show();
+            }
         });
 
         binding.search.getEditText().addTextChangedListener(new TextWatcher() {

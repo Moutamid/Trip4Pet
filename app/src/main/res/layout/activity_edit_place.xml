@@ -141,7 +141,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/place"
-                style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
+                style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:boxBackgroundColor="@color/grey"
@@ -154,13 +154,18 @@
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">
 
-                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/placesList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:focusableInTouchMode="false"
+                    android:focusable="false"
+                    android:cursorVisible="false"
+                    android:clickable="false"
                     android:inputType="textPersonName" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
 
             <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/isAccessible"

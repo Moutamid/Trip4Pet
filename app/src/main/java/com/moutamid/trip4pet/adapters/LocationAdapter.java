@@ -51,10 +51,14 @@ public class LocationAdapter extends RecyclerView.Adapter<LocationAdapter.Locati
         } else {
             holder.rating.setText("0.0");
         }
-        holder.imagesCount.setText(model.images.size()+"");
-        holder.typeOfPlace.setText(model.typeOfPlace);
-        Glide.with(context).load(model.images.get(0)).into(holder.image);
-
+        if (model.images != null) {
+            holder.imagesCount.setText(model.images.size() + "");
+            holder.typeOfPlace.setText(model.typeOfPlace);
+            Glide.with(context).load(model.images.get(0)).into(holder.image);
+        } else {
+            holder.imagesCount.setText("0");
+            Glide.with(context).load(R.drawable.trip4pet_logo).into(holder.image);
+        }
         holder.itemView.setOnClickListener(v -> {
             Stash.put(Constants.MODEL, model);
             context.startActivity(new Intent(context, DetailActivity.class));

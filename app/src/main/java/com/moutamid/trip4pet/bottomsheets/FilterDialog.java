@@ -7,11 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,8 +26,6 @@ import com.moutamid.trip4pet.listener.BottomSheetDismissListener;
 import com.moutamid.trip4pet.models.FilterModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class FilterDialog extends BottomSheetDialogFragment {
     FilterFragmentBinding binding;
@@ -43,6 +39,7 @@ public class FilterDialog extends BottomSheetDialogFragment {
     };
     ArrayList<FilterModel> service = new ArrayList<>();
     ArrayList<FilterModel> activities = new ArrayList<>();
+    ArrayList<FilterModel> places = new ArrayList<>();
 
     @Nullable
     @Override
@@ -131,13 +128,13 @@ public class FilterDialog extends BottomSheetDialogFragment {
         }
 
         if (Stash.getBoolean(Constants.ISVIP, false)) {
-            if (binding.rating47.isChecked()){
+            if (binding.rating47.isChecked()) {
                 filters.add("4.7");
             }
-            if (binding.rating40.isChecked()){
+            if (binding.rating40.isChecked()) {
                 filters.add("4.0");
             }
-            if (binding.rating3.isChecked()){
+            if (binding.rating3.isChecked()) {
                 filters.add("3");
             }
         }
@@ -146,7 +143,8 @@ public class FilterDialog extends BottomSheetDialogFragment {
     }
 
     private void addPlaces() {
-        for (String s : placesList) {
+        places = new ArrayList<>(Constants.getTypeOfPlaces(requireContext()));
+        for (FilterModel s : places) {
             LayoutInflater inflater = getLayoutInflater();
             View customEditTextLayout = inflater.inflate(R.layout.filter_check_layout, null);
             MaterialCheckBox checkbox = customEditTextLayout.findViewById(R.id.checkbox);
@@ -154,9 +152,9 @@ public class FilterDialog extends BottomSheetDialogFragment {
             ImageView lock = customEditTextLayout.findViewById(R.id.lock);
             ImageView image = customEditTextLayout.findViewById(R.id.image);
 
-            image.setVisibility(View.GONE);
             lock.setVisibility(View.GONE);
-            text.setText(s);
+            image.setImageResource(s.icon);
+            text.setText(s.name);
             checkbox.setEnabled(true);
 
             MaterialCardView card = customEditTextLayout.findViewById(R.id.card);
@@ -165,7 +163,7 @@ public class FilterDialog extends BottomSheetDialogFragment {
             });
 
             for (String filter : filters) {
-                if (filter.trim().equalsIgnoreCase(s.trim())) {
+                if (filter.trim().equalsIgnoreCase(s.name.trim())) {
                     checkbox.setChecked(true);
                     break;
                 }
@@ -187,7 +185,7 @@ public class FilterDialog extends BottomSheetDialogFragment {
             ImageView image = customEditTextLayout.findViewById(R.id.image);
             TextView text = customEditTextLayout.findViewById(R.id.text);
 
-            //   image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+            image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
 
             if (Stash.getBoolean(Constants.ISVIP, false)) {
                 lock.setVisibility(View.GONE);

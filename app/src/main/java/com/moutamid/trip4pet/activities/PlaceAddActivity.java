@@ -1,12 +1,14 @@
 package com.moutamid.trip4pet.activities;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +35,7 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.adapters.ImageAdapter;
@@ -49,6 +52,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PlaceAddActivity extends AppCompatActivity {
     ActivityPlaceAddBinding binding;
@@ -62,6 +66,8 @@ public class PlaceAddActivity extends AppCompatActivity {
     ImageAdapter adapter;
     ArrayList<Uri> imagesList;
     String ID;
+    boolean isPlaceSelected = false;
+    String selectedPlace = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,15 +101,21 @@ public class PlaceAddActivity extends AppCompatActivity {
             binding.country.getEditText().setText(place[1]);
         }
 
+        if (!isPlaceSelected) {
+            showTypeOfPlace();
+        }
+
+        binding.place.getEditText().setOnClickListener(v -> showTypeOfPlace());
+
         binding.addActivity.setOnClickListener(v -> showFeatures(true));
         binding.addServices.setOnClickListener(v -> showFeatures(false));
 
         addServices();
         addActivities();
 
-        List<String> list = Arrays.asList(FilterDialog.placesList);
-        ArrayAdapter<String> exerciseAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, list);
-        binding.placesList.setAdapter(exerciseAdapter);
+//        List<String> list = Arrays.asList(FilterDialog.placesList);
+//        ArrayAdapter<String> exerciseAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, list);
+//        binding.placesList.setAdapter(exerciseAdapter);
 
         binding.btnAddCarPhoto.setOnClickListener(v -> {
             if (imagesList.size() >= limit) {
@@ -131,6 +143,82 @@ public class PlaceAddActivity extends AppCompatActivity {
 
     }
 
+    Dialog typeofplace;
+
+    private void showTypeOfPlace() {
+        typeofplace = new Dialog(this);
+        typeofplace.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        typeofplace.setContentView(R.layout.features);
+        typeofplace.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        typeofplace.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        typeofplace.setCancelable(true);
+        typeofplace.show();
+        AtomicReference<MaterialRadioButton> globalBtn = new AtomicReference<>();
+        TextView textview = typeofplace.findViewById(R.id.text);
+        LinearLayout features = typeofplace.findViewById(R.id.features);
+        MaterialButton apply = typeofplace.findViewById(R.id.apply);
+        textview.setText(getString(R.string.select_type_of_place));
+        ArrayList<FilterModel> list = Constants.getTypeOfPlaces(PlaceAddActivity.this);
+        for (FilterModel s : list) {
+            LayoutInflater inflater = getLayoutInflater();
+            View customEditTextLayout = inflater.inflate(R.layout.type_of_place, null);
+            MaterialRadioButton radioBtn = customEditTextLayout.findViewById(R.id.radioBtn);
+            ImageView image = customEditTextLayout.findViewById(R.id.image);
+            TextView text = customEditTextLayout.findViewById(R.id.text);
+            image.setTag(s.icon);
+            image.setImageResource(s.icon);
+            text.setText(s.name);
+            radioBtn.setEnabled(true);
+            MaterialCardView card = customEditTextLayout.findViewById(R.id.card);
+            radioBtn.setOnClickListener(v -> {
+                if (globalBtn.get() != null) {
+                    globalBtn.get().setChecked(false);
+                }
+                globalBtn.set(radioBtn);
+            });
+            card.setOnClickListener(v -> {
+                if (globalBtn.get() != null) {
+                    globalBtn.get().setChecked(false);
+                }
+                globalBtn.set(radioBtn);
+                radioBtn.setChecked(!radioBtn.isChecked());
+            });
+            features.addView(customEditTextLayout);
+        }
+
+        typeofplace.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (!isPlaceSelected) {
+                    finish();
+                } else {
+                    binding.place.getEditText().setText(selectedPlace);
+                }
+            }
+        });
+
+        apply.setOnClickListener(v -> {
+            for (int i = 0; i < features.getChildCount(); i++) {
+                View view = features.getChildAt(i);
+                if (view instanceof RelativeLayout) {
+                    RelativeLayout main = (RelativeLayout) view;
+                    MaterialRadioButton radioBtn = main.findViewById(R.id.radioBtn);
+                    TextView text = main.findViewById(R.id.text);
+                    if (radioBtn.isChecked()) {
+                        selectedPlace = text.getText().toString().trim();
+                    }
+                }
+            }
+            if (!selectedPlace.isEmpty()) {
+                isPlaceSelected = true;
+                typeofplace.dismiss();
+            } else {
+                Toast.makeText(this, getString(R.string.please_select_the_type_of_place), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+
     private void uploadImages() {
         for (Uri uri : imagesList) {
             Constants.storageReference().child("images").child(new SimpleDateFormat("ddMMyyyyhhmmss", Locale.getDefault()).format(new Date().getTime()))
@@ -153,7 +241,7 @@ public class PlaceAddActivity extends AppCompatActivity {
         model.userID = Constants.auth().getCurrentUser().getUid();
         model.name = binding.name.getEditText().getText().toString();
         model.contact = binding.contact.getEditText().getText().toString();
-        model.typeOfPlace = binding.place.getEditText().getText().toString();
+        model.typeOfPlace = selectedPlace;
         model.description = binding.desc.getEditText().getText().toString();
         model.address = binding.location.getEditText().getText().toString();
         model.city = binding.city.getEditText().getText().toString();
@@ -191,10 +279,10 @@ public class PlaceAddActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.contact_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (binding.place.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, R.string.type_of_place_is_empty, Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        if (binding.place.getEditText().getText().toString().isEmpty()) {
+//            Toast.makeText(this, R.string.type_of_place_is_empty, Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
         if (binding.desc.getEditText().getText().toString().isEmpty()) {
             Toast.makeText(this, R.string.description_is_empty, Toast.LENGTH_SHORT).show();
             return false;
@@ -268,7 +356,7 @@ public class PlaceAddActivity extends AppCompatActivity {
 
     private void getImageFromGallery() {
         Intent intent = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // intent.setType("image/*");
         // intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -297,7 +385,7 @@ public class PlaceAddActivity extends AppCompatActivity {
             ImageView image = customEditTextLayout.findViewById(R.id.image);
             CardView card = customEditTextLayout.findViewById(R.id.card);
             card.setCardBackgroundColor(getResources().getColor(R.color.green_card));
-            //  image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+            image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
             image.setImageResource(s.icon);
             binding.servicesIcon.addView(customEditTextLayout);
         }
@@ -307,7 +395,7 @@ public class PlaceAddActivity extends AppCompatActivity {
         Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.features);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.setCancelable(true);
         dialog.show();
@@ -332,9 +420,8 @@ public class PlaceAddActivity extends AppCompatActivity {
             lock.setVisibility(View.GONE);
             text.setText(s.name);
             checkbox.setEnabled(true);
-            if (b) {
-                image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
-            }
+            int color = b ? R.color.blue : R.color.green;
+            image.setImageTintList(ColorStateList.valueOf(getResources().getColor(color)));
             MaterialCardView card = customEditTextLayout.findViewById(R.id.card);
             card.setOnClickListener(v -> checkbox.setChecked(!checkbox.isChecked()));
 
@@ -382,9 +469,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                 addServices();
             }
         });
-
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

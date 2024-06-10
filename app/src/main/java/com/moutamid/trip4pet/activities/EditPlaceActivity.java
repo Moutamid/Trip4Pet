@@ -1,6 +1,7 @@
 package com.moutamid.trip4pet.activities;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -32,6 +33,7 @@ import com.fxn.stash.Stash;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.adapters.ImageAdapter;
@@ -49,6 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class EditPlaceActivity extends AppCompatActivity {
     ActivityEditPlaceBinding binding;
@@ -65,6 +68,8 @@ public class EditPlaceActivity extends AppCompatActivity {
     String ID;
     LocationsModel model;
     Map<Integer, Integer> positionMap = new HashMap<>();
+    String selectedPlace = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,9 +109,11 @@ public class EditPlaceActivity extends AppCompatActivity {
             }
         });
 
-        List<String> list = Arrays.asList(FilterDialog.placesList);
-        ArrayAdapter<String> exerciseAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, list);
-        binding.placesList.setAdapter(exerciseAdapter);
+        binding.place.getEditText().setOnClickListener(v -> showTypeOfPlace());
+
+//        List<String> list = Arrays.asList(FilterDialog.placesList);
+//        ArrayAdapter<String> exerciseAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, list);
+//        binding.placesList.setAdapter(exerciseAdapter);
 
         binding.addActivity.setOnClickListener(v -> showFeatures(true));
         binding.addServices.setOnClickListener(v -> showFeatures(false));
@@ -127,9 +134,80 @@ public class EditPlaceActivity extends AppCompatActivity {
 
     }
 
+    Dialog typeofplace;
+
+    private void showTypeOfPlace() {
+        typeofplace = new Dialog(this);
+        typeofplace.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        typeofplace.setContentView(R.layout.features);
+        typeofplace.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        typeofplace.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        typeofplace.setCancelable(true);
+        typeofplace.show();
+        AtomicReference<MaterialRadioButton> globalBtn = new AtomicReference<>();
+        TextView textview = typeofplace.findViewById(R.id.text);
+        LinearLayout features = typeofplace.findViewById(R.id.features);
+        MaterialButton apply = typeofplace.findViewById(R.id.apply);
+        textview.setText(getString(R.string.select_type_of_place));
+        ArrayList<FilterModel> list = Constants.getTypeOfPlaces(EditPlaceActivity.this);
+        for (FilterModel s : list) {
+            LayoutInflater inflater = getLayoutInflater();
+            View customEditTextLayout = inflater.inflate(R.layout.type_of_place, null);
+            MaterialRadioButton radioBtn = customEditTextLayout.findViewById(R.id.radioBtn);
+            ImageView image = customEditTextLayout.findViewById(R.id.image);
+            TextView text = customEditTextLayout.findViewById(R.id.text);
+            image.setTag(s.icon);
+            image.setImageResource(s.icon);
+            text.setText(s.name);
+            radioBtn.setEnabled(true);
+            MaterialCardView card = customEditTextLayout.findViewById(R.id.card);
+            radioBtn.setOnClickListener(v -> {
+                if (globalBtn.get() != null) {
+                    globalBtn.get().setChecked(false);
+                }
+                globalBtn.set(radioBtn);
+            });
+            card.setOnClickListener(v -> {
+                if (globalBtn.get() != null) {
+                    globalBtn.get().setChecked(false);
+                }
+                globalBtn.set(radioBtn);
+                radioBtn.setChecked(!radioBtn.isChecked());
+            });
+            features.addView(customEditTextLayout);
+        }
+
+        typeofplace.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                binding.place.getEditText().setText(selectedPlace);
+            }
+        });
+
+        apply.setOnClickListener(v -> {
+            for (int i = 0; i < features.getChildCount(); i++) {
+                View view = features.getChildAt(i);
+                if (view instanceof RelativeLayout) {
+                    RelativeLayout main = (RelativeLayout) view;
+                    MaterialRadioButton radioBtn = main.findViewById(R.id.radioBtn);
+                    TextView text = main.findViewById(R.id.text);
+                    if (radioBtn.isChecked()) {
+                        selectedPlace = text.getText().toString().trim();
+                    }
+                }
+            }
+            if (!selectedPlace.isEmpty()) {
+                typeofplace.dismiss();
+            } else {
+                Toast.makeText(this, getString(R.string.please_select_the_type_of_place), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void updateViews() {
         binding.name.getEditText().setText(model.name);
         binding.contact.getEditText().setText(model.contact);
+        selectedPlace = model.typeOfPlace;
         binding.place.getEditText().setText(model.typeOfPlace);
         binding.desc.getEditText().setText(model.description);
         binding.location.getEditText().setText(model.address);
@@ -286,7 +364,7 @@ public class EditPlaceActivity extends AppCompatActivity {
             ImageView image = customEditTextLayout.findViewById(R.id.image);
             CardView card = customEditTextLayout.findViewById(R.id.card);
             card.setCardBackgroundColor(getResources().getColor(R.color.green_card));
-            //  image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+            image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
             image.setImageResource(s.icon);
             binding.servicesIcon.addView(customEditTextLayout);
         }
@@ -321,9 +399,8 @@ public class EditPlaceActivity extends AppCompatActivity {
             lock.setVisibility(View.GONE);
             text.setText(s.name);
             checkbox.setEnabled(true);
-            if (b) {
-                image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
-            }
+            int color = b ? R.color.blue : R.color.green;
+            image.setImageTintList(ColorStateList.valueOf(getResources().getColor(color)));
             MaterialCardView card = customEditTextLayout.findViewById(R.id.card);
             card.setOnClickListener(v -> checkbox.setChecked(!checkbox.isChecked()));
 

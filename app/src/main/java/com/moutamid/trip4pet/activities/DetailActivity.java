@@ -318,7 +318,7 @@ public class DetailActivity extends AppCompatActivity {
                 ImageView image = customEditTextLayout.findViewById(R.id.image);
                 CardView card = customEditTextLayout.findViewById(R.id.card);
                 card.setCardBackgroundColor(getResources().getColor(R.color.green_card));
-                //  image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+                image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
                 image.setImageResource(s.icon);
                 binding.servicesIcon.addView(customEditTextLayout);
             }

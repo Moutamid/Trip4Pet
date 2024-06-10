@@ -22,7 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.moutamid.trip4pet.models.FilterModel;
-import com.moutamid.trip4pet.models.LocationsModel;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,9 +32,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
-import java.util.UUID;
 
 public class Constants {
     public static final String DUMMY_IMAGE = "https://firebasestorage.googleapis.com/v0/b/multistreamz-10cba.appspot.com/o/trip4pet%2Fimages%2F01062024113321?alt=media&token=f2840b63-8f4d-48b8-a04a-db72ca4d9de9";
@@ -96,6 +93,7 @@ public class Constants {
         db.keepSynced(true);
         return db;
     }
+
     public static StorageReference storageReference() {
         return FirebaseStorage.getInstance().getReference().child("trip4pet");
     }
@@ -119,6 +117,77 @@ public class Constants {
 
     public static ArrayList<FilterModel> getServices(Context context) {
         ArrayList<FilterModel> service = new ArrayList<>();
+        service.add(new FilterModel(context.getString(R.string.lifeguard_services), R.drawable.life_ring_solid));
+        service.add(new FilterModel(context.getString(R.string.umbrellas_and_beach_chair_rentals), R.drawable.umbrella_beach_solid));
+        service.add(new FilterModel(context.getString(R.string.restrooms_and_showers), R.drawable.shower_solid));
+        service.add(new FilterModel(context.getString(R.string.coffee_and_espresso_drinks), R.drawable.mug_hot_solid));
+        service.add(new FilterModel(context.getString(R.string.pastries_and_snacks), R.drawable.cake_candles_solid));
+        service.add(new FilterModel(context.getString(R.string.wi_fi), R.drawable.wifi_solid));
+        service.add(new FilterModel(context.getString(R.string.food_and_drinks), R.drawable.utensils_solid));
+        service.add(new FilterModel(context.getString(R.string.dog_friendly_swimming_area), R.drawable.person_swimming_solid));
+        service.add(new FilterModel(context.getString(R.string.places_for_dogs_to_run_and_play), R.drawable.dog_solid));
+        service.add(new FilterModel(context.getString(R.string.dog_waste_bag_dispensers), R.drawable.dumpster_solid));
+        service.add(new FilterModel(context.getString(R.string.dog_showers), R.drawable.soap_solid));
+        service.add(new FilterModel(context.getString(R.string.fenced_in_area_for_dogs_to_run_and_play), R.drawable.xmarks_lines_solid));
+        service.add(new FilterModel(context.getString(R.string.benches_for_dog_owners), R.drawable.chair_solid));
+        service.add(new FilterModel(context.getString(R.string.campsites), R.drawable.campground_solid));
+        service.add(new FilterModel(context.getString(R.string.laundry_facilities), R.drawable.jug_detergent_solid));
+        service.add(new FilterModel(context.getString(R.string.camp_store), R.drawable.tent_solid));
+        service.add(new FilterModel(context.getString(R.string.lodging), R.drawable.hotel_solid));
+        service.add(new FilterModel(context.getString(R.string.detergent_and_fabric_softener_vending_machines), R.drawable.jug_detergent_solid));
+        service.add(new FilterModel(context.getString(R.string.detergent_for_pet_hair), R.drawable.pump_soap_solid));
+
+        ///////////////
+
+        service.add(new FilterModel(context.getString(R.string.sunbeds_and_umbrellas_rental), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.coffee_bar), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.restaurant_with_access_for_animals), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.pet_pool), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.private_garden_accessible_to_animals), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.dog_area), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.pet_grooming_service), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.pet_services), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.education_course_for_animals), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.veterinary_emergency_room), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.pet_caregiver), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.animal_oncology), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.animal_rehabilitation), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.animal_neurology), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.agility_field), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.other), R.drawable.pump_soap_solid));
+
+        return service;
+    }
+
+    public static int getTypeOfPlace(Context context, String place) {
+        if (place.equals(context.getString(R.string.beach_without_signs))) {
+            return R.drawable.spiaggia_senza_cartelli;
+        } else if (place.equals(context.getString(R.string.veterinarian))) {
+            return R.drawable.vet;
+        } else if (place.equals(context.getString(R.string.coffee_bar))) {
+            return R.drawable.coffee_bar;
+        } else if (place.equals(context.getString(R.string.ristorante))) {
+            return R.drawable.ristorante;
+        } else if (place.equals(context.getString(R.string.dog_beach))) {
+            return R.drawable.spiaggia_per_cani;
+        } else if (place.equals(context.getString(R.string.pet_store))) {
+            return R.drawable.pet_store;
+        } else if (place.equals(context.getString(R.string.dog_area))) {
+            return R.drawable.area_cani;
+        } else if (place.equals(context.getString(R.string.camping))) {
+            return R.drawable.campeggio;
+        } else if (place.equals(context.getString(R.string.albergo))) {
+            return R.drawable.albergo;
+        } else if (place.equals(context.getString(R.string.laundry))) {
+            return R.drawable.lavanderia;
+        } else if (place.equals(context.getString(R.string.laundry_for_pets))) {
+            return R.drawable.lavanderia_for_pet;
+        }
+        return 0;
+    }
+
+    public static ArrayList<FilterModel> getTypeOfPlaces(Context context) {
+        ArrayList<FilterModel> service = new ArrayList<>();
         service.add(new FilterModel(context.getString(R.string.beach_without_signs), R.drawable.spiaggia_senza_cartelli));
         service.add(new FilterModel(context.getString(R.string.veterinarian), R.drawable.vet));
         service.add(new FilterModel(context.getString(R.string.coffee_bar), R.drawable.coffee_bar));
@@ -130,16 +199,6 @@ public class Constants {
         service.add(new FilterModel(context.getString(R.string.albergo), R.drawable.albergo));
         service.add(new FilterModel(context.getString(R.string.laundry), R.drawable.lavanderia));
         service.add(new FilterModel(context.getString(R.string.laundry_for_pets), R.drawable.lavanderia_for_pet));
-
-//        service.add(new FilterModel("Pet-Friendly Amenities", R.drawable.wifi_solid));  // Placeholder icon
-//        service.add(new FilterModel("Laundry (for pet items)", R.drawable.jug_detergent_solid));
-//        service.add(new FilterModel("Freshwater for Pets", R.drawable.faucet_drip_solid));  // Already appropriate
-//        service.add(new FilterModel("Public toilets (for pet waste disposal)", R.drawable.restroom_solid));  // Clarification
-//        service.add(new FilterModel("Internet for Booking Services", R.drawable.wifi_solid));  // Already appropriate
-//        service.add(new FilterModel("LPG station (for heating)", R.drawable.gas_pump_solid));  // Clarification
-//        service.add(new FilterModel("Bottled gas service (for heating)", R.drawable.fire_flame_simple_solid));  // Clarification
-//        service.add(new FilterModel("3G/4G internet", R.drawable.signal_solid));  // Already appropriate
-//        service.add(new FilterModel("Washing for pets (and items)", R.drawable.soap_solid));  // Clarification
         return service;
     }
 
