@@ -78,7 +78,7 @@ public class AddPlaceActivity extends AppCompatActivity {
                     .addOnSuccessListener(this, location -> {
                         if (location != null) {
                             LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f));
                         } else {
                             Toast.makeText(this, getString(R.string.location_not_found), Toast.LENGTH_SHORT).show();
                         }

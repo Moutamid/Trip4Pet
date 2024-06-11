@@ -6,9 +6,13 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
@@ -291,4 +295,11 @@ public class Constants {
         }).start();
     }
 
+    public static SpannableString spanText(String text) {
+        String learnMoreText = "*";
+        String combinedNameText = text + learnMoreText;
+        SpannableString name = new SpannableString(combinedNameText);
+        name.setSpan(new ForegroundColorSpan(Color.RED), text.length(), combinedNameText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return name;
+    }
 }

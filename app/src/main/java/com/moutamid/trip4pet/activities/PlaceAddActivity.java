@@ -9,12 +9,14 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,7 +41,6 @@ import com.google.android.material.radiobutton.MaterialRadioButton;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.adapters.ImageAdapter;
-import com.moutamid.trip4pet.bottomsheets.FilterDialog;
 import com.moutamid.trip4pet.databinding.ActivityPlaceAddBinding;
 import com.moutamid.trip4pet.listener.ImageListener;
 import com.moutamid.trip4pet.models.FilterModel;
@@ -47,9 +48,7 @@ import com.moutamid.trip4pet.models.LocationsModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
@@ -83,6 +82,14 @@ public class PlaceAddActivity extends AppCompatActivity {
         });
 
         ID = UUID.randomUUID().toString();
+
+        String nameText = getString(R.string.name) + " ";
+        String typeText = getString(R.string.place_type) + " ";
+        String descText = getString(R.string.description) + " ";
+
+        binding.nameText.setText(Constants.spanText(nameText));
+        binding.typeText.setText(Constants.spanText(typeText));
+        binding.descriptionText.setText(Constants.spanText(descText));
 
         images = new ArrayList<>();
         imagesList = new ArrayList<>();

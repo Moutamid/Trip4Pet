@@ -3,9 +3,13 @@
     <item
         android:id="@+id/aroundMe"
         android:icon="@drawable/compass"
-        android:title="Around Me" />
+        android:title="@string/around_me" />
+    <item
+        android:id="@+id/aroundPlace"
+        android:icon="@drawable/location_crosshairs_solid"
+        android:title="@string/around_place" />
     <item
         android:id="@+id/menu"
         android:icon="@drawable/bars"
-        android:title="Menu" />
+        android:title="@string/menu" />
 </menu>

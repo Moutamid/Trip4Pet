@@ -5,11 +5,6 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,6 +14,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.fxn.stash.Stash;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -26,7 +24,6 @@ import com.google.gson.stream.JsonReader;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.MainActivity;
 import com.moutamid.trip4pet.R;
-import com.moutamid.trip4pet.activities.AroundPlaceActivity;
 import com.moutamid.trip4pet.adapters.CitiesAdapter;
 import com.moutamid.trip4pet.databinding.FragmentAroundPlaceBinding;
 import com.moutamid.trip4pet.listener.CityClick;
@@ -44,6 +41,7 @@ public class AroundPlaceFragment extends Fragment {
     CitiesAdapter adapter;
     private static final String TAG = "AroundPlaceFragment";
     ArrayList<Cities> list = new ArrayList<>();
+
     public AroundPlaceFragment() {
         // Required empty public constructor
     }
@@ -53,11 +51,17 @@ public class AroundPlaceFragment extends Fragment {
         super.onResume();
         Constants.setLocale(requireContext(), Stash.getString(Constants.LANGUAGE, "en"));
         Constants.initDialog(requireContext());
+        Stash.clear(Constants.CITIES);
+//        list = Stash.getArrayList(Constants.CITIES, Cities.class);
         if (list.isEmpty()) {
             Constants.showDialog();
             MyTask task = new MyTask();
             task.execute();
         }
+//        else {
+//            adapter = new CitiesAdapter(requireActivity(), list, cityClick);
+//            binding.cities.setAdapter(adapter);
+//        }
     }
 
     @Override
@@ -139,7 +143,6 @@ public class AroundPlaceFragment extends Fragment {
                 while (jsonReader.hasNext()) {
                     Cities dataItem = gson.fromJson(jsonReader, Cities.class);
                     dataArray.add(dataItem);
-                    Log.d(TAG, "doInBackground: Sizeee   " + dataArray.size());
                 }
                 jsonReader.endArray();
                 reader.close();
@@ -157,7 +160,7 @@ public class AroundPlaceFragment extends Fragment {
             super.onPostExecute(dataArray);
             list = new ArrayList<>(dataArray);
             Constants.dismissDialog();
-            // Stash.put(Constants.CITIES, list);
+//            Stash.put(Constants.CITIES, list);
             Log.d(TAG, "onPostExecute: LIST SIZE  " + list.size());
             adapter = new CitiesAdapter(requireActivity(), list, cityClick);
             binding.cities.setAdapter(adapter);

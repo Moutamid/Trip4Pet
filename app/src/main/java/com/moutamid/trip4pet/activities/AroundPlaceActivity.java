@@ -24,6 +24,7 @@ import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.adapters.CitiesAdapter;
 import com.moutamid.trip4pet.databinding.ActivityAroundPlaceBinding;
+import com.moutamid.trip4pet.fragments.AroundPlaceFragment;
 import com.moutamid.trip4pet.listener.CityClick;
 import com.moutamid.trip4pet.models.Cities;
 
@@ -62,9 +63,18 @@ public class AroundPlaceActivity extends AppCompatActivity {
         binding.cities.setHasFixedSize(false);
 
         Constants.initDialog(this);
-        Constants.showDialog();
-        MyTask task = new MyTask();
-        task.execute();
+
+//        list = Stash.getArrayList(Constants.CITIES, Cities.class);
+        if (list.isEmpty()) {
+            Constants.showDialog();
+            MyTask task = new MyTask();
+            task.execute();
+        }
+//        else {
+//            adapter = new CitiesAdapter(requireActivity(), list, cityClick);
+//            binding.cities.setAdapter(adapter);
+//        }
+
 //        list = Stash.getArrayList(Constants.CITIES, Cities.class);
 //        if (list.isEmpty()) {
 //            Constants.showDialog();

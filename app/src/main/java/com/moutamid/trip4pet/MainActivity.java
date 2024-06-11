@@ -1,7 +1,11 @@
 package com.moutamid.trip4pet;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -17,6 +21,7 @@ import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.PurchaseInfo;
 import com.anjlab.android.iab.v3.SkuDetails;
 import com.fxn.stash.Stash;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.moutamid.trip4pet.databinding.ActivityMainBinding;
 import com.moutamid.trip4pet.fragments.AroundMeFragment;
 import com.moutamid.trip4pet.fragments.AroundPlaceFragment;
@@ -37,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         setContentView(binding.getRoot());
         Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
         Constants.checkApp(this);
@@ -52,15 +59,38 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         checkSubscription();
 
-        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
-        binding.viewPager.setAdapter(adapter);
-        binding.tabLayout.setupWithViewPager(binding.viewPager);
-        // Optionally, you can set icons for the tabs
-        binding.tabLayout.getTabAt(0).setIcon(R.drawable.compass);
-        binding.tabLayout.getTabAt(1).setIcon(R.drawable.location_crosshairs_solid);
-        binding.tabLayout.getTabAt(2).setIcon(R.drawable.bars);
+        binding.bottomNav.setItemActiveIndicatorColor(ColorStateList.valueOf(getColor(R.color.white2)));
+        binding.bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if (id == R.id.aroundMe) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new AroundMeFragment()).commit();
+                }
+                if (id == R.id.aroundPlace) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new AroundPlaceFragment()).commit();
+                }
+                if (id == R.id.menu) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frameLayout, new SettingFragment()).commit();
+                }
+                return true;
+            }
+        });
 
-        viewPager = binding.viewPager;
+        binding.bottomNav.setSelectedItemId(R.id.aroundMe);
+
+
+
+
+//        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
+//        binding.viewPager.setAdapter(adapter);
+//        binding.tabLayout.setupWithViewPager(binding.viewPager);
+//        // Optionally, you can set icons for the tabs
+//        binding.tabLayout.getTabAt(0).setIcon(R.drawable.compass);
+//        binding.tabLayout.getTabAt(1).setIcon(R.drawable.location_crosshairs_solid);
+//        binding.tabLayout.getTabAt(2).setIcon(R.drawable.bars);
+//
+//        viewPager = binding.viewPager;
     }
 
     public class PagerAdapter extends FragmentPagerAdapter {

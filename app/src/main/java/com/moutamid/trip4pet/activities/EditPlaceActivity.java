@@ -87,6 +87,14 @@ public class EditPlaceActivity extends AppCompatActivity {
 
         ID = model.id;
 
+        String nameText = getString(R.string.name) + " ";
+        String typeText = getString(R.string.place_type) + " ";
+        String descText = getString(R.string.description) + " ";
+
+        binding.nameText.setText(Constants.spanText(nameText));
+        binding.typeText.setText(Constants.spanText(typeText));
+        binding.descriptionText.setText(Constants.spanText(descText));
+
         images = new ArrayList<>();
         imagesList = new ArrayList<>();
         editedList = new ArrayList<>();

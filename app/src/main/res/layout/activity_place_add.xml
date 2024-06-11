@@ -8,19 +8,21 @@
     android:background="@color/white"
     tools:context=".activities.PlaceAddActivity">
 
-    <include layout="@layout/toolbar" android:id="@+id/toolbar" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:layout_below="@id/toolbar">
+        android:layout_below="@id/toolbar"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="20dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="20dp">
 
             <LinearLayout
                 android:id="@+id/AddPhotoLayout"
@@ -53,8 +55,8 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:gravity="center"
-                android:visibility="gone"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/RecyclerViewImageList"
@@ -62,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/image_layout"/>
+                    tools:listitem="@layout/image_layout" />
 
                 <Button
                     android:id="@+id/btnAddCarPhoto"
@@ -75,6 +77,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/nameText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -86,13 +89,13 @@
                 style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/west_beach"
+                android:textColorHint="@color/text"
                 app:boxBackgroundColor="@color/grey"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                android:textColorHint="@color/text"
-                android:hint="@string/west_beach"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">
 
@@ -115,13 +118,13 @@
                 style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="+1xxxxxxxx"
+                android:textColorHint="@color/text"
                 app:boxBackgroundColor="@color/grey"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                android:textColorHint="@color/text"
-                android:hint="+1xxxxxxxx"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">
 
@@ -133,6 +136,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
+                android:id="@+id/typeText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -144,13 +148,13 @@
                 style="@style/Widget.Material3.TextInputLayout.FilledBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:hint="@string/type_of_place"
                 app:boxBackgroundColor="@color/grey"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                android:layout_marginTop="5dp"
-                android:hint="@string/type_of_place"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">
 
@@ -158,10 +162,10 @@
                     android:id="@+id/placesList"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:focusableInTouchMode="false"
-                    android:focusable="false"
-                    android:cursorVisible="false"
                     android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:inputType="textPersonName" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -175,6 +179,7 @@
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/descriptionText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -186,13 +191,13 @@
                 style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/breif_description"
+                android:textColorHint="@color/text"
                 app:boxBackgroundColor="@color/grey"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                android:textColorHint="@color/text"
-                android:hint="@string/breif_description"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">
 
@@ -215,13 +220,13 @@
                 style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/location"
+                android:textColorHint="@color/text"
                 app:boxBackgroundColor="@color/grey"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                android:textColorHint="@color/text"
-                android:hint="@string/location"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">
 
@@ -244,12 +249,12 @@
                 style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColorHint="@color/text"
                 app:boxBackgroundColor="@color/grey"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                android:textColorHint="@color/text"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">
 
@@ -272,12 +277,12 @@
                 style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColorHint="@color/text"
                 app:boxBackgroundColor="@color/grey"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                android:textColorHint="@color/text"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">
 
@@ -300,13 +305,13 @@
                 style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="DD.DDDDD"
+                android:textColorHint="@color/text"
                 app:boxBackgroundColor="@color/grey"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                android:textColorHint="@color/text"
-                android:hint="DD.DDDDD"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">
 
@@ -329,13 +334,13 @@
                 style="@style/Widget.Material3.TextInputLayout.FilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="DD.DDDDD"
+                android:textColorHint="@color/text"
                 app:boxBackgroundColor="@color/grey"
                 app:boxCornerRadiusBottomEnd="12dp"
                 app:boxCornerRadiusBottomStart="12dp"
                 app:boxCornerRadiusTopEnd="12dp"
                 app:boxCornerRadiusTopStart="12dp"
-                android:textColorHint="@color/text"
-                android:hint="DD.DDDDD"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">
 
@@ -374,23 +379,23 @@
                         android:text="@string/activity"
                         android:textColor="@color/text"
                         android:textSize="14sp" />
-                    
+
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/addActivity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="100dp"
                         android:layout_marginStart="10dp"
-                        app:cardElevation="0dp"
                         app:cardBackgroundColor="@color/blue_card"
+                        app:cardCornerRadius="100dp"
+                        app:cardElevation="0dp"
                         app:strokeWidth="0dp">
 
                         <ImageView
                             android:layout_width="18dp"
                             android:layout_height="18dp"
-                            app:tint="@color/blue"
+                            android:layout_margin="10dp"
                             android:src="@drawable/square_plus_regular"
-                            android:layout_margin="10dp" />
+                            app:tint="@color/blue" />
 
                     </com.google.android.material.card.MaterialCardView>
 
@@ -450,18 +455,18 @@
                         android:id="@+id/addServices"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="100dp"
                         android:layout_marginStart="10dp"
-                        app:cardElevation="0dp"
                         app:cardBackgroundColor="@color/green_card"
+                        app:cardCornerRadius="100dp"
+                        app:cardElevation="0dp"
                         app:strokeWidth="0dp">
 
                         <ImageView
                             android:layout_width="18dp"
                             android:layout_height="18dp"
-                            app:tint="@color/green"
+                            android:layout_margin="10dp"
                             android:src="@drawable/square_plus_regular"
-                            android:layout_margin="10dp" />
+                            app:tint="@color/green" />
 
                     </com.google.android.material.card.MaterialCardView>
 
@@ -493,8 +498,8 @@
                 android:id="@+id/addPlace"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="15dp"
                 android:layout_marginTop="10dp"
+                android:padding="15dp"
                 android:text="@string/add_place" />
 
         </LinearLayout>
