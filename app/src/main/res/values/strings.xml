@@ -228,5 +228,8 @@
     <string name="animal_neurology">Animal neurology</string>
     <string name="agility_field">Agility field</string>
     <string name="other">Other</string>
+    <string name="confirm_location">Confirm Location</string>
+    <string name="our_system_detected_another_nearby_location_is_the_entered_location_correct">Our system detected another nearby location. Is the entered location correct?</string>
+    <string name="contact_not_found">Contact not found</string>
 
 </resources>

@@ -45,6 +45,7 @@ public class Constants {
     public static final String MODEL = "MODEL";
     public static final String CITIES = "CITIES";
     public static final String FILTERS = "FILTERS";
+    public static final String PLACES = "PLACES";
     public static final String ISVIP = "ISVIP";
     public static final String PLACE = "PLACE";
     public static final String VISITED = "VISITED";

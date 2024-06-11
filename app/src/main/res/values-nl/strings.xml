@@ -224,5 +224,8 @@
     <string name="animal_neurology">Dierneurologie</string>
     <string name="agility_field">Behendigheidsveld</string>
     <string name="other">Anders</string>
+    <string name="confirm_location">Locatie Bevestigen</string>
+    <string name="our_system_detected_another_nearby_location_is_the_entered_location_correct">Ons systeem heeft een andere nabijgelegen locatie gedetecteerd. Is de ingevoerde locatie correct?</string>
+    <string name="contact_not_found">Contact niet gevonden</string>
 
 </resources>

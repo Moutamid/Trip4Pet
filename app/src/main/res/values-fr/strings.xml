@@ -224,5 +224,8 @@
     <string name="animal_neurology">Neurologie animale</string>
     <string name="agility_field">Terrain d\'agilité</string>
     <string name="other">Autre</string>
+    <string name="confirm_location">Confirmer la Position</string>
+    <string name="our_system_detected_another_nearby_location_is_the_entered_location_correct">Notre système a détecté un autre emplacement à proximité. L\'emplacement saisi est-il correct?</string>
+    <string name="contact_not_found">Contact non trouvé</string>
 
 </resources>

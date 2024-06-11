@@ -3,6 +3,7 @@ package com.moutamid.trip4pet.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -22,9 +23,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.databinding.ActivityAddPlaceBinding;
+import com.moutamid.trip4pet.models.LocationsModel;
+
+import java.util.ArrayList;
 
 public class AddPlaceActivity extends AppCompatActivity {
     ActivityAddPlaceBinding binding;
@@ -32,6 +37,7 @@ public class AddPlaceActivity extends AppCompatActivity {
     boolean isGiven = false;
     String name = "";
     GoogleMap mMap;
+    Location loc = new Location("");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,11 +68,36 @@ public class AddPlaceActivity extends AppCompatActivity {
         String finalPlace = place;
         binding.pick.setOnClickListener(v -> {
             LatLng centerOfMap = mMap.getCameraPosition().target;
-            double latitude = centerOfMap.latitude;
-            double longitude = centerOfMap.longitude;
-            String COORDINATES = latitude + ", " + longitude;
-            startActivity(new Intent(this, PlaceAddActivity.class).putExtra(Constants.COORDINATES, COORDINATES).putExtra(Constants.PLACE, finalPlace));
-            finish();
+            ArrayList<LocationsModel> places = Stash.getArrayList(Constants.PLACES, LocationsModel.class);
+            loc.setLatitude(centerOfMap.latitude);
+            loc.setLongitude(centerOfMap.longitude);
+            boolean isNearBy = false;
+            for (LocationsModel model : places) {
+                Location loc2 = new Location("");
+                loc2.setLatitude(model.latitude);
+                loc2.setLongitude(model.longitude);
+                Log.d(TAG, "distanceTo: " + loc.distanceTo(loc2));
+                if (loc.distanceTo(loc2) <= 50) {
+                    isNearBy = true;
+                    break;
+                }
+            }
+            String COORDINATES = centerOfMap.latitude + ", " + centerOfMap.longitude;
+            if (!isNearBy) {
+                startActivity(new Intent(this, PlaceAddActivity.class).putExtra(Constants.COORDINATES, COORDINATES).putExtra(Constants.PLACE, finalPlace));
+                finish();
+            } else {
+                new MaterialAlertDialogBuilder(this)
+                        .setTitle(R.string.confirm_location)
+                        .setMessage(R.string.our_system_detected_another_nearby_location_is_the_entered_location_correct)
+                        .setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss())
+                        .setPositiveButton(R.string.yes, (dialog, which) -> {
+                            dialog.dismiss();
+                            startActivity(new Intent(this, PlaceAddActivity.class).putExtra(Constants.COORDINATES, COORDINATES).putExtra(Constants.PLACE, finalPlace));
+                            finish();
+                        })
+                        .show();
+            }
         });
 
         binding.aroundMe.setOnClickListener(v -> {
@@ -78,7 +109,7 @@ public class AddPlaceActivity extends AppCompatActivity {
                     .addOnSuccessListener(this, location -> {
                         if (location != null) {
                             LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 15f));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 18f));
                         } else {
                             Toast.makeText(this, getString(R.string.location_not_found), Toast.LENGTH_SHORT).show();
                         }
@@ -107,7 +138,7 @@ public class AddPlaceActivity extends AppCompatActivity {
                     .addOnSuccessListener(this, location -> {
                         if (location != null) {
                             LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 8f));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 18f));
                         } else {
                             // Location not found, handle the case where there is no last known location
                             Toast.makeText(this, getString(R.string.location_not_found), Toast.LENGTH_SHORT).show();
@@ -116,7 +147,7 @@ public class AddPlaceActivity extends AppCompatActivity {
         } else {
             String[] cord = name.split(", ");
             LatLng currentLatLng = new LatLng(Double.parseDouble(cord[0]), Double.parseDouble(cord[1])); // lat, long
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 8f));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16f));
         }
         mMap.setMaxZoomPreference(20f);
 //        googleMap.setMinZoomPreference(12f);

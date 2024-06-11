@@ -31,8 +31,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.activities.DetailActivity;
@@ -245,29 +243,22 @@ public class AroundMeFragment extends Fragment {
     }
 
     private void getPlaces() {
-        Constants.databaseReference().child(Constants.PLACE)
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        // Constants.dismissDialog();
-                        if (snapshot.exists()) {
-                            places.clear();
-                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                                for (DataSnapshot dataSnapshot2 : dataSnapshot.getChildren()) {
-                                    LocationsModel model = dataSnapshot2.getValue(LocationsModel.class);
-                                    places.add(model);
-                                }
-                            }
-                        }
-                        showAll();
+        Constants.databaseReference().child(Constants.PLACE).get().addOnSuccessListener(dataSnapshot -> {
+            if (dataSnapshot.exists()) {
+                places.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    for (DataSnapshot dataSnapshot2 : snapshot.getChildren()) {
+                        LocationsModel model = dataSnapshot2.getValue(LocationsModel.class);
+                        places.add(model);
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Constants.dismissDialog();
-                        Toast.makeText(requireContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                }
+                showAll();
+            }
+            Stash.put(Constants.PLACES, places);
+        }).addOnFailureListener(e -> {
+            Constants.dismissDialog();
+            Toast.makeText(requireContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override

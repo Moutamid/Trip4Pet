@@ -60,9 +60,13 @@ public class DetailActivity extends AppCompatActivity {
         binding.back.setOnClickListener(v -> onBackPressed());
 
         binding.contacts.setOnClickListener(v -> {
-            Intent dialIntent = new Intent(Intent.ACTION_DIAL);
-            dialIntent.setData(Uri.parse("tel:" + model.contact));
-            startActivity(dialIntent);
+            if (model.contact.isEmpty()) {
+                Toast.makeText(this, getString(R.string.contact_not_found), Toast.LENGTH_SHORT).show();
+            } else {
+                Intent dialIntent = new Intent(Intent.ACTION_DIAL);
+                dialIntent.setData(Uri.parse("tel:" + model.contact));
+                startActivity(dialIntent);
+            }
         });
 
         binding.directions.setOnClickListener(v -> {
@@ -285,6 +289,8 @@ public class DetailActivity extends AppCompatActivity {
                 image.setImageResource(s.icon);
                 binding.activitiesIcon.addView(customEditTextLayout);
             }
+        } else {
+            binding.activities.setVisibility(View.GONE);
         }
         ArrayList<LocationsModel> favorite = Stash.getArrayList(Constants.FAVORITE, LocationsModel.class);
         for (int i = 0; i < favorite.size(); i++) {
