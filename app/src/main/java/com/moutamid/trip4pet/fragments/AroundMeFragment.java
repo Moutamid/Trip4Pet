@@ -175,22 +175,6 @@ public class AroundMeFragment extends Fragment {
                             }
                         }
 
-//                        if (model.typeOfPlace.equals("Other")) {
-//                            MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)).position(latLng).title(model.name);
-//                            Marker marker = mMap.addMarker(markerOptions);
-//                            marker.setTag(model.id);
-//                            currentMarkers.add(marker);
-//                        }
-
-//                        if (model.activities == null && model.services == null) {
-//                            if (icon != 0) {
-//                                MarkerOptions markerOptions = new MarkerOptions().icon(BitmapDescriptorFactory.fromBitmap(Constants.convertVectorToBitmap(getContext(), icon, widthPx, heightPx))).position(latLng).title(model.name);
-//                                Marker marker = mMap.addMarker(markerOptions);
-//                                marker.setTag(model.id);
-//                                currentMarkers.add(marker);
-//                            }
-//                        }
-
                         View customMarker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
                         ImageView iconImage = customMarker.findViewById(R.id.icon);
                         iconImage.setImageResource(Constants.getTypeOfPlace(requireContext(), model.typeOfPlace));

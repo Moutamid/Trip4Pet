@@ -230,11 +230,15 @@ public class EditPlaceActivity extends AppCompatActivity {
         addServices();
         addActivities();
 
-        images = new ArrayList<>(model.images);
-
-        for (String link : model.images) {
-            imagesList.add(Uri.parse(link));
+        if (model.images == null) {
+            images = new ArrayList<>();
+        } else {
+            images = new ArrayList<>(model.images);
+            for (String link : model.images) {
+                imagesList.add(Uri.parse(link));
+            }
         }
+
         if (!imagesList.isEmpty()) {
             binding.AddPhotoLayoutRecycler.setVisibility(View.VISIBLE);
             binding.AddPhotoLayout.setVisibility(View.GONE);
@@ -300,10 +304,10 @@ public class EditPlaceActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.name_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (binding.contact.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, R.string.contact_is_empty, Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        if (binding.contact.getEditText().getText().toString().isEmpty()) {
+//            Toast.makeText(this, R.string.contact_is_empty, Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
         if (binding.place.getEditText().getText().toString().isEmpty()) {
             Toast.makeText(this, R.string.type_of_place_is_empty, Toast.LENGTH_SHORT).show();
             return false;
@@ -312,10 +316,10 @@ public class EditPlaceActivity extends AppCompatActivity {
             Toast.makeText(this, R.string.description_is_empty, Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (binding.location.getEditText().getText().toString().isEmpty()) {
-            Toast.makeText(this, R.string.address_is_empty, Toast.LENGTH_SHORT).show();
-            return false;
-        }
+//        if (binding.location.getEditText().getText().toString().isEmpty()) {
+//            Toast.makeText(this, R.string.address_is_empty, Toast.LENGTH_SHORT).show();
+//            return false;
+//        }
         if (binding.city.getEditText().getText().toString().isEmpty()) {
             Toast.makeText(this, R.string.city_is_empty, Toast.LENGTH_SHORT).show();
             return false;

@@ -134,32 +134,30 @@ public class Constants {
         service.add(new FilterModel(context.getString(R.string.dog_waste_bag_dispensers), R.drawable.dumpster_solid));
         service.add(new FilterModel(context.getString(R.string.dog_showers), R.drawable.soap_solid));
         service.add(new FilterModel(context.getString(R.string.fenced_in_area_for_dogs_to_run_and_play), R.drawable.xmarks_lines_solid));
-        service.add(new FilterModel(context.getString(R.string.benches_for_dog_owners), R.drawable.chair_solid));
-        service.add(new FilterModel(context.getString(R.string.campsites), R.drawable.campground_solid));
+       // service.add(new FilterModel(context.getString(R.string.benches_for_dog_owners), R.drawable.chair_solid));
+       // service.add(new FilterModel(context.getString(R.string.campsites), R.drawable.campground_solid));
         service.add(new FilterModel(context.getString(R.string.laundry_facilities), R.drawable.jug_detergent_solid));
-        service.add(new FilterModel(context.getString(R.string.camp_store), R.drawable.tent_solid));
+      //  service.add(new FilterModel(context.getString(R.string.camp_store), R.drawable.tent_solid));
         service.add(new FilterModel(context.getString(R.string.lodging), R.drawable.hotel_solid));
         service.add(new FilterModel(context.getString(R.string.detergent_and_fabric_softener_vending_machines), R.drawable.jug_detergent_solid));
-        service.add(new FilterModel(context.getString(R.string.detergent_for_pet_hair), R.drawable.pump_soap_solid));
+       // service.add(new FilterModel(context.getString(R.string.detergent_for_pet_hair), R.drawable.pump_soap_solid));
 
-        ///////////////
-
-        service.add(new FilterModel(context.getString(R.string.sunbeds_and_umbrellas_rental), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.coffee_bar), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.restaurant_with_access_for_animals), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.pet_pool), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.private_garden_accessible_to_animals), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.dog_area), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.pet_grooming_service), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.pet_services), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.education_course_for_animals), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.veterinary_emergency_room), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.pet_caregiver), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.animal_oncology), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.animal_rehabilitation), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.animal_neurology), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.agility_field), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.other), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.sunbeds_and_umbrellas_rental), R.drawable.umbrella_beach_solid));
+       // service.add(new FilterModel(context.getString(R.string.coffee_bar), R.drawable.pump_soap_solid));
+      //  service.add(new FilterModel(context.getString(R.string.restaurant_with_access_for_animals), R.drawable.hotel_solid));
+        service.add(new FilterModel(context.getString(R.string.pet_pool), R.drawable.water_ladder_solid));
+        service.add(new FilterModel(context.getString(R.string.private_garden_accessible_to_animals), R.drawable.pagelines));
+      //  service.add(new FilterModel(context.getString(R.string.dog_area), R.drawable.pump_soap_solid));
+        service.add(new FilterModel(context.getString(R.string.pet_grooming_service), R.drawable.paw_solid));
+        service.add(new FilterModel(context.getString(R.string.pet_services), R.drawable.shield_dog_solid));
+        service.add(new FilterModel(context.getString(R.string.education_course_for_animals), R.drawable.school_solid));
+        service.add(new FilterModel(context.getString(R.string.veterinary_emergency_room), R.drawable.truck_medical_solid));
+        service.add(new FilterModel(context.getString(R.string.pet_caregiver), R.drawable.hand_holding_hand_solid));
+        service.add(new FilterModel(context.getString(R.string.animal_oncology), R.drawable.hospital_solid));
+        service.add(new FilterModel(context.getString(R.string.animal_rehabilitation), R.drawable.stethoscope_solid));
+        service.add(new FilterModel(context.getString(R.string.animal_neurology), R.drawable.brain_solid));
+        service.add(new FilterModel(context.getString(R.string.agility_field), R.drawable.person_chalkboard_solid));
+        service.add(new FilterModel(context.getString(R.string.other), R.drawable.otter_solid));
 
         return service;
     }
@@ -187,24 +185,27 @@ public class Constants {
             return R.drawable.lavanderia;
         } else if (place.equals(context.getString(R.string.laundry_for_pets))) {
             return R.drawable.lavanderia_for_pet;
+        } else if (place.equals(context.getString(R.string.dog_salon))) {
+            return R.drawable.dog_salon_copia;
         }
         return 0;
     }
 
     public static ArrayList<FilterModel> getTypeOfPlaces(Context context) {
-        ArrayList<FilterModel> service = new ArrayList<>();
-        service.add(new FilterModel(context.getString(R.string.beach_without_signs), R.drawable.spiaggia_senza_cartelli));
-        service.add(new FilterModel(context.getString(R.string.veterinarian), R.drawable.vet));
-        service.add(new FilterModel(context.getString(R.string.coffee_bar), R.drawable.coffee_bar));
-        service.add(new FilterModel(context.getString(R.string.ristorante), R.drawable.ristorante));
-        service.add(new FilterModel(context.getString(R.string.dog_beach), R.drawable.spiaggia_per_cani));
-        service.add(new FilterModel(context.getString(R.string.pet_store), R.drawable.pet_store));
-        service.add(new FilterModel(context.getString(R.string.dog_area), R.drawable.area_cani));
-        service.add(new FilterModel(context.getString(R.string.camping), R.drawable.campeggio));
-        service.add(new FilterModel(context.getString(R.string.albergo), R.drawable.albergo));
-        service.add(new FilterModel(context.getString(R.string.laundry), R.drawable.lavanderia));
-        service.add(new FilterModel(context.getString(R.string.laundry_for_pets), R.drawable.lavanderia_for_pet));
-        return service;
+        ArrayList<FilterModel> typeOfPlace = new ArrayList<>();
+        typeOfPlace.add(new FilterModel(context.getString(R.string.beach_without_signs), R.drawable.spiaggia_senza_cartelli));
+        typeOfPlace.add(new FilterModel(context.getString(R.string.veterinarian), R.drawable.vet));
+        typeOfPlace.add(new FilterModel(context.getString(R.string.coffee_bar), R.drawable.coffee_bar));
+        typeOfPlace.add(new FilterModel(context.getString(R.string.ristorante), R.drawable.ristorante));
+        typeOfPlace.add(new FilterModel(context.getString(R.string.dog_beach), R.drawable.spiaggia_per_cani));
+        typeOfPlace.add(new FilterModel(context.getString(R.string.pet_store), R.drawable.pet_store));
+        typeOfPlace.add(new FilterModel(context.getString(R.string.dog_area), R.drawable.area_cani));
+        typeOfPlace.add(new FilterModel(context.getString(R.string.camping), R.drawable.campeggio));
+        typeOfPlace.add(new FilterModel(context.getString(R.string.albergo), R.drawable.albergo));
+        typeOfPlace.add(new FilterModel(context.getString(R.string.laundry), R.drawable.lavanderia));
+        typeOfPlace.add(new FilterModel(context.getString(R.string.laundry_for_pets), R.drawable.lavanderia_for_pet));
+        typeOfPlace.add(new FilterModel(context.getString(R.string.dog_salon), R.drawable.dog_salon_copia));
+        return typeOfPlace;
     }
 
     public static Bitmap convertVectorToBitmap(Context context, int vectorDrawableId, int width, int height) {
