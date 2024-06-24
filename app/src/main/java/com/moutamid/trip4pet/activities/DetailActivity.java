@@ -7,6 +7,7 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -316,21 +317,29 @@ public class DetailActivity extends AppCompatActivity {
         binding.coordinates.setText(cord);
         String address = model.name + ", " + model.city + ", " + model.country;
         binding.location.setText(address);
-
+        binding.servicesIcon.removeAllViews();
         if (model.services != null) {
             for (FilterModel s : model.services) {
-                LayoutInflater inflater = getLayoutInflater();
-                View customEditTextLayout = inflater.inflate(R.layout.icon, null);
-                ImageView image = customEditTextLayout.findViewById(R.id.image);
-                CardView card = customEditTextLayout.findViewById(R.id.card);
-                card.setCardBackgroundColor(getResources().getColor(R.color.green_card));
-                image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
-                image.setImageResource(s.icon);
-                binding.servicesIcon.addView(customEditTextLayout);
+                Log.d(TAG, "onResume: " + s.name);
+                try {
+                    LayoutInflater inflater = getLayoutInflater();
+                    View customEditTextLayout = inflater.inflate(R.layout.icon, null);
+                    ImageView image = customEditTextLayout.findViewById(R.id.image);
+                    CardView card = customEditTextLayout.findViewById(R.id.card);
+                    card.setCardBackgroundColor(getResources().getColor(R.color.green_card));
+                    image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
+                    image.setImageResource(s.icon);
+                    binding.servicesIcon.addView(customEditTextLayout);
+                } catch (Exception e){
+                    e.printStackTrace();
+                    Log.d(TAG, "onResume: " + e.getLocalizedMessage());
+                }
             }
         }
 
         updateRecycler();
 
     }
+
+    private static final String TAG = "DetailActivity";
 }

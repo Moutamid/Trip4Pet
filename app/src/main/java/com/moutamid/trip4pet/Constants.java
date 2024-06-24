@@ -134,20 +134,20 @@ public class Constants {
         service.add(new FilterModel(context.getString(R.string.dog_waste_bag_dispensers), R.drawable.dumpster_solid));
         service.add(new FilterModel(context.getString(R.string.dog_showers), R.drawable.soap_solid));
         service.add(new FilterModel(context.getString(R.string.fenced_in_area_for_dogs_to_run_and_play), R.drawable.xmarks_lines_solid));
-       // service.add(new FilterModel(context.getString(R.string.benches_for_dog_owners), R.drawable.chair_solid));
-       // service.add(new FilterModel(context.getString(R.string.campsites), R.drawable.campground_solid));
+        // service.add(new FilterModel(context.getString(R.string.benches_for_dog_owners), R.drawable.chair_solid));
+        // service.add(new FilterModel(context.getString(R.string.campsites), R.drawable.campground_solid));
         service.add(new FilterModel(context.getString(R.string.laundry_facilities), R.drawable.jug_detergent_solid));
-      //  service.add(new FilterModel(context.getString(R.string.camp_store), R.drawable.tent_solid));
+        //  service.add(new FilterModel(context.getString(R.string.camp_store), R.drawable.tent_solid));
         service.add(new FilterModel(context.getString(R.string.lodging), R.drawable.hotel_solid));
         service.add(new FilterModel(context.getString(R.string.detergent_and_fabric_softener_vending_machines), R.drawable.jug_detergent_solid));
-       // service.add(new FilterModel(context.getString(R.string.detergent_for_pet_hair), R.drawable.pump_soap_solid));
+        // service.add(new FilterModel(context.getString(R.string.detergent_for_pet_hair), R.drawable.pump_soap_solid));
 
-        service.add(new FilterModel(context.getString(R.string.sunbeds_and_umbrellas_rental), R.drawable.umbrella_beach_solid));
-       // service.add(new FilterModel(context.getString(R.string.coffee_bar), R.drawable.pump_soap_solid));
-      //  service.add(new FilterModel(context.getString(R.string.restaurant_with_access_for_animals), R.drawable.hotel_solid));
+        // service.add(new FilterModel(context.getString(R.string.sunbeds_and_umbrellas_rental), R.drawable.umbrella_beach_solid));
+        // service.add(new FilterModel(context.getString(R.string.coffee_bar), R.drawable.pump_soap_solid));
+        //  service.add(new FilterModel(context.getString(R.string.restaurant_with_access_for_animals), R.drawable.hotel_solid));
         service.add(new FilterModel(context.getString(R.string.pet_pool), R.drawable.water_ladder_solid));
         service.add(new FilterModel(context.getString(R.string.private_garden_accessible_to_animals), R.drawable.pagelines));
-      //  service.add(new FilterModel(context.getString(R.string.dog_area), R.drawable.pump_soap_solid));
+        //  service.add(new FilterModel(context.getString(R.string.dog_area), R.drawable.pump_soap_solid));
         service.add(new FilterModel(context.getString(R.string.pet_grooming_service), R.drawable.paw_solid));
         service.add(new FilterModel(context.getString(R.string.pet_services), R.drawable.shield_dog_solid));
         service.add(new FilterModel(context.getString(R.string.education_course_for_animals), R.drawable.school_solid));

@@ -22,4 +22,13 @@
         app:tint="@color/white2"
         android:src="@drawable/trip4pet_logo" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_margin="10dp"
+        android:textColor="@color/white"
+        android:text="In Memory of Cindy" />
+
 </RelativeLayout>

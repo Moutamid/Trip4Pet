@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapterVH> {
     private Context context;
-    private ArrayList<String> mSliderItems = new ArrayList<>();
+    private ArrayList<String> mSliderItems;
 
     public SliderAdapter(Context context, ArrayList<String> mSliderItems) {
         this.context = context;

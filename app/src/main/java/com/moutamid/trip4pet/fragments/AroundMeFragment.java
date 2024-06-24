@@ -291,7 +291,7 @@ public class AroundMeFragment extends Fragment {
         Cities cities = (Cities) Stash.getObject(Constants.AROUND_PLACE, Cities.class);
         if (cities != null) {
             LatLng currentLatLng = new LatLng(cities.latitude, cities.longitude);
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 6f));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f));
         }
     };
 
