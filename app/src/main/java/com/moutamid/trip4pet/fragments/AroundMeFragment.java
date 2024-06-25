@@ -264,7 +264,7 @@ public class AroundMeFragment extends Fragment {
                     .addOnSuccessListener(requireActivity(), location -> {
                         if (location != null) {
                             LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 6f));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f));
                         } else {
                             new MaterialAlertDialogBuilder(requireContext())
                                     .setMessage(getString(R.string.this_function_requires_a_gps_connection))
