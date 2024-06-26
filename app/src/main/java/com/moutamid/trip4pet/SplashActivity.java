@@ -25,8 +25,10 @@ public class SplashActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         Stash.clear(Constants.FILTERS);
         Stash.clear(Constants.AROUND_PLACE);
+
         new Handler().postDelayed(() -> {
             if (Constants.auth().getCurrentUser() != null) {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));

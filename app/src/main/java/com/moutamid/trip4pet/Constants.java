@@ -187,6 +187,10 @@ public class Constants {
             return R.drawable.lavanderia_for_pet;
         } else if (place.equals(context.getString(R.string.dog_salon))) {
             return R.drawable.dog_salon_copia;
+        } else if (place.equals(context.getString(R.string.museum))) {
+            return R.drawable.museum;
+        } else if (place.equals(context.getString(R.string.prohibition))) {
+            return R.drawable.divieto;
         }
         return 0;
     }
@@ -205,6 +209,8 @@ public class Constants {
         typeOfPlace.add(new FilterModel(context.getString(R.string.laundry), R.drawable.lavanderia));
         typeOfPlace.add(new FilterModel(context.getString(R.string.laundry_for_pets), R.drawable.lavanderia_for_pet));
         typeOfPlace.add(new FilterModel(context.getString(R.string.dog_salon), R.drawable.dog_salon_copia));
+        typeOfPlace.add(new FilterModel(context.getString(R.string.museum), R.drawable.museum));
+        typeOfPlace.add(new FilterModel(context.getString(R.string.prohibition), R.drawable.divieto));
         return typeOfPlace;
     }
 

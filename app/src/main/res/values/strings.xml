@@ -233,5 +233,7 @@
     <string name="contact_not_found">Contact not found</string>
     <string name="dog_salon">Dog Salon</string>
     <string name="update_place">Update Place</string>
+    <string name="museum">Museum</string>
+    <string name="prohibition">Prohibition</string>
 
 </resources>

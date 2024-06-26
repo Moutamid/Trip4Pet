@@ -228,4 +228,7 @@
     <string name="our_system_detected_another_nearby_location_is_the_entered_location_correct">Il nostro sistema ha rilevato un\'altra posizione nelle vicinanze. La posizione inserita è corretta?</string>
     <string name="contact_not_found">Contatto non trovato</string>
     <string name="dog_salon">Salone per cani</string>
+    <string name="update_place">Aggiorna luogo</string>
+    <string name="museum">Museo</string>
+    <string name="prohibition">Divieto</string>
 </resources>
