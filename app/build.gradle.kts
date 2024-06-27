@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.stash)
     implementation(libs.autoimageslider)
     implementation(libs.simpleratingbar)
+    implementation(libs.translateapi)
 
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)

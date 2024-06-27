@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,6 +22,8 @@ import com.fxn.stash.Stash;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+import com.mannan.translateapi.Language;
+import com.mannan.translateapi.TranslateAPI;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.MainActivity;
 import com.moutamid.trip4pet.R;
@@ -90,6 +93,8 @@ public class AroundPlaceFragment extends Fragment {
         });
 
         binding.search.getEditText().addTextChangedListener(new TextWatcher() {
+            private Handler handler = new Handler();
+            private Runnable runnable;
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -97,6 +102,7 @@ public class AroundPlaceFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "onTextChanged: ");
                 if (s.toString().isEmpty()) {
                     binding.gps.setVisibility(View.VISIBLE);
                     binding.cities.setVisibility(View.GONE);
@@ -105,17 +111,30 @@ public class AroundPlaceFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().isEmpty()) {
-                    binding.gps.setVisibility(View.VISIBLE);
-                    binding.cities.setVisibility(View.GONE);
-                } else {
-                    binding.gps.setChecked(false);
-                    binding.gps.setVisibility(View.GONE);
-                    binding.cities.setVisibility(View.VISIBLE);
-                    if (s.toString().length() > 3) {
-                        adapter.filter(s.toString());
-                    }
+                if (runnable != null) {
+                    handler.removeCallbacks(runnable);
                 }
+
+                runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "afterTextChanged: ");
+                        if (s.toString().isEmpty()) {
+                            binding.gps.setVisibility(View.VISIBLE);
+                            binding.cities.setVisibility(View.GONE);
+                        } else {
+                            binding.gps.setChecked(false);
+                            binding.gps.setVisibility(View.GONE);
+                            binding.cities.setVisibility(View.VISIBLE);
+                            if (s.toString().length() > 3) {
+                                adapter.filter(s.toString());
+                            }
+                        }
+                    }
+                };
+
+                // Post the runnable with a delay (e.g., 500 milliseconds)
+                handler.postDelayed(runnable, 500);
             }
         });
 
@@ -130,14 +149,13 @@ public class AroundPlaceFragment extends Fragment {
                 Log.d(TAG, "doInBackground: Reading json");
                 AssetManager assetManager = requireContext().getAssets();
                 InputStream inputStream = assetManager.open("cities.json");
-                Reader reader = new InputStreamReader(inputStream, "UTF-8"); // Replace "UTF-8" with appropriate encoding if known
+                Reader reader = new InputStreamReader(inputStream, "UTF-8");
 
                 JsonReader jsonReader = new JsonReader(reader);
                 jsonReader.setLenient(true); // Handle potential parsing issues
 
                 Gson gson = new Gson();
-                Type listType = new TypeToken<ArrayList<Cities>>() {
-                }.getType(); // Replace MyDataModel with your actual class
+                Type listType = new TypeToken<ArrayList<Cities>>() {}.getType();
                 ArrayList<Cities> dataArray = new ArrayList<>();
                 jsonReader.beginArray();
                 while (jsonReader.hasNext()) {

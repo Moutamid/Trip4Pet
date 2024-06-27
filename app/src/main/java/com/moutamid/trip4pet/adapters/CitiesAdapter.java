@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.fxn.stash.Stash;
+import com.mannan.translateapi.Language;
+import com.mannan.translateapi.TranslateAPI;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.listener.CityClick;
 import com.moutamid.trip4pet.models.Cities;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.activities.AddPlaceActivity;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -29,6 +35,8 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.CitiesVH> 
     ArrayList<Cities> list;
     ArrayList<Cities> currentItems;
     CityClick cityClick;
+    private static final String TAG = "CitiesAdapter";
+
     public CitiesAdapter(Activity context, ArrayList<Cities> list, CityClick cityClick) {
         this.context = context;
         this.list = list;
@@ -45,9 +53,24 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.CitiesVH> 
     @Override
     public void onBindViewHolder(@NonNull CitiesVH holder, int position) {
         Cities cities = currentItems.get(holder.getAdapterPosition());
-        String name = cities.name + ", " + cities.state_name + ", " + cities.country_name;
-        holder.name.setText(name);
+        final String[] name = {cities.name + ", " + cities.state_name + ", " + cities.country_name};
+        TranslateAPI type = new TranslateAPI(Language.ENGLISH, Stash.getString(Constants.LANGUAGE, "en"), name[0]);
+        type.setTranslateListener(new TranslateAPI.TranslateListener() {
+            @Override
+            public void onSuccess(String translatedText) {
+                Log.d(TAG, "onSuccess: " + translatedText);
+                name[0] = translatedText;
+                holder.name.setText(translatedText);
+            }
+
+            @Override
+            public void onFailure(String ErrorText) {
+                Log.d(TAG, "onFailure: " + ErrorText);
+            }
+        });
+        holder.name.setText(name[0]);
         holder.itemView.setOnClickListener(v -> cityClick.onClick(cities));
+      //  holder.itemView.setOnClickListener(v -> Log.d(TAG, "onBindViewHolder: " + cities.name + ", " + cities.state_name + ", " + cities.country_name));
     }
 
     @Override
@@ -81,25 +104,39 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.CitiesVH> 
 
     @SuppressLint("StaticFieldLeak")
     public void filter(final String query) {
-        Constants.showDialog();
-        new AsyncTask<Void, Void, ArrayList<Cities>>() {
-
+        // Constants.showDialog();
+        TranslateAPI type = new TranslateAPI(Stash.getString(Constants.LANGUAGE, "en"), Language.ENGLISH, query);
+        type.setTranslateListener(new TranslateAPI.TranslateListener() {
             @Override
-            protected ArrayList<Cities> doInBackground(Void... voids) {
-                ArrayList<Cities> filterList = (ArrayList<Cities>) list.stream()
-                        .filter(item -> item.name.toLowerCase().contains(query.toString().toLowerCase()))
-                        .collect(Collectors.toList());
-                return filterList;
-            }
-
-            @Override
-            protected void onPostExecute(ArrayList<Cities> filterList) {
+            public void onSuccess(String translatedText) {
                 Constants.dismissDialog();
-                currentItems.clear();
-                currentItems.addAll(filterList);
-                notifyDataSetChanged();
+                Log.d(TAG, "onSuccess: " + translatedText);
+                new AsyncTask<Void, Void, ArrayList<Cities>>() {
+
+                    @Override
+                    protected ArrayList<Cities> doInBackground(Void... voids) {
+                        ArrayList<Cities> filterList = (ArrayList<Cities>) list.stream()
+                                .filter(item -> item.name.toLowerCase().contains(translatedText.toString().toLowerCase()))
+                                .collect(Collectors.toList());
+                        return filterList;
+                    }
+
+                    @Override
+                    protected void onPostExecute(ArrayList<Cities> filterList) {
+                        Log.d(TAG, "onPostExecute: ");
+                        Constants.dismissDialog();
+                        currentItems.clear();
+                        currentItems.addAll(filterList);
+                        notifyDataSetChanged();
+                    }
+                }.execute();
             }
-        }.execute();
+
+            @Override
+            public void onFailure(String ErrorText) {
+                Log.d(TAG, "onFailure: " + ErrorText);
+            }
+        });
     }
 
     @Override

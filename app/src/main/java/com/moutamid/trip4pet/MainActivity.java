@@ -15,7 +15,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.PurchaseInfo;
@@ -27,6 +26,17 @@ import com.moutamid.trip4pet.fragments.AroundMeFragment;
 import com.moutamid.trip4pet.fragments.AroundPlaceFragment;
 import com.moutamid.trip4pet.fragments.SettingFragment;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,7 +45,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler {
     ActivityMainBinding binding;
     BillingProcessor bp;
-    public ViewPager viewPager;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +63,64 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 //            return insets;
 //        });
         requestLocationPermission();
+
+
+        try {
+            String url = "https://translate.googleapis.com/translate_a/single?" + "client=gtx&" + "sl=" +
+                    "en" + "&tl=" + "fr" + "&dt=t&q=" + URLEncoder.encode("Parigi", "UTF-8");
+            Log.d(TAG, "filter: " + url);
+            new Thread(() -> {
+                try {
+                    URL obj = new URL(url);
+                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+                    con.setRequestProperty("User-Agent", "Mozilla/5.0");
+                    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    String inputLine;
+                    StringBuffer response = new StringBuffer();
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+                    String resp = response.toString();
+                    Log.d(TAG, "onCreate: " + resp);
+                    StringBuilder temp = new StringBuilder();
+
+                    if (resp == null) {
+                        Log.d(TAG, "onCreate: NULLL");
+                        // listener.onFailure("Network Error");
+                    } else {
+                        try {
+                            JSONArray main = new JSONArray(resp);
+                            JSONArray total = (JSONArray) main.get(0);
+                            for (int i = 0; i < total.length(); i++) {
+                                JSONArray currentLine = (JSONArray) total.get(i);
+                                temp.append(currentLine.get(0).toString());
+                            }
+                            Log.d(TAG, "onPostExecute: " + temp);
+
+//                            if (temp.length() > 2) {
+//                                listener.onSuccess(temp);
+//                            } else {
+//                                listener.onFailure("Invalid Input String");
+//                            }
+                        } catch (JSONException e) {
+                            //listener.onFailure(e.getLocalizedMessage());
+                            e.printStackTrace();
+                        }
+                    }
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         bp = BillingProcessor.newBillingProcessor(this, Constants.LICENSE_KEY, this);
         bp.initialize();
@@ -78,8 +146,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         });
 
         binding.bottomNav.setSelectedItemId(R.id.aroundMe);
-
-
 
 
 //        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
