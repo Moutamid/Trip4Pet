@@ -231,4 +231,7 @@
     <string name="update_place">Plaats bijwerken</string>
     <string name="museum">Museum</string>
     <string name="prohibition">Verbod</string>
+    <string name="translate">Vertalen</string>
+    <string name="original">Origineel</string>
+
 </resources>

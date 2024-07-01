@@ -57,70 +57,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         setContentView(binding.getRoot());
         Constants.setLocale(getBaseContext(), Stash.getString(Constants.LANGUAGE, "en"));
         Constants.checkApp(this);
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-//            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-//            return insets;
-//        });
         requestLocationPermission();
-
-
-        try {
-            String url = "https://translate.googleapis.com/translate_a/single?" + "client=gtx&" + "sl=" +
-                    "en" + "&tl=" + "fr" + "&dt=t&q=" + URLEncoder.encode("Parigi", "UTF-8");
-            Log.d(TAG, "filter: " + url);
-            new Thread(() -> {
-                try {
-                    URL obj = new URL(url);
-                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-                    con.setRequestProperty("User-Agent", "Mozilla/5.0");
-                    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                    String inputLine;
-                    StringBuffer response = new StringBuffer();
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
-                    }
-                    in.close();
-                    String resp = response.toString();
-                    Log.d(TAG, "onCreate: " + resp);
-                    StringBuilder temp = new StringBuilder();
-
-                    if (resp == null) {
-                        Log.d(TAG, "onCreate: NULLL");
-                        // listener.onFailure("Network Error");
-                    } else {
-                        try {
-                            JSONArray main = new JSONArray(resp);
-                            JSONArray total = (JSONArray) main.get(0);
-                            for (int i = 0; i < total.length(); i++) {
-                                JSONArray currentLine = (JSONArray) total.get(i);
-                                temp.append(currentLine.get(0).toString());
-                            }
-                            Log.d(TAG, "onPostExecute: " + temp);
-
-//                            if (temp.length() > 2) {
-//                                listener.onSuccess(temp);
-//                            } else {
-//                                listener.onFailure("Invalid Input String");
-//                            }
-                        } catch (JSONException e) {
-                            //listener.onFailure(e.getLocalizedMessage());
-                            e.printStackTrace();
-                        }
-                    }
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
 
         bp = BillingProcessor.newBillingProcessor(this, Constants.LICENSE_KEY, this);
         bp.initialize();
@@ -147,49 +84,6 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
         binding.bottomNav.setSelectedItemId(R.id.aroundMe);
 
-
-//        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager());
-//        binding.viewPager.setAdapter(adapter);
-//        binding.tabLayout.setupWithViewPager(binding.viewPager);
-//        // Optionally, you can set icons for the tabs
-//        binding.tabLayout.getTabAt(0).setIcon(R.drawable.compass);
-//        binding.tabLayout.getTabAt(1).setIcon(R.drawable.location_crosshairs_solid);
-//        binding.tabLayout.getTabAt(2).setIcon(R.drawable.bars);
-//
-//        viewPager = binding.viewPager;
-    }
-
-    public class PagerAdapter extends FragmentPagerAdapter {
-
-        public PagerAdapter(@NonNull FragmentManager fm) {
-            super(fm);
-        }
-
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            switch (position) {
-                case 0:
-                    return new AroundMeFragment();
-                case 1:
-                    return new AroundPlaceFragment();
-                case 2:
-                    return new SettingFragment();
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            // Return tab titles here if needed
-            return null;
-        }
     }
 
     private void requestLocationPermission() {

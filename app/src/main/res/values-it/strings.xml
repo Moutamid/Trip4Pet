@@ -231,4 +231,7 @@
     <string name="update_place">Aggiorna luogo</string>
     <string name="museum">Museo</string>
     <string name="prohibition">Divieto</string>
+    <string name="translate">Tradurre</string>
+    <string name="original">Originale</string>
+
 </resources>

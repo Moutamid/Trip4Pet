@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -292,6 +293,7 @@ public class AroundMeFragment extends Fragment {
         if (cities != null) {
             LatLng currentLatLng = new LatLng(cities.latitude, cities.longitude);
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f));
+            new Handler().postDelayed(() -> Stash.clear(Constants.AROUND_PLACE), 2000);
         }
     };
 
