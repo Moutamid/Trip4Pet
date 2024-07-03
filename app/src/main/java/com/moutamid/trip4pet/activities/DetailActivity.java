@@ -38,8 +38,10 @@ import com.moutamid.trip4pet.models.FilterModel;
 import com.moutamid.trip4pet.models.LocationsModel;
 import com.moutamid.trip4pet.models.UserModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -224,6 +226,7 @@ public class DetailActivity extends AppCompatActivity {
             commentModel.LocationId = model.id;
             commentModel.message = comment.getEditText().getText().toString();
             commentModel.rating = rating.getRating();
+            commentModel.timestamp = new Date().getTime();
             commentModel.userID = Constants.auth().getCurrentUser().getUid();
             commentModel.userName = userModel.name;
             Map<String, Object> map = new HashMap<>();
@@ -281,18 +284,6 @@ public class DetailActivity extends AppCompatActivity {
             binding.imageSlider.setSliderAdapter(new SliderAdapter(this, new ArrayList<>(Arrays.asList(Constants.DUMMY_IMAGE))));
         }
 
-        if (model.activities != null) {
-            for (FilterModel s : model.activities) {
-                LayoutInflater inflater = getLayoutInflater();
-                View customEditTextLayout = inflater.inflate(R.layout.icon, null);
-                ImageView image = customEditTextLayout.findViewById(R.id.image);
-                image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.blue)));
-                image.setImageResource(s.icon);
-                binding.activitiesIcon.addView(customEditTextLayout);
-            }
-        } else {
-            binding.activities.setVisibility(View.GONE);
-        }
         ArrayList<LocationsModel> favorite = Stash.getArrayList(Constants.FAVORITE, LocationsModel.class);
         for (int i = 0; i < favorite.size(); i++) {
             LocationsModel favoriteModel = favorite.get(i);
@@ -303,10 +294,20 @@ public class DetailActivity extends AppCompatActivity {
             }
         }
 
-        int activitySize = model.activities == null ? 0 : model.activities.size();
-        int servicesSize = model.services == null ? 0 : model.services.size();
+        String price = model.price.isEmpty() ? getString(R.string.free) : Constants.EURO_LOW + model.price;
+        binding.price.setText(price);
 
-        binding.totalActivity.setText(activitySize + " " + getString(R.string.activities));
+        if (model.isAlwaysOpen){
+            binding.openClose.setText(getString(R.string.open_all_year_round));
+        } else {
+            String open = new SimpleDateFormat("hh:mm aa", Locale.getDefault()).format(model.opening_time).toUpperCase(Locale.ROOT);
+            String close = new SimpleDateFormat("hh:mm aa", Locale.getDefault()).format(model.closing_time).toUpperCase(Locale.ROOT);
+            binding.openClose.setText(open + " / " + close);
+        }
+
+        int servicesSize = model.services == null ? 0 : model.services.size();
+        String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(model.timestamp);
+        binding.date.setText(getString(R.string.created_by).replace("_DATE_", date).replace("_NAME_", model.created_by));
         binding.totalServices.setText(servicesSize + " " + getString(R.string.services));
         binding.name.setText(model.name);
         binding.typeOfPlace.setText(model.typeOfPlace);
@@ -328,7 +329,7 @@ public class DetailActivity extends AppCompatActivity {
                     CardView card = customEditTextLayout.findViewById(R.id.card);
                     card.setCardBackgroundColor(getResources().getColor(R.color.green_card));
                     image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
-                    image.setImageResource(s.icon);
+                    image.setImageResource(Constants.getServicesIcon(s.id));
                     binding.servicesIcon.addView(customEditTextLayout);
                 } catch (Exception e){
                     e.printStackTrace();

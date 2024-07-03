@@ -244,6 +244,7 @@ public class EditPlaceActivity extends AppCompatActivity {
             image.setImageResource(s.icon);
             lock.setVisibility(View.GONE);
             text.setText(s.name);
+            text.setTag(s.id);
             checkbox.setEnabled(true);
             int color = R.color.green;
             image.setImageTintList(ColorStateList.valueOf(getResources().getColor(color)));
@@ -278,10 +279,11 @@ public class EditPlaceActivity extends AppCompatActivity {
                     TextView text = main.findViewById(R.id.text);
                     ImageView image = main.findViewById(R.id.image);
                     if (checkbox.isChecked()) {
-                        finalList.add(new FilterModel(text.getText().toString(), (Integer) image.getTag()));
+                        finalList.add(new FilterModel((Integer) text.getTag(),text.getText().toString(), (Integer) image.getTag()));
                     }
                 }
             }
+            services.clear();
             services.addAll(finalList);
             dialog.dismiss();
             addServices();

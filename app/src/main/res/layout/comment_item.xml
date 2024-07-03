@@ -46,7 +46,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
-                    tools:text="Suleman" />
+                    android:lines="1"
+                    android:ellipsize="marquee"
+                    tools:text="Suleman Ijaz Ahmed Bajwa" />
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="@color/text"
+                    tools:text="12/12/2002" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"

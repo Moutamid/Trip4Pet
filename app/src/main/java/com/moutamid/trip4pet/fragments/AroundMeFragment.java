@@ -146,20 +146,6 @@ public class AroundMeFragment extends Fragment {
                     }
                     if (model.typeOfPlace.contains(filter) || (model.rating == total && total != 0) || getFilter(model, filter)) {
                         LatLng latLng = new LatLng(model.latitude, model.longitude);
-                        if (model.activities != null) {
-                            for (FilterModel filterModel : model.activities) {
-                                View customMarker = getLayoutInflater().inflate(R.layout.marker, null, false);
-                                ImageView iconImage = customMarker.findViewById(R.id.image);
-                                iconImage.setImageResource(filterModel.icon);
-                                MarkerOptions markerOptions = new MarkerOptions()
-                                        .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
-                                        .position(latLng).title(model.name);
-                                Marker marker = mMap.addMarker(markerOptions);
-                                marker.setTag(model.id);
-                                currentMarkers.add(marker);
-                            }
-                        }
-
                         if (model.services != null) {
                             for (FilterModel filterModel : model.services) {
                                 View customMarker = getLayoutInflater().inflate(R.layout.marker, null, false);
@@ -178,7 +164,7 @@ public class AroundMeFragment extends Fragment {
 
                         View customMarker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
                         ImageView iconImage = customMarker.findViewById(R.id.icon);
-                        iconImage.setImageResource(Constants.getTypeOfPlace(requireContext(), model.typeOfPlace));
+                        iconImage.setImageResource(Constants.getTypeOfPlace(model.placeID));
                         MarkerOptions markerOptions = new MarkerOptions()
                                 .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
                                 .position(latLng).title(model.name);
@@ -207,7 +193,7 @@ public class AroundMeFragment extends Fragment {
     }
 
     private boolean getFilter(LocationsModel model, String filter) {
-        boolean service = false, activity = false;
+        boolean service = false;
         if (model.services != null) {
             for (FilterModel ser : model.services) {
                 if (ser.name.contains(filter)) {
@@ -216,15 +202,7 @@ public class AroundMeFragment extends Fragment {
                 }
             }
         }
-        if (model.activities != null) {
-            for (FilterModel act : model.activities) {
-                if (act.name.contains(filter)) {
-                    activity = true;
-                    break;
-                }
-            }
-        }
-        return service || activity;
+        return service;
     }
 
     private void getPlaces() {
@@ -313,7 +291,7 @@ public class AroundMeFragment extends Fragment {
 
             View customMarker = getLayoutInflater().inflate(R.layout.custom_marker, null, false);
             ImageView iconImage = customMarker.findViewById(R.id.icon);
-            iconImage.setImageResource(Constants.getTypeOfPlace(requireContext(), model.typeOfPlace));
+            iconImage.setImageResource(Constants.getTypeOfPlace(model.placeID));
             MarkerOptions markerOptions = new MarkerOptions()
                     .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
                     .position(latLng).title(model.name);

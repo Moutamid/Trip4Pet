@@ -21,7 +21,9 @@ import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.models.Cities;
 import com.moutamid.trip4pet.models.CommentModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.CommentVH> {
@@ -45,7 +47,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
         CommentModel commentModel = list.get(holder.getAdapterPosition());
         holder.name.setText(commentModel.userName);
         holder.comment.setText(commentModel.message);
-
+        holder.date.setText(new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(commentModel.timestamp));
         holder.translate.setOnClickListener(v -> {
             if (holder.translate.getText().toString().equals(context.getString(R.string.translate))) {
                 TranslateAPI type = new TranslateAPI(Language.AUTO_DETECT, Stash.getString(Constants.LANGUAGE, "en"), commentModel.message);
@@ -103,12 +105,13 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.Commen
     }
 
     public class CommentVH extends RecyclerView.ViewHolder {
-        TextView name, comment;
+        TextView name, comment, date;
         ImageView star1, star2, star3, star4, star5;
         MaterialButton translate;
         public CommentVH(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.name);
+            date = itemView.findViewById(R.id.date);
             translate = itemView.findViewById(R.id.translate);
             comment = itemView.findViewById(R.id.comment);
             star1 = itemView.findViewById(R.id.star1);

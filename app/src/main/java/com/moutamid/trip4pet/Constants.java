@@ -43,6 +43,8 @@ public class Constants {
     public static Dialog dialog;
     public static final String STASH_USER = "STASH_USER";
     public static final String MODEL = "MODEL";
+    public static final String EURO_LOW = "€";
+    public static final String EURO_HIGH = "€€€";
     public static final String CITIES = "CITIES";
     public static final String FILTERS = "FILTERS";
     public static final String PLACES = "PLACES";
@@ -103,114 +105,166 @@ public class Constants {
         return FirebaseStorage.getInstance().getReference().child("trip4pet");
     }
 
-    public static ArrayList<FilterModel> getActivities(Context context) {
-        ArrayList<FilterModel> activities = new ArrayList<>();
-        activities.add(new FilterModel(context.getString(R.string.pet_play_area), R.drawable.ride));
-        activities.add(new FilterModel(context.getString(R.string.scenic_views), R.drawable.binoculars_solid));
-        activities.add(new FilterModel(context.getString(R.string.pet_friendly_swimming), R.drawable.person_swimming_solid));
-        activities.add(new FilterModel(context.getString(R.string.pet_friendly_climbing_sites), R.drawable.climbing_with_rope));
-        activities.add(new FilterModel(context.getString(R.string.pet_friendly_canoe_kayak_bases), R.drawable.kayak));
-        activities.add(new FilterModel(context.getString(R.string.pet_friendly_fishing_spots), R.drawable.fish_fins_solid));
-        activities.add(new FilterModel(context.getString(R.string.pet_friendly_beaches), R.drawable.umbrella_beach_solid));
-        activities.add(new FilterModel(context.getString(R.string.pet_friendly_hiking_trails), R.drawable.person_hiking_solid));
-        activities.add(new FilterModel(context.getString(R.string.pet_friendly_monuments), R.drawable.monument_solid));
-        activities.add(new FilterModel(context.getString(R.string.pet_friendly_mountain_bike_tracks), R.drawable.bicycle_solid));
-        activities.add(new FilterModel(context.getString(R.string.pet_friendly_windsurf_kite_surf_spots), R.drawable.kitesurf));
-        activities.add(new FilterModel(context.getString(R.string.scenic_motorcycle_rides), R.drawable.motorcycle_solid));
-        return activities;
-    }
+//    public static ArrayList<FilterModel> getActivities(Context context) {
+//        ArrayList<FilterModel> activities = new ArrayList<>();
+//        activities.add(new FilterModel(context.getString(R.string.pet_play_area), R.drawable.ride));
+//        activities.add(new FilterModel(context.getString(R.string.scenic_views), R.drawable.binoculars_solid));
+//        activities.add(new FilterModel(context.getString(R.string.pet_friendly_swimming), R.drawable.person_swimming_solid));
+//        activities.add(new FilterModel(context.getString(R.string.pet_friendly_climbing_sites), R.drawable.climbing_with_rope));
+//        activities.add(new FilterModel(context.getString(R.string.pet_friendly_canoe_kayak_bases), R.drawable.kayak));
+//        activities.add(new FilterModel(context.getString(R.string.pet_friendly_fishing_spots), R.drawable.fish_fins_solid));
+//        activities.add(new FilterModel(context.getString(R.string.pet_friendly_beaches), R.drawable.umbrella_beach_solid));
+//        activities.add(new FilterModel(context.getString(R.string.pet_friendly_hiking_trails), R.drawable.person_hiking_solid));
+//        activities.add(new FilterModel(context.getString(R.string.pet_friendly_monuments), R.drawable.monument_solid));
+//        activities.add(new FilterModel(context.getString(R.string.pet_friendly_mountain_bike_tracks), R.drawable.bicycle_solid));
+//        activities.add(new FilterModel(context.getString(R.string.pet_friendly_windsurf_kite_surf_spots), R.drawable.kitesurf));
+//        activities.add(new FilterModel(context.getString(R.string.scenic_motorcycle_rides), R.drawable.motorcycle_solid));
+//        return activities;
+//    }
 
     public static ArrayList<FilterModel> getServices(Context context) {
         ArrayList<FilterModel> service = new ArrayList<>();
-        service.add(new FilterModel(context.getString(R.string.lifeguard_services), R.drawable.life_ring_solid));
-        service.add(new FilterModel(context.getString(R.string.umbrellas_and_beach_chair_rentals), R.drawable.umbrella_beach_solid));
-        service.add(new FilterModel(context.getString(R.string.restrooms_and_showers), R.drawable.shower_solid));
-        service.add(new FilterModel(context.getString(R.string.coffee_and_espresso_drinks), R.drawable.mug_hot_solid));
-        service.add(new FilterModel(context.getString(R.string.pastries_and_snacks), R.drawable.cake_candles_solid));
-        service.add(new FilterModel(context.getString(R.string.wi_fi), R.drawable.wifi_solid));
-        service.add(new FilterModel(context.getString(R.string.food_and_drinks), R.drawable.utensils_solid));
-        service.add(new FilterModel(context.getString(R.string.dog_friendly_swimming_area), R.drawable.person_swimming_solid));
-        service.add(new FilterModel(context.getString(R.string.places_for_dogs_to_run_and_play), R.drawable.dog_solid));
-        service.add(new FilterModel(context.getString(R.string.dog_waste_bag_dispensers), R.drawable.dumpster_solid));
-        service.add(new FilterModel(context.getString(R.string.dog_showers), R.drawable.soap_solid));
-        service.add(new FilterModel(context.getString(R.string.fenced_in_area_for_dogs_to_run_and_play), R.drawable.xmarks_lines_solid));
-        // service.add(new FilterModel(context.getString(R.string.benches_for_dog_owners), R.drawable.chair_solid));
-        // service.add(new FilterModel(context.getString(R.string.campsites), R.drawable.campground_solid));
-        service.add(new FilterModel(context.getString(R.string.laundry_facilities), R.drawable.jug_detergent_solid));
-        //  service.add(new FilterModel(context.getString(R.string.camp_store), R.drawable.tent_solid));
-        service.add(new FilterModel(context.getString(R.string.lodging), R.drawable.hotel_solid));
-        service.add(new FilterModel(context.getString(R.string.detergent_and_fabric_softener_vending_machines), R.drawable.jug_detergent_solid));
-        // service.add(new FilterModel(context.getString(R.string.detergent_for_pet_hair), R.drawable.pump_soap_solid));
-
-        // service.add(new FilterModel(context.getString(R.string.sunbeds_and_umbrellas_rental), R.drawable.umbrella_beach_solid));
-        // service.add(new FilterModel(context.getString(R.string.coffee_bar), R.drawable.pump_soap_solid));
-        //  service.add(new FilterModel(context.getString(R.string.restaurant_with_access_for_animals), R.drawable.hotel_solid));
-        service.add(new FilterModel(context.getString(R.string.pet_pool), R.drawable.water_ladder_solid));
-        service.add(new FilterModel(context.getString(R.string.private_garden_accessible_to_animals), R.drawable.pagelines));
-        //  service.add(new FilterModel(context.getString(R.string.dog_area), R.drawable.pump_soap_solid));
-        service.add(new FilterModel(context.getString(R.string.pet_grooming_service), R.drawable.paw_solid));
-        service.add(new FilterModel(context.getString(R.string.pet_services), R.drawable.shield_dog_solid));
-        service.add(new FilterModel(context.getString(R.string.education_course_for_animals), R.drawable.school_solid));
-        service.add(new FilterModel(context.getString(R.string.veterinary_emergency_room), R.drawable.truck_medical_solid));
-        service.add(new FilterModel(context.getString(R.string.pet_caregiver), R.drawable.hand_holding_hand_solid));
-        service.add(new FilterModel(context.getString(R.string.animal_oncology), R.drawable.hospital_solid));
-        service.add(new FilterModel(context.getString(R.string.animal_rehabilitation), R.drawable.stethoscope_solid));
-        service.add(new FilterModel(context.getString(R.string.animal_neurology), R.drawable.brain_solid));
-        service.add(new FilterModel(context.getString(R.string.agility_field), R.drawable.person_chalkboard_solid));
-        service.add(new FilterModel(context.getString(R.string.other), R.drawable.otter_solid));
+        service.add(new FilterModel(0,context.getString(R.string.lifeguard_services), R.drawable.life_ring_solid));
+        service.add(new FilterModel(1,context.getString(R.string.umbrellas_and_beach_chair_rentals), R.drawable.umbrella_beach_solid));
+        service.add(new FilterModel(2,context.getString(R.string.restrooms_and_showers), R.drawable.shower_solid));
+        service.add(new FilterModel(3,context.getString(R.string.coffee_and_espresso_drinks), R.drawable.mug_hot_solid));
+        service.add(new FilterModel(4,context.getString(R.string.pastries_and_snacks), R.drawable.cake_candles_solid));
+        service.add(new FilterModel(5,context.getString(R.string.wi_fi), R.drawable.wifi_solid));
+        service.add(new FilterModel(6,context.getString(R.string.food_and_drinks), R.drawable.utensils_solid));
+        service.add(new FilterModel(7,context.getString(R.string.dog_friendly_swimming_area), R.drawable.person_swimming_solid));
+        service.add(new FilterModel(8,context.getString(R.string.places_for_dogs_to_run_and_play), R.drawable.dog_solid));
+        service.add(new FilterModel(9,context.getString(R.string.dog_waste_bag_dispensers), R.drawable.dumpster_solid));
+        service.add(new FilterModel(10,context.getString(R.string.dog_showers), R.drawable.soap_solid));
+        service.add(new FilterModel(11,context.getString(R.string.fenced_in_area_for_dogs_to_run_and_play), R.drawable.xmarks_lines_solid));
+        service.add(new FilterModel(12,context.getString(R.string.laundry_facilities), R.drawable.jug_detergent_solid));
+        service.add(new FilterModel(13,context.getString(R.string.lodging), R.drawable.hotel_solid));
+        service.add(new FilterModel(14,context.getString(R.string.detergent_and_fabric_softener_vending_machines), R.drawable.jug_detergent_solid));
+        service.add(new FilterModel(15,context.getString(R.string.pet_pool), R.drawable.water_ladder_solid));
+        service.add(new FilterModel(16,context.getString(R.string.private_garden_accessible_to_animals), R.drawable.pagelines));
+        service.add(new FilterModel(17,context.getString(R.string.pet_grooming_service), R.drawable.paw_solid));
+        service.add(new FilterModel(18,context.getString(R.string.pet_services), R.drawable.shield_dog_solid));
+        service.add(new FilterModel(19,context.getString(R.string.education_course_for_animals), R.drawable.school_solid));
+        service.add(new FilterModel(20,context.getString(R.string.veterinary_emergency_room), R.drawable.truck_medical_solid));
+        service.add(new FilterModel(21,context.getString(R.string.pet_caregiver), R.drawable.hand_holding_hand_solid));
+        service.add(new FilterModel(22,context.getString(R.string.animal_oncology), R.drawable.hospital_solid));
+        service.add(new FilterModel(23,context.getString(R.string.animal_rehabilitation), R.drawable.stethoscope_solid));
+        service.add(new FilterModel(24,context.getString(R.string.animal_neurology), R.drawable.brain_solid));
+        service.add(new FilterModel(25,context.getString(R.string.agility_field), R.drawable.person_chalkboard_solid));
+        service.add(new FilterModel(26,context.getString(R.string.other), R.drawable.otter_solid));
 
         return service;
     }
 
-    public static int getTypeOfPlace(Context context, String place) {
-        if (place.equals(context.getString(R.string.beach_without_signs))) {
-            return R.drawable.spiaggia_senza_cartelli;
-        } else if (place.equals(context.getString(R.string.veterinarian))) {
-            return R.drawable.vet;
-        } else if (place.equals(context.getString(R.string.coffee_bar))) {
-            return R.drawable.coffee_bar;
-        } else if (place.equals(context.getString(R.string.ristorante))) {
-            return R.drawable.ristorante;
-        } else if (place.equals(context.getString(R.string.dog_beach))) {
-            return R.drawable.spiaggia_per_cani;
-        } else if (place.equals(context.getString(R.string.pet_store))) {
-            return R.drawable.pet_store;
-        } else if (place.equals(context.getString(R.string.dog_area))) {
-            return R.drawable.area_cani;
-        } else if (place.equals(context.getString(R.string.camping))) {
-            return R.drawable.campeggio;
-        } else if (place.equals(context.getString(R.string.albergo))) {
-            return R.drawable.albergo;
-        } else if (place.equals(context.getString(R.string.laundry))) {
-            return R.drawable.lavanderia;
-        } else if (place.equals(context.getString(R.string.laundry_for_pets))) {
-            return R.drawable.lavanderia_for_pet;
-        } else if (place.equals(context.getString(R.string.dog_salon))) {
-            return R.drawable.dog_salon_copia;
-        } else if (place.equals(context.getString(R.string.museum))) {
-            return R.drawable.museum;
-        } else if (place.equals(context.getString(R.string.prohibition))) {
-            return R.drawable.divieto;
+    public static int getServicesIcon(int place) {
+        switch (place) {
+            case 0:
+                return R.drawable.life_ring_solid;
+            case 1:
+                return R.drawable.umbrella_beach_solid;
+            case 2:
+                return R.drawable.shower_solid;
+            case 3:
+                return R.drawable.mug_hot_solid;
+            case 4:
+                return R.drawable.cake_candles_solid;
+            case 5:
+                return R.drawable.wifi_solid;
+            case 6:
+                return R.drawable.utensils_solid;
+            case 7:
+                return R.drawable.person_swimming_solid;
+            case 8:
+                return R.drawable.dog_solid;
+            case 9:
+                return R.drawable.dumpster_solid;
+            case 10:
+                return R.drawable.soap_solid;
+            case 11:
+                return R.drawable.xmarks_lines_solid;
+            case 12:
+                return R.drawable.jug_detergent_solid;
+            case 13:
+                return R.drawable.hotel_solid;
+            case 14:
+                return R.drawable.jug_detergent_solid;
+            case 15:
+                return R.drawable.water_ladder_solid;
+            case 16:
+                return R.drawable.pagelines;
+            case 17:
+                return R.drawable.paw_solid;
+            case 18:
+                return R.drawable.shield_dog_solid;
+            case 19:
+                return R.drawable.school_solid;
+            case 20:
+                return R.drawable.truck_medical_solid;
+            case 21:
+                return R.drawable.hand_holding_hand_solid;
+            case 22:
+                return R.drawable.hospital_solid;
+            case 23:
+                return R.drawable.stethoscope_solid;
+            case 24:
+                return R.drawable.brain_solid;
+            case 25:
+                return R.drawable.person_chalkboard_solid;
+            case 26:
+                return R.drawable.otter_solid;
+        }
+        return 0;
+    }
+
+    public static int getTypeOfPlace(int place) {
+        switch (place) {
+            case 0:
+                return R.drawable.spiaggia_senza_cartelli;
+            case 1:
+                return R.drawable.vet;
+            case 2:
+                return R.drawable.coffee_bar;
+            case 3:
+                return R.drawable.ristorante;
+            case 4:
+                return R.drawable.spiaggia_per_cani;
+            case 5:
+                return R.drawable.pet_store;
+            case 6:
+                return R.drawable.area_cani;
+            case 7:
+                return R.drawable.campeggio;
+            case 8:
+                return R.drawable.albergo;
+            case 9:
+                return R.drawable.lavanderia;
+            case 10:
+                return R.drawable.lavanderia_for_pet;
+            case 11:
+                return R.drawable.dog_salon_copia;
+            case 12:
+                return R.drawable.museum;
+            case 13:
+                return R.drawable.divieto;
         }
         return 0;
     }
 
     public static ArrayList<FilterModel> getTypeOfPlaces(Context context) {
         ArrayList<FilterModel> typeOfPlace = new ArrayList<>();
-        typeOfPlace.add(new FilterModel(context.getString(R.string.beach_without_signs), R.drawable.spiaggia_senza_cartelli));
-        typeOfPlace.add(new FilterModel(context.getString(R.string.veterinarian), R.drawable.vet));
-        typeOfPlace.add(new FilterModel(context.getString(R.string.coffee_bar), R.drawable.coffee_bar));
-        typeOfPlace.add(new FilterModel(context.getString(R.string.ristorante), R.drawable.ristorante));
-        typeOfPlace.add(new FilterModel(context.getString(R.string.dog_beach), R.drawable.spiaggia_per_cani));
-        typeOfPlace.add(new FilterModel(context.getString(R.string.pet_store), R.drawable.pet_store));
-        typeOfPlace.add(new FilterModel(context.getString(R.string.dog_area), R.drawable.area_cani));
-        typeOfPlace.add(new FilterModel(context.getString(R.string.camping), R.drawable.campeggio));
-        typeOfPlace.add(new FilterModel(context.getString(R.string.albergo), R.drawable.albergo));
-        typeOfPlace.add(new FilterModel(context.getString(R.string.laundry), R.drawable.lavanderia));
-        typeOfPlace.add(new FilterModel(context.getString(R.string.laundry_for_pets), R.drawable.lavanderia_for_pet));
-        typeOfPlace.add(new FilterModel(context.getString(R.string.dog_salon), R.drawable.dog_salon_copia));
-        typeOfPlace.add(new FilterModel(context.getString(R.string.museum), R.drawable.museum));
-        typeOfPlace.add(new FilterModel(context.getString(R.string.prohibition), R.drawable.divieto));
+        typeOfPlace.add(new FilterModel(0, context.getString(R.string.beach_without_signs), R.drawable.spiaggia_senza_cartelli));
+        typeOfPlace.add(new FilterModel(1,context.getString(R.string.veterinarian), R.drawable.vet));
+        typeOfPlace.add(new FilterModel(2,context.getString(R.string.coffee_bar), R.drawable.coffee_bar));
+        typeOfPlace.add(new FilterModel(3,context.getString(R.string.ristorante), R.drawable.ristorante));
+        typeOfPlace.add(new FilterModel(4,context.getString(R.string.dog_beach), R.drawable.spiaggia_per_cani));
+        typeOfPlace.add(new FilterModel(5,context.getString(R.string.pet_store), R.drawable.pet_store));
+        typeOfPlace.add(new FilterModel(6,context.getString(R.string.dog_area), R.drawable.area_cani));
+        typeOfPlace.add(new FilterModel(7,context.getString(R.string.camping), R.drawable.campeggio));
+        typeOfPlace.add(new FilterModel(8,context.getString(R.string.albergo), R.drawable.albergo));
+        typeOfPlace.add(new FilterModel(9,context.getString(R.string.laundry), R.drawable.lavanderia));
+        typeOfPlace.add(new FilterModel(10,context.getString(R.string.laundry_for_pets), R.drawable.lavanderia_for_pet));
+        typeOfPlace.add(new FilterModel(11,context.getString(R.string.dog_salon), R.drawable.dog_salon_copia));
+        typeOfPlace.add(new FilterModel(12,context.getString(R.string.museum), R.drawable.museum));
+        typeOfPlace.add(new FilterModel(13,context.getString(R.string.prohibition), R.drawable.divieto));
         return typeOfPlace;
     }
 

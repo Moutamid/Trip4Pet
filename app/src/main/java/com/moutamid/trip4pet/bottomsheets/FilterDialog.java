@@ -53,7 +53,6 @@ public class FilterDialog extends BottomSheetDialogFragment {
         filters = Stash.getArrayList(Constants.FILTERS, String.class);
 
         addPlaces();
-        addActivities();
         addServices();
 
         if (Stash.getBoolean(Constants.ISVIP, false)) {
@@ -209,7 +208,7 @@ public class FilterDialog extends BottomSheetDialogFragment {
         }
     }
 
-    private void addActivities() {
+/*    private void addActivities() {
         activities = new ArrayList<>(Constants.getActivities(requireContext()));
 
         for (FilterModel s : activities) {
@@ -243,7 +242,7 @@ public class FilterDialog extends BottomSheetDialogFragment {
 
             binding.activities.addView(customEditTextLayout);
         }
-    }
+    }*/
 
     @Override
     public void onStart() {

@@ -233,5 +233,17 @@
     <string name="prohibition">Interdiction</string>
     <string name="translate">Traduire</string>
     <string name="original">Original</string>
+    <string name="created_by">Créé le _DATE_ par _NAME_</string>
+    <string name="price">Prix</string>
+    <string name="entry_price_ticket">Prix d\'entrée / Billet</string>
+    <string name="opening_time">Heure d\'ouverture</string>
+    <string name="closing_time">Heure de fermeture</string>
+    <string name="is_this_place_always_open">Ce lieu est-il toujours ouvert ?</string>
+    <string name="set_time">Définir l\'heure</string>
+    <string name="cancel">Annuler</string>
+    <string name="clear">Effacer</string>
+    <string name="open_close">Ouvert/Fermé</string>
+    <string name="free">Gratuit</string>
+    <string name="open_all_year_round">Ouvert toute l\'année</string>
 
 </resources>

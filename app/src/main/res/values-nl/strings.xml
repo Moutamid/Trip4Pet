@@ -233,5 +233,17 @@
     <string name="prohibition">Verbod</string>
     <string name="translate">Vertalen</string>
     <string name="original">Origineel</string>
+    <string name="created_by">Gemaakt op _DATE_ door _NAME_</string>
+    <string name="price">Prijs</string>
+    <string name="entry_price_ticket">Toegangsprijs / Ticket</string>
+    <string name="opening_time">Openingstijd</string>
+    <string name="closing_time">Sluitingstijd</string>
+    <string name="is_this_place_always_open">Is deze plek altijd open?</string>
+    <string name="set_time">Tijd instellen</string>
+    <string name="cancel">Annuleren</string>
+    <string name="clear">Wissen</string>
+    <string name="open_close">Geopend/Gesloten</string>
+    <string name="free">Gratis</string>
+    <string name="open_all_year_round">Het hele jaar open</string>
 
 </resources>

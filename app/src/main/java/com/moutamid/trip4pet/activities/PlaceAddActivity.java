@@ -1,6 +1,8 @@
 package com.moutamid.trip4pet.activities;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -45,9 +48,11 @@ import com.moutamid.trip4pet.databinding.ActivityPlaceAddBinding;
 import com.moutamid.trip4pet.listener.ImageListener;
 import com.moutamid.trip4pet.models.FilterModel;
 import com.moutamid.trip4pet.models.LocationsModel;
+import com.moutamid.trip4pet.models.UserModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
@@ -57,6 +62,9 @@ public class PlaceAddActivity extends AppCompatActivity {
     ActivityPlaceAddBinding binding;
     String COORDINATES;
     String PLACE;
+    String openingDate, closingDate;
+    final Calendar opening_calendar = Calendar.getInstance();
+    final Calendar closing_calendar = Calendar.getInstance();
     ArrayList<FilterModel> activities = new ArrayList<>();
     ArrayList<FilterModel> services = new ArrayList<>();
     ArrayList<String> images;
@@ -67,6 +75,7 @@ public class PlaceAddActivity extends AppCompatActivity {
     String ID;
     boolean isPlaceSelected = false;
     String selectedPlace = "";
+    int selectedPlaceID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +157,55 @@ public class PlaceAddActivity extends AppCompatActivity {
             }
         });
 
+        TimePickerDialog.OnTimeSetListener opening_time = (view, hourOfDay, minute) -> {
+            opening_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            opening_calendar.set(Calendar.MINUTE, minute);
+            binding.openingTime.getEditText().setText(new SimpleDateFormat("hh:mm aa", Locale.getDefault()).format(opening_calendar.getTime()).toUpperCase(Locale.ROOT));
+        };
+        TimePickerDialog.OnTimeSetListener closing_time = (view, hourOfDay, minute) -> {
+            closing_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            closing_calendar.set(Calendar.MINUTE, minute);
+            binding.closingTime.getEditText().setText(new SimpleDateFormat("hh:mm aa", Locale.getDefault()).format(closing_calendar.getTime()).toUpperCase(Locale.ROOT));
+        };
+
+        binding.openingTime.getEditText().setOnClickListener(v -> {
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this, opening_time,
+                    opening_calendar.get(Calendar.HOUR_OF_DAY),
+                    opening_calendar.get(Calendar.MINUTE),
+                    false);
+
+            timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.set_time), timePickerDialog);
+            timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), timePickerDialog);
+            timePickerDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.clear), (dialog, which) -> {
+                opening_calendar.set(Calendar.HOUR_OF_DAY, 0);
+                opening_calendar.set(Calendar.MINUTE, 0);
+            });
+            timePickerDialog.show();
+        });
+
+        binding.closingTime.getEditText().setOnClickListener(v -> {
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this, closing_time,
+                    closing_calendar.get(Calendar.HOUR_OF_DAY),
+                    closing_calendar.get(Calendar.MINUTE),
+                    false);
+
+            timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.set_time), timePickerDialog);
+            timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), timePickerDialog);
+            timePickerDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.clear), (dialog, which) -> {
+                closing_calendar.set(Calendar.HOUR_OF_DAY, 0);
+                closing_calendar.set(Calendar.MINUTE, 0);
+            });
+            timePickerDialog.show();
+        });
+
+        binding.alwaysOpen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int vis = isChecked ? View.GONE : View.VISIBLE;
+                binding.timesLayout.setVisibility(vis);
+            }
+        });
+
     }
 
     Dialog typeofplace;
@@ -175,6 +233,7 @@ public class PlaceAddActivity extends AppCompatActivity {
             image.setTag(s.icon);
             image.setImageResource(s.icon);
             text.setText(s.name);
+            text.setTag(s.id);
             radioBtn.setEnabled(true);
             MaterialCardView card = customEditTextLayout.findViewById(R.id.card);
             radioBtn.setOnClickListener(v -> {
@@ -213,6 +272,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                     TextView text = main.findViewById(R.id.text);
                     if (radioBtn.isChecked()) {
                         selectedPlace = text.getText().toString().trim();
+                        selectedPlaceID = (int) text.getTag();
                     }
                 }
             }
@@ -248,7 +308,9 @@ public class PlaceAddActivity extends AppCompatActivity {
         model.userID = Constants.auth().getCurrentUser().getUid();
         model.name = binding.name.getEditText().getText().toString();
         model.contact = binding.contact.getEditText().getText().toString();
+        model.price = binding.price.getEditText().getText().toString();
         model.typeOfPlace = selectedPlace;
+        model.placeID = selectedPlaceID;
         model.description = binding.desc.getEditText().getText().toString();
         model.address = binding.location.getEditText().getText().toString();
         model.city = binding.city.getEditText().getText().toString();
@@ -256,11 +318,15 @@ public class PlaceAddActivity extends AppCompatActivity {
         model.latitude = Double.parseDouble(binding.latitude.getEditText().getText().toString());
         model.longitude = Double.parseDouble(binding.longitude.getEditText().getText().toString());
         model.images = new ArrayList<>(images);
-        model.activities = new ArrayList<>(activities);
         model.services = new ArrayList<>(services);
         model.isAccessibleToAnimals = binding.isAccessible.isChecked();
+        model.isAlwaysOpen = binding.alwaysOpen.isChecked();
         model.timestamp = new Date().getTime();
+        model.opening_time = opening_calendar.getTime().getTime();
+        model.closing_time = closing_calendar.getTime().getTime();
         model.comments = new ArrayList<>();
+        UserModel userModel = (UserModel) Stash.getObject(Constants.STASH_USER, UserModel.class);
+        model.created_by = userModel.email.split("@")[0];
 
         Constants.databaseReference().child(Constants.PLACE).child(Constants.auth().getCurrentUser().getUid()).child(model.id)
                 .setValue(model).addOnSuccessListener(unused -> {
@@ -411,9 +477,9 @@ public class PlaceAddActivity extends AppCompatActivity {
         LinearLayout features = dialog.findViewById(R.id.features);
         MaterialButton apply = dialog.findViewById(R.id.apply);
 
-        String t = b ? getString(R.string.select_all_activities_that_apply) : getString(R.string.select_all_services_that_apply);
+        String t =  getString(R.string.select_all_services_that_apply);
         textview.setText(t);
-        ArrayList<FilterModel> list = b ? Constants.getActivities(PlaceAddActivity.this) : Constants.getServices(PlaceAddActivity.this);
+        ArrayList<FilterModel> list = Constants.getServices(PlaceAddActivity.this);
         for (FilterModel s : list) {
             LayoutInflater inflater = getLayoutInflater();
             View customEditTextLayout = inflater.inflate(R.layout.filter_check_layout, null);
@@ -426,6 +492,7 @@ public class PlaceAddActivity extends AppCompatActivity {
             image.setImageResource(s.icon);
             lock.setVisibility(View.GONE);
             text.setText(s.name);
+            text.setTag(s.id);
             checkbox.setEnabled(true);
             int color = b ? R.color.blue : R.color.green;
             image.setImageTintList(ColorStateList.valueOf(getResources().getColor(color)));
@@ -460,7 +527,7 @@ public class PlaceAddActivity extends AppCompatActivity {
                     TextView text = main.findViewById(R.id.text);
                     ImageView image = main.findViewById(R.id.image);
                     if (checkbox.isChecked()) {
-                        finalList.add(new FilterModel(text.getText().toString(), (Integer) image.getTag()));
+                        finalList.add(new FilterModel((Integer) text.getTag(),text.getText().toString(), (Integer) image.getTag()));
                     }
                 }
             }

@@ -123,12 +123,14 @@ public class AroundPlaceFragment extends Fragment {
                             binding.gps.setVisibility(View.VISIBLE);
                             binding.cities.setVisibility(View.GONE);
                         } else {
-                            binding.gps.setChecked(false);
-                            binding.gps.setVisibility(View.GONE);
-                            binding.cities.setVisibility(View.VISIBLE);
                             if (s.toString().length() > 3) {
                                 adapter.filter(s.toString());
                             }
+                            new Handler().postDelayed(() -> {
+                                binding.gps.setChecked(false);
+                                binding.gps.setVisibility(View.GONE);
+                                binding.cities.setVisibility(View.VISIBLE);
+                            }, 2000);
                         }
                     }
                 };
