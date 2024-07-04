@@ -1,9 +1,11 @@
 package com.moutamid.trip4pet.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,6 +22,8 @@ import com.fxn.stash.Stash;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
+import com.mannan.translateapi.Language;
+import com.mannan.translateapi.TranslateAPI;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.adapters.CitiesAdapter;
@@ -34,6 +38,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class AroundPlaceActivity extends AppCompatActivity {
     ActivityAroundPlaceBinding binding;
@@ -111,6 +116,8 @@ public class AroundPlaceActivity extends AppCompatActivity {
         });
 
         binding.search.getEditText().addTextChangedListener(new TextWatcher() {
+            private Handler handler = new Handler();
+            private Runnable runnable;
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -126,20 +133,115 @@ public class AroundPlaceActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().isEmpty()) {
-                    binding.gps.setVisibility(View.VISIBLE);
-                    binding.cities.setVisibility(View.GONE);
-                } else {
-                    binding.gps.setChecked(false);
-                    binding.gps.setVisibility(View.GONE);
-                    binding.cities.setVisibility(View.VISIBLE);
-                    if (s.toString().length() > 3) {
-                        adapter.filter(s.toString());
-                    }
+                if (runnable != null) {
+                    handler.removeCallbacks(runnable);
                 }
+
+                runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "afterTextChanged: ");
+                        if (s.toString().isEmpty()) {
+                            binding.gps.setVisibility(View.VISIBLE);
+                            binding.cities.setVisibility(View.GONE);
+                        } else {
+                            if (s.toString().length() > 3) {
+                             filter(s.toString());
+                            }
+                            new Handler().postDelayed(() -> {
+                                binding.gps.setChecked(false);
+                                binding.gps.setVisibility(View.GONE);
+                                binding.cities.setVisibility(View.VISIBLE);
+                            }, 2000);
+                        }
+                    }
+                };
+
+                // Post the runnable with a delay (e.g., 500 milliseconds)
+                handler.postDelayed(runnable, 500);
             }
         });
 
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    public void filter(final String query) {
+        Log.d(TAG, "filter: " + query);
+        Log.d(TAG, "filter: " + list.size());
+        Constants.showDialog();
+        // Stash.getString(Constants.LANGUAGE, "en")
+        TranslateAPI type = new TranslateAPI(Stash.getString(Constants.LANGUAGE, "en"), Language.ENGLISH, query);
+        type.setTranslateListener(new TranslateAPI.TranslateListener() {
+            @Override
+            public void onSuccess(String translatedText) {
+                Constants.dismissDialog();
+                Log.d(TAG, "onSuccess: " + translatedText);
+                String[] split = translatedText.replace(",", "").split(" ");
+                new AsyncTask<Void, Void, ArrayList<Cities>>() {
+                    @Override
+                    protected ArrayList<Cities> doInBackground(Void... voids) {
+                        ArrayList<Cities> mainList = new ArrayList<>(list);
+                        ArrayList<Cities> filterList;
+                        if (split.length > 1) {
+                            Log.d(TAG, "doInBackground: length 2 " + split[0] + " " + split[1]);
+                            filterList = (ArrayList<Cities>) mainList.stream()
+                                    .filter(item -> item.country_name.toLowerCase().equals(split[1].toString().toLowerCase()))
+                                    .collect(Collectors.toList());
+
+                            Log.d(TAG, "doInBackground: Country " + filterList.size());
+
+                            filterList = (ArrayList<Cities>) filterList.stream()
+                                    .filter(item -> item.name.toLowerCase().equals(split[0].toString().toLowerCase()))
+                                    .collect(Collectors.toList());
+                        } else {
+                            Log.d(TAG, "doInBackground: length 1 " + split[0] + " " + split[0]);
+                            filterList = (ArrayList<Cities>) mainList.stream()
+                                    .filter(item -> item.name.toLowerCase().equals(split[0].toString().toLowerCase()) ||
+                                            item.country_name.toLowerCase().equals(split[0].toString().toLowerCase())
+                                    )
+                                    .collect(Collectors.toList());
+                        }
+                        Log.d(TAG, "doInBackground: " + filterList.size());
+                        return filterList;
+                    }
+
+                    @Override
+                    protected void onPostExecute(ArrayList<Cities> filterList) {
+                        Constants.dismissDialog();
+                        if (filterList.isEmpty()) {
+                            adapter = new CitiesAdapter(AroundPlaceActivity.this, filterList, cityClick);
+                            binding.cities.setAdapter(adapter);
+                        }
+                        ArrayList<Cities> temp = new ArrayList<>();
+                        ArrayList<Cities> filter = new ArrayList<>(filterList.subList(0, Math.min(20, filterList.size())));
+                        for (Cities city : filter) {
+                            TranslateAPI type = new TranslateAPI(Language.ENGLISH, Stash.getString(Constants.LANGUAGE, "en"), city.name);
+                            type.setTranslateListener(new TranslateAPI.TranslateListener() {
+                                @Override
+                                public void onSuccess(String translatedText) {
+                                    city.name = translatedText;
+                                    temp.add(city);
+                                    adapter = new CitiesAdapter(AroundPlaceActivity.this, temp, cityClick);
+                                    binding.cities.setAdapter(adapter);
+                                }
+
+                                @Override
+                                public void onFailure(String ErrorText) {
+                                    Constants.dismissDialog();
+                                    Log.d(TAG, "onFailure: " + ErrorText);
+                                }
+                            });
+                        }
+                    }
+                }.execute();
+            }
+
+            @Override
+            public void onFailure(String ErrorText) {
+                Constants.dismissDialog();
+                Log.d(TAG, "onFailure: " + ErrorText);
+            }
+        });
     }
 
     public class MyTask extends AsyncTask<Void, Void, ArrayList<Cities>> {

@@ -28,6 +28,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.iarcuschin.simpleratingbar.SimpleRatingBar;
+import com.mannan.translateapi.Language;
+import com.mannan.translateapi.TranslateAPI;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
 import com.moutamid.trip4pet.adapters.CommentsAdapter;
@@ -330,6 +332,9 @@ public class DetailActivity extends AppCompatActivity {
                     card.setCardBackgroundColor(getResources().getColor(R.color.green_card));
                     image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
                     image.setImageResource(Constants.getServicesIcon(s.id));
+
+                    card.setOnClickListener(v -> showServiceDialog(s.id, s.name));
+
                     binding.servicesIcon.addView(customEditTextLayout);
                 } catch (Exception e){
                     e.printStackTrace();
@@ -339,6 +344,46 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         updateRecycler();
+
+    }
+
+    private void showServiceDialog(int id, String name) {
+        Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.service_dialog);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(true);
+        dialog.show();
+
+        MaterialButton translate = dialog.findViewById(R.id.translate);
+        TextView service = dialog.findViewById(R.id.service);
+        ImageView image = dialog.findViewById(R.id.image);
+
+        image.setImageResource(Constants.getServicesIcon(id));
+        service.setText(name);
+
+        translate.setOnClickListener(v -> {
+            if (translate.getText().toString().equals(getString(R.string.translate))) {
+                TranslateAPI type = new TranslateAPI(Language.AUTO_DETECT, Stash.getString(Constants.LANGUAGE, "en"), name);
+                type.setTranslateListener(new TranslateAPI.TranslateListener() {
+                    @Override
+                    public void onSuccess(String translatedText) {
+                        Log.d(TAG, "onSuccess: " + translatedText);
+                        service.setText(translatedText);
+                        translate.setText(R.string.original);
+                    }
+
+                    @Override
+                    public void onFailure(String ErrorText) {
+                        Log.d(TAG, "onFailure: " + ErrorText);
+                    }
+                });
+            } else {
+                service.setText(name);
+                translate.setText(R.string.translate);
+            }
+        });
 
     }
 

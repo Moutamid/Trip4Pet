@@ -114,17 +114,17 @@ public class FilterDialog extends BottomSheetDialogFragment {
                 }
             }
         }
-        for (int i = 0; i < binding.activities.getChildCount(); i++) {
-            View view = binding.activities.getChildAt(i);
-            if (view instanceof RelativeLayout) {
-                RelativeLayout main = (RelativeLayout) view;
-                MaterialCheckBox checkbox = main.findViewById(R.id.checkbox);
-                TextView text = main.findViewById(R.id.text);
-                if (checkbox.isChecked()) {
-                    filters.add(text.getText().toString());
-                }
-            }
-        }
+//        for (int i = 0; i < binding.activities.getChildCount(); i++) {
+//            View view = binding.activities.getChildAt(i);
+//            if (view instanceof RelativeLayout) {
+//                RelativeLayout main = (RelativeLayout) view;
+//                MaterialCheckBox checkbox = main.findViewById(R.id.checkbox);
+//                TextView text = main.findViewById(R.id.text);
+//                if (checkbox.isChecked()) {
+//                    filters.add(text.getText().toString());
+//                }
+//            }
+//        }
 
         if (Stash.getBoolean(Constants.ISVIP, false)) {
             if (binding.rating47.isChecked()) {
