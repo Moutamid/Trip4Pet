@@ -150,18 +150,25 @@ public class EditPlaceActivity extends AppCompatActivity {
 
     private void uploadImages() {
         for (Uri uri : editedList) {
-            Constants.storageReference().child("images").child(new SimpleDateFormat("ddMMyyyyhhmmss", Locale.getDefault()).format(new Date().getTime()))
-                    .putFile(uri).addOnSuccessListener(taskSnapshot -> {
-                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(link -> {
-                            images.add(link.toString());
-                            uploadData();
-                        });
-                    })
-                    .addOnFailureListener(e -> {
+            uploadImage(uri);
+        }
+    }
+
+    private void uploadImage(Uri uri) {
+        Constants.storageReference().child("images").child(new SimpleDateFormat("ddMMyyyyhhmmss", Locale.getDefault()).format(new Date().getTime()))
+                .putFile(uri).addOnSuccessListener(taskSnapshot -> {
+                    taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(link -> {
+                        images.add(link.toString());
+                        uploadData();
+                    }).addOnFailureListener(e -> {
                         Constants.dismissDialog();
                         Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                    });
-        }
+                    });;
+                })
+                .addOnFailureListener(e -> {
+                    Constants.dismissDialog();
+                    Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void uploadData() {
@@ -208,7 +215,7 @@ public class EditPlaceActivity extends AppCompatActivity {
                 CardView card = customEditTextLayout.findViewById(R.id.card);
                 card.setCardBackgroundColor(getResources().getColor(R.color.green_card));
                 image.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.green)));
-                image.setImageResource(s.icon);
+                image.setImageResource(Constants.getServicesIcon(s.id));
                 binding.servicesIcon.addView(customEditTextLayout);
             } catch (Exception e) {
                 e.printStackTrace();

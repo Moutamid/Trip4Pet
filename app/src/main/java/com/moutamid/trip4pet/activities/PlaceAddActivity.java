@@ -285,21 +285,27 @@ public class PlaceAddActivity extends AppCompatActivity {
         });
     }
 
-
     private void uploadImages() {
         for (Uri uri : imagesList) {
-            Constants.storageReference().child("images").child(new SimpleDateFormat("ddMMyyyyhhmmss", Locale.getDefault()).format(new Date().getTime()))
-                    .putFile(uri).addOnSuccessListener(taskSnapshot -> {
-                        taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(link -> {
-                            images.add(link.toString());
-                            uploadData();
-                        });
-                    })
-                    .addOnFailureListener(e -> {
+            uploadImage(uri);
+        }
+    }
+
+    private void uploadImage(Uri uri) {
+        Constants.storageReference().child("images").child(new SimpleDateFormat("ddMMyyyyhhmmss", Locale.getDefault()).format(new Date().getTime()))
+                .putFile(uri).addOnSuccessListener(taskSnapshot -> {
+                    taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(link -> {
+                        images.add(link.toString());
+                        uploadData();
+                    }).addOnFailureListener(e -> {
                         Constants.dismissDialog();
                         Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                    });
-        }
+                    });;
+                })
+                .addOnFailureListener(e -> {
+                    Constants.dismissDialog();
+                    Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void uploadData() {
