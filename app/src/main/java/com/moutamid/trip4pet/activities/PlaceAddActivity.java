@@ -1,6 +1,5 @@
 package com.moutamid.trip4pet.activities;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -11,16 +10,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -65,6 +60,10 @@ public class PlaceAddActivity extends AppCompatActivity {
     String openingDate, closingDate;
     final Calendar opening_calendar = Calendar.getInstance();
     final Calendar closing_calendar = Calendar.getInstance();
+    final Calendar opening_calendar_evening = Calendar.getInstance();
+    final Calendar closing_calendar_evening = Calendar.getInstance();
+    final Calendar opening_calendar_lunch = Calendar.getInstance();
+    final Calendar closing_calendar_lunch = Calendar.getInstance();
     ArrayList<FilterModel> activities = new ArrayList<>();
     ArrayList<FilterModel> services = new ArrayList<>();
     ArrayList<String> images;
@@ -157,22 +156,65 @@ public class PlaceAddActivity extends AppCompatActivity {
             }
         });
 
+        timeManagement();
+
+        binding.alwaysOpen.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            int vis = isChecked ? View.GONE : View.VISIBLE;
+            binding.timesLayout.setVisibility(vis);
+            binding.shifts.setVisibility(vis);
+        });
+
+        binding.shifts.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            int vis = isChecked ? View.VISIBLE : View.GONE;
+            binding.MornTitle.setVisibility(vis);
+            binding.evenTitle.setVisibility(vis);
+            binding.eveningShift.setVisibility(vis);
+            binding.lunchEvening.setVisibility(vis);
+            if (isChecked) binding.lunchMorning.setHint(getString(R.string.morning_shift));
+            else binding.lunchMorning.setHint(getString(R.string.break_time));
+        });
+    }
+
+    private void timeManagement() {
         TimePickerDialog.OnTimeSetListener opening_time = (view, hourOfDay, minute) -> {
             opening_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             opening_calendar.set(Calendar.MINUTE, minute);
-            binding.openingTime.getEditText().setText(new SimpleDateFormat("hh:mm aa", Locale.getDefault()).format(opening_calendar.getTime()).toUpperCase(Locale.ROOT));
+            binding.openingTime.getEditText().setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(opening_calendar.getTime()).toUpperCase(Locale.ROOT));
         };
         TimePickerDialog.OnTimeSetListener closing_time = (view, hourOfDay, minute) -> {
             closing_calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             closing_calendar.set(Calendar.MINUTE, minute);
-            binding.closingTime.getEditText().setText(new SimpleDateFormat("hh:mm aa", Locale.getDefault()).format(closing_calendar.getTime()).toUpperCase(Locale.ROOT));
+            binding.closingTime.getEditText().setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(closing_calendar.getTime()).toUpperCase(Locale.ROOT));
+        };
+
+
+        TimePickerDialog.OnTimeSetListener opening_time_evening = (view, hourOfDay, minute) -> {
+            opening_calendar_evening.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            opening_calendar_evening.set(Calendar.MINUTE, minute);
+            binding.openingTimeEven.getEditText().setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(opening_calendar_evening.getTime()).toUpperCase(Locale.ROOT));
+        };
+        TimePickerDialog.OnTimeSetListener closing_time_evening = (view, hourOfDay, minute) -> {
+            closing_calendar_evening.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            closing_calendar_evening.set(Calendar.MINUTE, minute);
+            binding.closingTimeEven.getEditText().setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(closing_calendar_evening.getTime()).toUpperCase(Locale.ROOT));
+        };
+
+        TimePickerDialog.OnTimeSetListener opening_time_lunch = (view, hourOfDay, minute) -> {
+            opening_calendar_lunch.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            opening_calendar_lunch.set(Calendar.MINUTE, minute);
+            binding.lunchMorning.getEditText().setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(opening_calendar_lunch.getTime()).toUpperCase(Locale.ROOT));
+        };
+        TimePickerDialog.OnTimeSetListener closing_time_lunch = (view, hourOfDay, minute) -> {
+            closing_calendar_lunch.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            closing_calendar_lunch.set(Calendar.MINUTE, minute);
+            binding.lunchEvening.getEditText().setText(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(closing_calendar_lunch.getTime()).toUpperCase(Locale.ROOT));
         };
 
         binding.openingTime.getEditText().setOnClickListener(v -> {
             TimePickerDialog timePickerDialog = new TimePickerDialog(this, opening_time,
                     opening_calendar.get(Calendar.HOUR_OF_DAY),
                     opening_calendar.get(Calendar.MINUTE),
-                    false);
+                    true);
 
             timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.set_time), timePickerDialog);
             timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), timePickerDialog);
@@ -187,7 +229,7 @@ public class PlaceAddActivity extends AppCompatActivity {
             TimePickerDialog timePickerDialog = new TimePickerDialog(this, closing_time,
                     closing_calendar.get(Calendar.HOUR_OF_DAY),
                     closing_calendar.get(Calendar.MINUTE),
-                    false);
+                    true);
 
             timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.set_time), timePickerDialog);
             timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), timePickerDialog);
@@ -198,14 +240,65 @@ public class PlaceAddActivity extends AppCompatActivity {
             timePickerDialog.show();
         });
 
-        binding.alwaysOpen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int vis = isChecked ? View.GONE : View.VISIBLE;
-                binding.timesLayout.setVisibility(vis);
-            }
+        binding.openingTimeEven.getEditText().setOnClickListener(v -> {
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this, opening_time_evening,
+                    opening_calendar_evening.get(Calendar.HOUR_OF_DAY),
+                    opening_calendar_evening.get(Calendar.MINUTE),
+                    true);
+
+            timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.set_time), timePickerDialog);
+            timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), timePickerDialog);
+            timePickerDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.clear), (dialog, which) -> {
+                opening_calendar_evening.set(Calendar.HOUR_OF_DAY, 0);
+                opening_calendar_evening.set(Calendar.MINUTE, 0);
+            });
+            timePickerDialog.show();
         });
 
+        binding.closingTimeEven.getEditText().setOnClickListener(v -> {
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this, closing_time_evening,
+                    closing_calendar_evening.get(Calendar.HOUR_OF_DAY),
+                    closing_calendar_evening.get(Calendar.MINUTE),
+                    true);
+
+            timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.set_time), timePickerDialog);
+            timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), timePickerDialog);
+            timePickerDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.clear), (dialog, which) -> {
+                closing_calendar_evening.set(Calendar.HOUR_OF_DAY, 0);
+                closing_calendar_evening.set(Calendar.MINUTE, 0);
+            });
+            timePickerDialog.show();
+        });
+
+        binding.lunchMorning.getEditText().setOnClickListener(v -> {
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this, opening_time_lunch,
+                    opening_calendar_lunch.get(Calendar.HOUR_OF_DAY),
+                    opening_calendar_lunch.get(Calendar.MINUTE),
+                    true);
+
+            timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.set_time), timePickerDialog);
+            timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), timePickerDialog);
+            timePickerDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.clear), (dialog, which) -> {
+                opening_calendar_lunch.set(Calendar.HOUR_OF_DAY, 0);
+                opening_calendar_lunch.set(Calendar.MINUTE, 0);
+            });
+            timePickerDialog.show();
+        });
+
+        binding.lunchEvening.getEditText().setOnClickListener(v -> {
+            TimePickerDialog timePickerDialog = new TimePickerDialog(this, closing_time_lunch,
+                    closing_calendar_lunch.get(Calendar.HOUR_OF_DAY),
+                    closing_calendar_lunch.get(Calendar.MINUTE),
+                    true);
+
+            timePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.set_time), timePickerDialog);
+            timePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), timePickerDialog);
+            timePickerDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.clear), (dialog, which) -> {
+                closing_calendar_lunch.set(Calendar.HOUR_OF_DAY, 0);
+                closing_calendar_lunch.set(Calendar.MINUTE, 0);
+            });
+            timePickerDialog.show();
+        });
     }
 
     Dialog typeofplace;
@@ -327,9 +420,14 @@ public class PlaceAddActivity extends AppCompatActivity {
         model.services = new ArrayList<>(services);
         model.isAccessibleToAnimals = binding.isAccessible.isChecked();
         model.isAlwaysOpen = binding.alwaysOpen.isChecked();
+        model.hasShift = binding.shifts.isChecked();
         model.timestamp = new Date().getTime();
         model.opening_time = opening_calendar.getTime().getTime();
         model.closing_time = closing_calendar.getTime().getTime();
+        model.opening_time_evening = opening_calendar_evening.getTime().getTime();
+        model.closing_time_evening = closing_calendar_evening.getTime().getTime();
+        model.lunch_time_morning = opening_calendar_lunch.getTime().getTime();
+        model.lunch_time_evening = closing_calendar_lunch.getTime().getTime();
         model.comments = new ArrayList<>();
         UserModel userModel = (UserModel) Stash.getObject(Constants.STASH_USER, UserModel.class);
         model.created_by = userModel.email.split("@")[0];

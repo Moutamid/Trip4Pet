@@ -9,10 +9,11 @@ public class LocationsModel {
     public double latitude, longitude;
     public ArrayList<String> images;
     public ArrayList<FilterModel> services;
-    public long timestamp, opening_time, closing_time;
+    public long timestamp;
+    public long opening_time, closing_time, opening_time_evening, closing_time_evening, lunch_time_morning, lunch_time_evening;
     public double rating;
     public boolean isAccessibleToAnimals;
-    public boolean isAlwaysOpen;
+    public boolean isAlwaysOpen, hasShift;
     public ArrayList<CommentModel> comments;
 
     public LocationsModel() {

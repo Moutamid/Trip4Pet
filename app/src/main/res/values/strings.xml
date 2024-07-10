@@ -249,5 +249,12 @@
     <string name="open_close">Open/Closed</string>
     <string name="free">Free</string>
     <string name="open_all_year_round">Open all year round</string>
+    <string name="morning_shift">Morning Shift</string>
+    <string name="lunch_time">Lunch Time</string>
+    <string name="evening_shift">Evening Shift</string>
+    <string name="break_time">Break Time</string>
+    <string name="has_shifts">Does this place have shifts?</string>
+    <string name="morning_opening_closing">Morning Open/Closed</string>
+    <string name="evening_open_closed">Evening Open/Closed</string>
 
 </resources>

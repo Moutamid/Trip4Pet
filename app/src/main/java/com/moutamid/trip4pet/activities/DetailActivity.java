@@ -296,15 +296,42 @@ public class DetailActivity extends AppCompatActivity {
             }
         }
 
-        String price = model.price.isEmpty() ? getString(R.string.free) : Constants.EURO_LOW + model.price;
-        binding.price.setText(price);
+        if (model.price.isEmpty()) {
+            binding.priceLaout.setVisibility(View.GONE);
+        } else {
+            String price = Constants.EURO_LOW + model.price;
+            binding.price.setText(price);
+        }
 
         if (model.isAlwaysOpen){
-            binding.openClose.setText(getString(R.string.open_all_year_round));
+            binding.openCloseMorning.setText(getString(R.string.open_all_year_round));
         } else {
-            String open = new SimpleDateFormat("hh:mm aa", Locale.getDefault()).format(model.opening_time).toUpperCase(Locale.ROOT);
-            String close = new SimpleDateFormat("hh:mm aa", Locale.getDefault()).format(model.closing_time).toUpperCase(Locale.ROOT);
-            binding.openClose.setText(open + " / " + close);
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.getDefault());
+            if (model.hasShift) {
+                String open = format.format(model.opening_time).toUpperCase(Locale.ROOT);
+                String close = format.format(model.closing_time).toUpperCase(Locale.ROOT);
+                binding.openCloseMorning.setText(open + " / " + close);
+
+                binding.eveningShift.setVisibility(View.VISIBLE);
+                binding.morningShiftText.setText(getString(R.string.morning_opening_closing));
+
+                String open_ev = format.format(model.opening_time_evening).toUpperCase(Locale.ROOT);
+                String close_ev = format.format(model.closing_time_evening).toUpperCase(Locale.ROOT);
+                binding.openCloseEvening.setText(open_ev + " / " + close_ev);
+
+                String morning = format.format(model.lunch_time_morning).toUpperCase(Locale.ROOT);
+                String evening = format.format(model.lunch_time_evening).toUpperCase(Locale.ROOT);
+                binding.lunchTime.setText(morning + " / " + evening);
+            } else {
+                binding.eveningShift.setVisibility(View.GONE);
+
+                String open = format.format(model.opening_time).toUpperCase(Locale.ROOT);
+                String close = format.format(model.closing_time).toUpperCase(Locale.ROOT);
+                binding.openCloseMorning.setText(open + " / " + close);
+
+                String lunch = format.format(model.lunch_time_morning).toUpperCase(Locale.ROOT);
+                binding.lunchTime.setText(lunch);
+            }
         }
 
         int servicesSize = model.services == null ? 0 : model.services.size();

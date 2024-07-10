@@ -215,6 +215,7 @@ public class AroundPlaceActivity extends AppCompatActivity {
                         ArrayList<Cities> temp = new ArrayList<>();
                         ArrayList<Cities> filter = new ArrayList<>(filterList.subList(0, Math.min(20, filterList.size())));
                         for (Cities city : filter) {
+                            Log.d(TAG, "onPostExecute: " + city.name);
                             TranslateAPI type = new TranslateAPI(Language.ENGLISH, Stash.getString(Constants.LANGUAGE, "en"), city.name);
                             type.setTranslateListener(new TranslateAPI.TranslateListener() {
                                 @Override
