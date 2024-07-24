@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.fxn.stash.Stash;
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -34,7 +35,6 @@ import com.moutamid.trip4pet.models.UserModel;
 public class WelcomeActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
     ActivityWelcomeBinding binding;
-
     private GoogleSignInClient mGoogleSignInClient;
     private static final String TAG = "WelcomeActivity";
 
@@ -47,10 +47,10 @@ public class WelcomeActivity extends AppCompatActivity {
         Constants.checkApp(this);
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -75,7 +75,6 @@ public class WelcomeActivity extends AppCompatActivity {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
-
     }
 
     @Override
@@ -97,7 +96,7 @@ public class WelcomeActivity extends AppCompatActivity {
                 Log.d("firebaseAuthWithGoogle", "firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
+                Constants.dismissDialog();
                 Toast.makeText(this, getString(R.string.google_sign_in_failed) + " " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.w("firebaseAuthWithGoogle", "Google sign in failed", e);
             }

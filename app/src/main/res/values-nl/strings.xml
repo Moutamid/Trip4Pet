@@ -245,5 +245,11 @@
     <string name="open_close">Geopend/Gesloten</string>
     <string name="free">Gratis</string>
     <string name="open_all_year_round">Het hele jaar open</string>
-
+    <string name="morning_shift">Ochtenddienst</string>
+    <string name="lunch_time">Lunchtijd</string>
+    <string name="evening_shift">Avonddienst</string>
+    <string name="break_time">Pauze</string>
+    <string name="has_shifts">Heeft deze plek diensten?</string>
+    <string name="morning_opening_closing">Open/Gesloten \'s ochtends</string>
+    <string name="evening_open_closed">Open/Gesloten \'s avonds</string>
 </resources>

@@ -76,13 +76,17 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:windowSoftInputMode="stateAlwaysVisible|adjustResize"
             android:name=".MainActivity"
             android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.gms.auth.api.signin.apikey"
+            android:value="@string/default_web_client_id"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

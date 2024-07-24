@@ -245,5 +245,11 @@
     <string name="open_close">Aperto/Chiuso</string>
     <string name="free">Gratuito</string>
     <string name="open_all_year_round">Aperto tutto l\'anno</string>
-
+    <string name="morning_shift">Turno mattina</string>
+    <string name="lunch_time">Ora di pranzo</string>
+    <string name="evening_shift">Turno di sera</string>
+    <string name="break_time">Pausa</string>
+    <string name="has_shifts">Questo posto ha i turni?</string>
+    <string name="morning_opening_closing">Apertura/Chiusura Mattina</string>
+    <string name="evening_open_closed">Apertura/Chiusura Sera</string>
 </resources>
