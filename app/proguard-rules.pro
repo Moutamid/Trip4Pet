@@ -19,3 +19,19 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Keep Gson classes from obfuscation
+-keep class com.google.gson.** { *; }
+
+-keep class com.google.gson.reflect.TypeToken
+-keep class * extends com.google.gson.reflect.TypeToken
+-keep public class * implements java.lang.reflect.Type
+
+# Keep attributes for Gson's SerializedName annotations
+-keepclassmembers class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+
+# Keep the Cities class and its inner classes from obfuscation
+-keep class com.moutamid.trip4pet.models.Cities { *; }
+-keep class com.moutamid.trip4pet.models.Cities$* { *; }

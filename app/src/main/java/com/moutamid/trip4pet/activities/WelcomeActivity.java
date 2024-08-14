@@ -138,6 +138,7 @@ public class WelcomeActivity extends AppCompatActivity {
                         Stash.put(Constants.STASH_USER, userDetails);
                         Constants.databaseReference().child(Constants.USER).child(user.getUid())
                                 .setValue(userDetails).addOnCompleteListener(task -> {
+                                    Constants.dismissDialog();
                                     if (task.isSuccessful()) {
                                         startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
                                         finish();

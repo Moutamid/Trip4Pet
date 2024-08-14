@@ -1,33 +1,42 @@
 package com.moutamid.trip4pet.models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Cities {
-    public int id;
-    public String name;
-    public int state_id;
-    public String state_code;
-    public String state_name;
-    public int country_id;
-    public String country_code;
-    public String country_name;
-    public double latitude;
-    public double longitude;
-    public String wikiDataId;
+    @SerializedName("id")
+    private int id;
+
+    @SerializedName("name")
+    private String name;
+
+    @SerializedName("state_id")
+    private int state_id;
+
+    @SerializedName("state_code")
+    private String state_code;
+
+    @SerializedName("state_name")
+    private String state_name;
+
+    @SerializedName("country_id")
+    private int country_id;
+
+    @SerializedName("country_code")
+    private String country_code;
+
+    @SerializedName("country_name")
+    private String country_name;
+
+    @SerializedName("latitude")
+    private String latitude;
+
+    @SerializedName("longitude")
+    private String longitude;
+
+    @SerializedName("wikiDataId")
+    private String wikiDataId;
 
     public Cities() {
-    }
-
-    public Cities(int id, String name, int state_id, String state_code, String state_name, int country_id, String country_code, String country_name, double latitude, double longitude, String wikiDataId) {
-        this.id = id;
-        this.name = name;
-        this.state_id = state_id;
-        this.state_code = state_code;
-        this.state_name = state_name;
-        this.country_id = country_id;
-        this.country_code = country_code;
-        this.country_name = country_name;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.wikiDataId = wikiDataId;
     }
 
     public int getId() {
@@ -94,19 +103,19 @@ public class Cities {
         this.country_name = country_name;
     }
 
-    public double getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public String getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 
@@ -116,5 +125,22 @@ public class Cities {
 
     public void setWikiDataId(String wikiDataId) {
         this.wikiDataId = wikiDataId;
+    }
+
+    @Override
+    public String toString() {
+        return "Cities{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", state_id=" + state_id +
+                ", state_code='" + state_code + '\'' +
+                ", state_name='" + state_name + '\'' +
+                ", country_id=" + country_id +
+                ", country_code='" + country_code + '\'' +
+                ", country_name='" + country_name + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
+                ", wikiDataId='" + wikiDataId + '\'' +
+                '}';
     }
 }

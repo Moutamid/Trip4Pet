@@ -72,8 +72,17 @@ public class AroundPlaceActivity extends AppCompatActivity {
 //        list = Stash.getArrayList(Constants.CITIES, Cities.class);
         if (list.isEmpty()) {
             Constants.showDialog();
-            MyTask task = new MyTask();
-            task.execute();
+            com.moutamid.trip4pet.JsonReader.readPlacesFromAssetInBackground(this, placeList -> {
+                // This code runs on the main thread after data is loaded
+                runOnUiThread(() -> {
+                    // Use the `placeList` here
+                    Constants.dismissDialog();
+                    Log.d(TAG, "onResume: " + placeList.get(0).toString());
+                    list = new ArrayList<>(placeList);
+                    adapter = new CitiesAdapter(AroundPlaceActivity.this, list, cityClick);
+                    binding.cities.setAdapter(adapter);
+                });
+            });
         }
 //        else {
 //            adapter = new CitiesAdapter(requireActivity(), list, cityClick);
@@ -185,19 +194,19 @@ public class AroundPlaceActivity extends AppCompatActivity {
                         if (split.length > 1) {
                             Log.d(TAG, "doInBackground: length 2 " + split[0] + " " + split[1]);
                             filterList = (ArrayList<Cities>) mainList.stream()
-                                    .filter(item -> item.country_name.toLowerCase().equals(split[1].toString().toLowerCase()))
+                                    .filter(item -> item.getCountry_name().toLowerCase().equals(split[1].toString().toLowerCase()))
                                     .collect(Collectors.toList());
 
                             Log.d(TAG, "doInBackground: Country " + filterList.size());
 
                             filterList = (ArrayList<Cities>) filterList.stream()
-                                    .filter(item -> item.name.toLowerCase().equals(split[0].toString().toLowerCase()))
+                                    .filter(item -> item.getName().toLowerCase().equals(split[0].toString().toLowerCase()))
                                     .collect(Collectors.toList());
                         } else {
                             Log.d(TAG, "doInBackground: length 1 " + split[0] + " " + split[0]);
                             filterList = (ArrayList<Cities>) mainList.stream()
-                                    .filter(item -> item.name.toLowerCase().equals(split[0].toString().toLowerCase()) ||
-                                            item.country_name.toLowerCase().equals(split[0].toString().toLowerCase())
+                                    .filter(item -> item.getName().toLowerCase().equals(split[0].toString().toLowerCase()) ||
+                                            item.getCountry_name().toLowerCase().equals(split[0].toString().toLowerCase())
                                     )
                                     .collect(Collectors.toList());
                         }
@@ -215,12 +224,12 @@ public class AroundPlaceActivity extends AppCompatActivity {
                         ArrayList<Cities> temp = new ArrayList<>();
                         ArrayList<Cities> filter = new ArrayList<>(filterList.subList(0, Math.min(20, filterList.size())));
                         for (Cities city : filter) {
-                            Log.d(TAG, "onPostExecute: " + city.name);
-                            TranslateAPI type = new TranslateAPI(Language.ENGLISH, Stash.getString(Constants.LANGUAGE, "en"), city.name);
+                            Log.d(TAG, "onPostExecute: " + city.getName());
+                            TranslateAPI type = new TranslateAPI(Language.ENGLISH, Stash.getString(Constants.LANGUAGE, "en"), city.getName());
                             type.setTranslateListener(new TranslateAPI.TranslateListener() {
                                 @Override
                                 public void onSuccess(String translatedText) {
-                                    city.name = translatedText;
+                                    city.setName(translatedText);
                                     temp.add(city);
                                     adapter = new CitiesAdapter(AroundPlaceActivity.this, temp, cityClick);
                                     binding.cities.setAdapter(adapter);
@@ -294,8 +303,8 @@ public class AroundPlaceActivity extends AppCompatActivity {
     CityClick cityClick = cities -> {
         Intent intent = new Intent(AroundPlaceActivity.this, AddPlaceActivity.class);
         intent.putExtra("GIVEN", true);
-        String COORDINATES = cities.latitude + ", " + cities.longitude;
-        String PLACE = cities.name + ", " + cities.country_name;
+        String COORDINATES = cities.getLatitude() + ", " + cities.getLongitude();
+        String PLACE = cities.getName() + ", " + cities.getCountry_name();
         intent.putExtra(Constants.COORDINATES, COORDINATES);
         intent.putExtra(Constants.PLACE, PLACE);
         startActivity(intent);

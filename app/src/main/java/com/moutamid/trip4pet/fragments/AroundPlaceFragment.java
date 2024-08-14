@@ -1,6 +1,7 @@
 package com.moutamid.trip4pet.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -21,7 +22,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.fxn.stash.Stash;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.mannan.translateapi.Language;
 import com.mannan.translateapi.TranslateAPI;
@@ -37,7 +37,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -54,19 +53,33 @@ public class AroundPlaceFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Constants.setLocale(requireContext(), Stash.getString(Constants.LANGUAGE, "en"));
-        Constants.initDialog(requireContext());
-        Stash.clear(Constants.CITIES);
+        if (isAdded() && getContext() != null) {
+            Constants.setLocale(getContext(), Stash.getString(Constants.LANGUAGE, "en"));
+            Constants.initDialog(getContext());
+            Stash.clear(Constants.CITIES);
 //        list = Stash.getArrayList(Constants.CITIES, Cities.class);
-        if (list.isEmpty()) {
-            Constants.showDialog();
-            MyTask task = new MyTask();
-            task.execute();
+            if (list.isEmpty()) {
+                if (isAdded() && getActivity() != null) {
+                    Constants.showDialog();
+                    // new MyTask(getActivity(), getContext()).execute();
+                    com.moutamid.trip4pet.JsonReader.readPlacesFromAssetInBackground(requireContext(), placeList -> {
+                        // This code runs on the main thread after data is loaded
+                        requireActivity().runOnUiThread(() -> {
+                            // Use the `placeList` here
+                            Constants.dismissDialog();
+                            Log.d(TAG, "onResume: " + placeList.get(0).toString());
+                            list = new ArrayList<>(placeList);
+                            adapter = new CitiesAdapter(requireActivity(), list, cityClick);
+                            binding.cities.setAdapter(adapter);
+                        });
+                    });
+                }
+            }
+//            else {
+//                adapter = new CitiesAdapter(requireActivity(), list, cityClick);
+//                binding.cities.setAdapter(adapter);
+//            }
         }
-//        else {
-//            adapter = new CitiesAdapter(requireActivity(), list, cityClick);
-//            binding.cities.setAdapter(adapter);
-//        }
     }
 
     @Override
@@ -84,8 +97,8 @@ public class AroundPlaceFragment extends Fragment {
         binding.confirm.setOnClickListener(v -> {
             if (!binding.latitude.getEditText().getText().toString().isEmpty() && !binding.longitude.getEditText().getText().toString().isEmpty()) {
                 Cities cities = new Cities();
-                cities.latitude = Double.parseDouble(binding.latitude.getEditText().getText().toString());
-                cities.longitude = Double.parseDouble(binding.longitude.getEditText().getText().toString());
+                cities.setLatitude(binding.latitude.getEditText().getText().toString());
+                cities.setLongitude(binding.longitude.getEditText().getText().toString());
                 Stash.put(Constants.AROUND_PLACE, cities);
                 startActivity(new Intent(requireContext(), MainActivity.class));
                 requireActivity().finish();
@@ -97,6 +110,7 @@ public class AroundPlaceFragment extends Fragment {
         binding.search.getEditText().addTextChangedListener(new TextWatcher() {
             private Handler handler = new Handler();
             private Runnable runnable;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -166,19 +180,19 @@ public class AroundPlaceFragment extends Fragment {
                         if (split.length > 1) {
                             Log.d(TAG, "doInBackground: length 2 " + split[0] + " " + split[1]);
                             filterList = (ArrayList<Cities>) mainList.stream()
-                                    .filter(item -> item.country_name.toLowerCase().equals(split[1].toString().toLowerCase()))
+                                    .filter(item -> item.getCountry_name().toLowerCase().equals(split[1].toString().toLowerCase()))
                                     .collect(Collectors.toList());
 
                             Log.d(TAG, "doInBackground: Country " + filterList.size());
 
                             filterList = (ArrayList<Cities>) filterList.stream()
-                                    .filter(item -> item.name.toLowerCase().equals(split[0].toString().toLowerCase()))
+                                    .filter(item -> item.getName().toLowerCase().equals(split[0].toString().toLowerCase()))
                                     .collect(Collectors.toList());
                         } else {
                             Log.d(TAG, "doInBackground: length 1 " + split[0] + " " + split[0]);
                             filterList = (ArrayList<Cities>) mainList.stream()
-                                    .filter(item -> item.name.toLowerCase().equals(split[0].toString().toLowerCase()) ||
-                                            item.country_name.toLowerCase().equals(split[0].toString().toLowerCase())
+                                    .filter(item -> item.getName().toLowerCase().equals(split[0].toString().toLowerCase()) ||
+                                            item.getCountry_name().toLowerCase().equals(split[0].toString().toLowerCase())
                                     )
                                     .collect(Collectors.toList());
                         }
@@ -196,11 +210,11 @@ public class AroundPlaceFragment extends Fragment {
                         ArrayList<Cities> temp = new ArrayList<>();
                         ArrayList<Cities> filter = new ArrayList<>(filterList.subList(0, Math.min(20, filterList.size())));
                         for (Cities city : filter) {
-                            TranslateAPI type = new TranslateAPI(Language.ENGLISH, Stash.getString(Constants.LANGUAGE, "en"), city.name);
+                            TranslateAPI type = new TranslateAPI(Language.ENGLISH, Stash.getString(Constants.LANGUAGE, "en"), city.getName());
                             type.setTranslateListener(new TranslateAPI.TranslateListener() {
                                 @Override
                                 public void onSuccess(String translatedText) {
-                                    city.name = translatedText;
+                                    city.setName(translatedText);
                                     temp.add(city);
                                     adapter = new CitiesAdapter(requireActivity(), temp, cityClick);
                                     binding.cities.setAdapter(adapter);
@@ -226,12 +240,21 @@ public class AroundPlaceFragment extends Fragment {
     }
 
     public class MyTask extends AsyncTask<Void, Void, ArrayList<Cities>> {
+        ArrayList<Cities> dataArray = new ArrayList<>();
+
+        private Activity activity;
+        private Context context;
+
+        public MyTask(Activity activity, Context context) {
+            this.activity = activity;
+            this.context = context;
+        }
 
         @Override
         protected ArrayList<Cities> doInBackground(Void... voids) {
             try {
                 Log.d(TAG, "doInBackground: Reading json");
-                AssetManager assetManager = requireContext().getAssets();
+                AssetManager assetManager = context.getAssets();
                 InputStream inputStream = assetManager.open("cities.json");
                 Reader reader = new InputStreamReader(inputStream, "UTF-8");
 
@@ -239,22 +262,36 @@ public class AroundPlaceFragment extends Fragment {
                 jsonReader.setLenient(true); // Handle potential parsing issues
 
                 Gson gson = new Gson();
-                Type listType = new TypeToken<ArrayList<Cities>>() {}.getType();
-                ArrayList<Cities> dataArray = new ArrayList<>();
+                // Type listType = new TypeToken<ArrayList<Cities>>() {}.getType();
                 jsonReader.beginArray();
                 while (jsonReader.hasNext()) {
                     Cities dataItem = gson.fromJson(jsonReader, Cities.class);
                     dataArray.add(dataItem);
                 }
+
+//                Gson gson = new GsonBuilder()
+//                        .registerTypeAdapter(Cities.class, new CitiesDeserializer())
+//                        .create();
+//
+//                Type listType = new TypeToken<ArrayList<Cities>>() {}.getType();
+//                dataArray = gson.fromJson(reader, listType);
+
                 jsonReader.endArray();
                 reader.close();
-
-                return dataArray;
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.d(TAG, "Error: " + e.getLocalizedMessage());
-                return new ArrayList<>();
+                activity.runOnUiThread(() -> {
+                    Toast.makeText(activity, e.getLocalizedMessage() + "", Toast.LENGTH_SHORT).show();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d(TAG, "Unexpected Error: " + e.getLocalizedMessage());
+                activity.runOnUiThread(() -> {
+                    Toast.makeText(activity, e.getLocalizedMessage() + "", Toast.LENGTH_SHORT).show();
+                });
             }
+            return dataArray;
         }
 
         @Override
@@ -262,12 +299,77 @@ public class AroundPlaceFragment extends Fragment {
             super.onPostExecute(dataArray);
             list = new ArrayList<>(dataArray);
             Constants.dismissDialog();
-//            Stash.put(Constants.CITIES, list);
+            //            Stash.put(Constants.CITIES, list);
             Log.d(TAG, "onPostExecute: LIST SIZE  " + list.size());
-            adapter = new CitiesAdapter(requireActivity(), list, cityClick);
+            Log.d(TAG, "onPostExecute: LIST isNull  " + (list.get(0) == null));
+            Log.d(TAG, "onPostExecute: LIST country_name  " + (list.get(0).toString()));
+            adapter = new CitiesAdapter(activity, list, cityClick);
             binding.cities.setAdapter(adapter);
         }
     }
+
+/*    public class MyTask extends AsyncTask<Void, Void, ArrayList<Cities>> {
+        private Activity activity;
+
+        public MyTask(Activity context) {
+            this.activity = context;
+        }
+
+        @Override
+        protected ArrayList<Cities> doInBackground(Void... voids) {
+            ArrayList<Cities> dataArray = new ArrayList<>();
+            try {
+                Log.d(TAG, "doInBackground: Reading json");
+                AssetManager assetManager = activity.getAssets(); // Use the context passed in the constructor
+                InputStream inputStream = assetManager.open("cities.json");
+                Reader reader = new InputStreamReader(inputStream, "UTF-8");
+
+                JsonReader jsonReader = new JsonReader(reader);
+                jsonReader.setLenient(true); // Handle potential parsing issues
+
+                Gson gson = new Gson();
+                Type listType = new TypeToken<Cities>() {
+                }.getType();
+                jsonReader.beginArray();
+                while (jsonReader.hasNext()) {
+                    Cities dataItem = gson.fromJson(jsonReader, listType);
+                    dataArray.add(dataItem);
+                }
+
+//                Type listType = new TypeToken<List<Cities>>() {}.getType();
+//                dataArray = gson.fromJson(jsonReader, listType);
+
+                jsonReader.endArray();
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.d(TAG, "Error: " + e.getLocalizedMessage());
+                activity.runOnUiThread(() -> {
+                    Toast.makeText(activity, e.getLocalizedMessage() + "", Toast.LENGTH_SHORT).show();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d(TAG, "Unexpected Error: " + e.getLocalizedMessage());
+                activity.runOnUiThread(() -> {
+                    Toast.makeText(activity, e.getLocalizedMessage() + "", Toast.LENGTH_SHORT).show();
+                });
+            }
+            return dataArray;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Cities> dataArray) {
+            super.onPostExecute(dataArray);
+            list = new ArrayList<>(dataArray);
+            Constants.dismissDialog();
+//        Stash.put(Constants.CITIES, list);
+            Log.d(TAG, "onPostExecute: LIST SIZE  " + list.size());
+            Toast.makeText(activity, "Size " + list.size(), Toast.LENGTH_SHORT).show();
+            adapter = new CitiesAdapter(activity, list, cityClick); // Use context for adapter
+            binding.cities.setAdapter(adapter);
+        }
+    }*/
+
 
     CityClick cityClick = cities -> {
         View view = getView();
