@@ -34,8 +34,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.stash)
-    implementation(libs.autoimageslider)
+    implementation(libs.gson)
+    implementation("com.github.smarteist:Android-Image-Slider:1.4.0")
     implementation(libs.simpleratingbar)
     implementation(libs.translateapi)
 

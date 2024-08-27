@@ -19,7 +19,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.PurchaseInfo;
 import com.anjlab.android.iab.v3.SkuDetails;
-import com.fxn.stash.Stash;
+import com.moutamid.trip4pet.Stash;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.moutamid.trip4pet.databinding.ActivityMainBinding;
 import com.moutamid.trip4pet.fragments.AroundMeFragment;

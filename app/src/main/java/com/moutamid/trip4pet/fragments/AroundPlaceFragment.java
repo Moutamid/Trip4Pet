@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +21,8 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.fxn.stash.Stash;
+import com.moutamid.trip4pet.Stash;
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import com.mannan.translateapi.Language;
 import com.mannan.translateapi.TranslateAPI;
 import com.moutamid.trip4pet.Constants;
@@ -265,7 +265,7 @@ public class AroundPlaceFragment extends Fragment {
                 // Type listType = new TypeToken<ArrayList<Cities>>() {}.getType();
                 jsonReader.beginArray();
                 while (jsonReader.hasNext()) {
-                    Cities dataItem = gson.fromJson(jsonReader, Cities.class);
+                    Cities dataItem = gson.fromJson(String.valueOf(jsonReader), Cities.class);
                     dataArray.add(dataItem);
                 }
 

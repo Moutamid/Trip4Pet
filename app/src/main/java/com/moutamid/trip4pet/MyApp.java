@@ -2,7 +2,7 @@ package com.moutamid.trip4pet;
 
 import android.app.Application;
 
-import com.fxn.stash.Stash;
+import com.moutamid.trip4pet.Stash;
 
 public class MyApp extends Application {
 

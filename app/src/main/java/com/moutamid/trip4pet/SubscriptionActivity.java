@@ -14,7 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.PurchaseInfo;
-import com.fxn.stash.Stash;
+import com.moutamid.trip4pet.Stash;
 import com.google.android.material.card.MaterialCardView;
 import com.moutamid.trip4pet.databinding.ActivitySubscriptionBinding;
 

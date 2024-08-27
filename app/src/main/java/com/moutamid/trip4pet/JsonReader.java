@@ -43,8 +43,7 @@ public class JsonReader {
 //                Log.d(TAG, "readPlacesFromAssetInBackground: " + jsonObject.toString());
 
                 Gson gson = new Gson();
-                Type listType = new TypeToken<List<Cities>>() {
-                }.getType();
+                Type listType = new TypeToken<List<Cities>>() {}.getType();
                 placeList = gson.fromJson(json, listType);
             } catch (Exception e) {
                 e.printStackTrace();
