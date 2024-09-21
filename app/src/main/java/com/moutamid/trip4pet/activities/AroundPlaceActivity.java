@@ -18,7 +18,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.moutamid.trip4pet.Stash;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -26,9 +25,9 @@ import com.mannan.translateapi.Language;
 import com.mannan.translateapi.TranslateAPI;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
+import com.moutamid.trip4pet.Stash;
 import com.moutamid.trip4pet.adapters.CitiesAdapter;
 import com.moutamid.trip4pet.databinding.ActivityAroundPlaceBinding;
-import com.moutamid.trip4pet.fragments.AroundPlaceFragment;
 import com.moutamid.trip4pet.listener.CityClick;
 import com.moutamid.trip4pet.models.Cities;
 
@@ -38,6 +37,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class AroundPlaceActivity extends AppCompatActivity {
@@ -127,6 +127,7 @@ public class AroundPlaceActivity extends AppCompatActivity {
         binding.search.getEditText().addTextChangedListener(new TextWatcher() {
             private Handler handler = new Handler();
             private Runnable runnable;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -155,7 +156,9 @@ public class AroundPlaceActivity extends AppCompatActivity {
                             binding.cities.setVisibility(View.GONE);
                         } else {
                             if (s.toString().length() > 3) {
-                             filter(s.toString());
+                                String name = s.toString().substring(0, 1).toUpperCase(Locale.ROOT) + s.toString().substring(1);
+                                Log.d(TAG, "run: " + name);
+                                filter(name);
                             }
                             new Handler().postDelayed(() -> {
                                 binding.gps.setChecked(false);
@@ -293,7 +296,7 @@ public class AroundPlaceActivity extends AppCompatActivity {
             super.onPostExecute(dataArray);
             list = new ArrayList<>(dataArray);
             Constants.dismissDialog();
-           // Stash.put(Constants.CITIES, list);
+            // Stash.put(Constants.CITIES, list);
             Log.d(TAG, "onPostExecute: LIST SIZE  " + list.size());
             adapter = new CitiesAdapter(AroundPlaceActivity.this, list, cityClick);
             binding.cities.setAdapter(adapter);

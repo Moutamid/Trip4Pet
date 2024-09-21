@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class AroundPlaceFragment extends Fragment {
@@ -140,7 +141,9 @@ public class AroundPlaceFragment extends Fragment {
                             binding.cities.setVisibility(View.GONE);
                         } else {
                             if (s.toString().length() > 3) {
-                                filter(s.toString());
+                                String name = s.toString().substring(0, 1).toUpperCase(Locale.ROOT) + s.toString().substring(1);
+                                Log.d(TAG, "run: " + name);
+                                filter(name);
                             }
                             new Handler().postDelayed(() -> {
                                 binding.gps.setChecked(false);
