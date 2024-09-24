@@ -202,9 +202,17 @@ public class AroundPlaceActivity extends AppCompatActivity {
 
                             Log.d(TAG, "doInBackground: Country " + filterList.size());
 
-                            filterList = (ArrayList<Cities>) filterList.stream()
-                                    .filter(item -> item.getName().toLowerCase().equals(split[0].toString().toLowerCase()))
-                                    .collect(Collectors.toList());
+                            if (filterList.isEmpty()) {
+                                filterList = (ArrayList<Cities>) mainList.stream()
+                                        .filter(item -> item.getName().toLowerCase().equals(translatedText.toString().toLowerCase()) ||
+                                                item.getCountry_name().toLowerCase().equals(translatedText.toString().toLowerCase())
+                                        )
+                                        .collect(Collectors.toList());
+                            } else {
+                                filterList = (ArrayList<Cities>) filterList.stream()
+                                        .filter(item -> item.getName().toLowerCase().equals(split[0].toString().toLowerCase()))
+                                        .collect(Collectors.toList());
+                            }
                         } else {
                             Log.d(TAG, "doInBackground: length 1 " + split[0] + " " + split[0]);
                             filterList = (ArrayList<Cities>) mainList.stream()

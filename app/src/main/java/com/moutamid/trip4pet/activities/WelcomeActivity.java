@@ -147,6 +147,8 @@ public class WelcomeActivity extends AppCompatActivity {
                                     }
                                 });
                     } else {
+                        UserModel userModel = snapshot.getValue(UserModel.class);
+                        Stash.put(Constants.STASH_USER, userModel);
                         startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
                         finish();
                     }

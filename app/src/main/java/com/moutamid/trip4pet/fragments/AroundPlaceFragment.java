@@ -186,11 +186,19 @@ public class AroundPlaceFragment extends Fragment {
                                     .filter(item -> item.getCountry_name().toLowerCase().equals(split[1].toString().toLowerCase()))
                                     .collect(Collectors.toList());
 
-                            Log.d(TAG, "doInBackground: Country " + filterList.size());
+                            if (filterList.isEmpty()) {
+                                filterList = (ArrayList<Cities>) mainList.stream()
+                                        .filter(item -> item.getName().toLowerCase().equals(translatedText.toString().toLowerCase()) ||
+                                                item.getCountry_name().toLowerCase().equals(translatedText.toString().toLowerCase())
+                                        )
+                                        .collect(Collectors.toList());
+                            } else {
+                                filterList = (ArrayList<Cities>) filterList.stream()
+                                        .filter(item -> item.getName().toLowerCase().equals(split[0].toString().toLowerCase()))
+                                        .collect(Collectors.toList());
+                            }
 
-                            filterList = (ArrayList<Cities>) filterList.stream()
-                                    .filter(item -> item.getName().toLowerCase().equals(split[0].toString().toLowerCase()))
-                                    .collect(Collectors.toList());
+                            Log.d(TAG, "doInBackground: Country " + filterList.size());
                         } else {
                             Log.d(TAG, "doInBackground: length 1 " + split[0] + " " + split[0]);
                             filterList = (ArrayList<Cities>) mainList.stream()
