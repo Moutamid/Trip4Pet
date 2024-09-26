@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -157,8 +158,13 @@ public class AroundMeFragment extends Fragment {
                                         .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
                                         .position(latLng).title(model.name);
                                 Marker marker = mMap.addMarker(markerOptions);
-                                marker.setTag(model.id);
-                                currentMarkers.add(marker);
+                                if (marker != null) {
+                                    marker.setTag(model.id);
+                                    currentMarkers.add(marker);
+                                } else {
+                                    Log.e("MarkerError", "Marker could not be added");
+                                }
+
                             }
                         }
 
@@ -169,9 +175,12 @@ public class AroundMeFragment extends Fragment {
                                 .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
                                 .position(latLng).title(model.name);
                         Marker marker = mMap.addMarker(markerOptions);
-                        marker.setTag(model.id);
-                        currentMarkers.add(marker);
-
+                        if (marker != null) {
+                            marker.setTag(model.id);
+                            currentMarkers.add(marker);
+                        } else {
+                            Log.e("MarkerError", "Marker could not be added");
+                        }
                         map.put(model.id, model);
                     }
 
@@ -302,8 +311,13 @@ public class AroundMeFragment extends Fragment {
                             .icon(BitmapDescriptorFactory.fromBitmap(Constants.createDrawableFromView(requireContext(), customMarker)))
                             .position(latLng).title(model.name);
                     Marker marker = mMap.addMarker(markerOptions);
-                    marker.setTag(model.id);
-                    currentMarkers.add(marker);
+                    if (marker != null) {
+                        marker.setTag(model.id);
+                        currentMarkers.add(marker);
+                    } else {
+                        Log.e("MarkerError", "Marker could not be added");
+                    }
+
                     map.put(model.id, model);
                 }
             }
