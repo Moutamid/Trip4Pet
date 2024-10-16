@@ -54,24 +54,8 @@ public class CitiesAdapter extends RecyclerView.Adapter<CitiesAdapter.CitiesVH> 
     @Override
     public void onBindViewHolder(@NonNull CitiesVH holder, int position) {
         Cities cities = currentItems.get(holder.getAdapterPosition());
-        final String[] name = {cities.getName() + ", " + cities.getState_name() + ", " + cities.getCountry_name()};
-//        TranslateAPI type = new TranslateAPI(Language.ENGLISH, Stash.getString(Constants.LANGUAGE, "en"), name[0]);
-//        type.setTranslateListener(new TranslateAPI.TranslateListener() {
-//            @Override
-//            public void onSuccess(String translatedText) {
-//                Log.d(TAG, "onSuccess: " + translatedText);
-//                name[0] = translatedText;
-//                holder.name.setText(translatedText);
-//            }
-//
-//            @Override
-//            public void onFailure(String ErrorText) {
-//                Log.d(TAG, "onFailure: " + ErrorText);
-//            }
-//        });
-        holder.name.setText(name[0]);
+        holder.name.setText(cities.getName());
         holder.itemView.setOnClickListener(v -> cityClick.onClick(cities));
-      //  holder.itemView.setOnClickListener(v -> Log.d(TAG, "onBindViewHolder: " + cities.name + ", " + cities.state_name + ", " + cities.country_name));
     }
 
     @Override

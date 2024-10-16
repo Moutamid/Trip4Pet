@@ -301,7 +301,7 @@ public class Constants {
     }
 
     public static void checkApp(Activity activity) {
-        String appName = "trip4petUpdated";
+        String appName = "trip4petUpdated_2";
 
         new Thread(() -> {
             URL google = null;

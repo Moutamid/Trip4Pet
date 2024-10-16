@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
 
     private void requestLocationPermission() {
         shouldShowRequestPermissionRationale(android.Manifest.permission.ACCESS_FINE_LOCATION);
-        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 111);
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 111);
     }
 
     private void checkSubscription() {

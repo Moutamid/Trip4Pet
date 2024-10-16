@@ -21,17 +21,26 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.moutamid.trip4pet.Stash;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.mannan.translateapi.Language;
 import com.mannan.translateapi.TranslateAPI;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.MainActivity;
 import com.moutamid.trip4pet.R;
+import com.moutamid.trip4pet.Stash;
 import com.moutamid.trip4pet.adapters.CitiesAdapter;
+import com.moutamid.trip4pet.api.ApiLink;
+import com.moutamid.trip4pet.api.VolleySingleton;
 import com.moutamid.trip4pet.databinding.FragmentAroundPlaceBinding;
 import com.moutamid.trip4pet.listener.CityClick;
 import com.moutamid.trip4pet.models.Cities;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,6 +59,8 @@ public class AroundPlaceFragment extends Fragment {
     public AroundPlaceFragment() {
         // Required empty public constructor
     }
+
+    RequestQueue requestQueue;
 
     @Override
     public void onResume() {
@@ -89,6 +100,8 @@ public class AroundPlaceFragment extends Fragment {
 
         binding.cities.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.cities.setHasFixedSize(false);
+
+        requestQueue = VolleySingleton.getInstance(requireContext()).getRequestQueue();
 
         binding.gps.setOnCheckedChangeListener((buttonView, isChecked) -> {
             int v = isChecked ? View.VISIBLE : View.GONE;
@@ -143,6 +156,7 @@ public class AroundPlaceFragment extends Fragment {
                             if (s.toString().length() > 3) {
                                 String name = s.toString().substring(0, 1).toUpperCase(Locale.ROOT) + s.toString().substring(1);
                                 Log.d(TAG, "run: " + name);
+                                requestQueue.cancelAll(ApiLink.GET_PLACES);
                                 filter(name);
                             }
                             new Handler().postDelayed(() -> {
@@ -166,221 +180,31 @@ public class AroundPlaceFragment extends Fragment {
     public void filter(final String query) {
         Log.d(TAG, "filter: " + query);
         Log.d(TAG, "filter: " + list.size());
-        Constants.showDialog();
+//        Constants.showDialog();
         // Stash.getString(Constants.LANGUAGE, "en")
-        TranslateAPI type = new TranslateAPI(Stash.getString(Constants.LANGUAGE, "en"), Language.ENGLISH, query);
-        type.setTranslateListener(new TranslateAPI.TranslateListener() {
-            @Override
-            public void onSuccess(String translatedText) {
-                Constants.dismissDialog();
-                Log.d(TAG, "onSuccess: " + translatedText);
-                String[] split = translatedText.replace(",", "").split(" ");
-                new AsyncTask<Void, Void, ArrayList<Cities>>() {
-                    @Override
-                    protected ArrayList<Cities> doInBackground(Void... voids) {
-                        ArrayList<Cities> mainList = new ArrayList<>(list);
-                        ArrayList<Cities> filterList;
-                        if (split.length > 1) {
-                            Log.d(TAG, "doInBackground: length 2 " + split[0] + " " + split[1]);
-                            filterList = (ArrayList<Cities>) mainList.stream()
-                                    .filter(item -> item.getCountry_name().toLowerCase().equals(split[1].toString().toLowerCase()))
-                                    .collect(Collectors.toList());
-
-                            if (filterList.isEmpty()) {
-                                filterList = (ArrayList<Cities>) mainList.stream()
-                                        .filter(item -> item.getName().toLowerCase().equals(translatedText.toString().toLowerCase()) ||
-                                                item.getCountry_name().toLowerCase().equals(translatedText.toString().toLowerCase())
-                                        )
-                                        .collect(Collectors.toList());
-                            } else {
-                                filterList = (ArrayList<Cities>) filterList.stream()
-                                        .filter(item -> item.getName().toLowerCase().equals(split[0].toString().toLowerCase()))
-                                        .collect(Collectors.toList());
-                            }
-
-                            Log.d(TAG, "doInBackground: Country " + filterList.size());
-                        } else {
-                            Log.d(TAG, "doInBackground: length 1 " + split[0] + " " + split[0]);
-                            filterList = (ArrayList<Cities>) mainList.stream()
-                                    .filter(item -> item.getName().toLowerCase().equals(split[0].toString().toLowerCase()) ||
-                                            item.getCountry_name().toLowerCase().equals(split[0].toString().toLowerCase())
-                                    )
-                                    .collect(Collectors.toList());
+        String url = ApiLink.searchCities(query);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        ArrayList<Cities> mainList = new ArrayList<>();
+                        JSONArray predictions = response.getJSONArray("predictions");
+                        for (int i = 0; i < predictions.length(); i++) {
+                            JSONObject city = predictions.getJSONObject(i);
+                            mainList.add(new Cities(city.getString("place_id"), city.getString("description")));
                         }
-                        Log.d(TAG, "doInBackground: " + filterList.size());
-                        return filterList;
+                        adapter = new CitiesAdapter(requireActivity(), mainList, cityClick);
+                        binding.cities.setAdapter(adapter);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-
-                    @Override
-                    protected void onPostExecute(ArrayList<Cities> filterList) {
-                        Constants.dismissDialog();
-                        if (filterList.isEmpty()) {
-                            adapter = new CitiesAdapter(requireActivity(), filterList, cityClick);
-                            binding.cities.setAdapter(adapter);
-                        }
-                        ArrayList<Cities> temp = new ArrayList<>();
-                        ArrayList<Cities> filter = new ArrayList<>(filterList.subList(0, Math.min(20, filterList.size())));
-                        for (Cities city : filter) {
-                            TranslateAPI type = new TranslateAPI(Language.ENGLISH, Stash.getString(Constants.LANGUAGE, "en"), city.getName());
-                            type.setTranslateListener(new TranslateAPI.TranslateListener() {
-                                @Override
-                                public void onSuccess(String translatedText) {
-                                    city.setName(translatedText);
-                                    temp.add(city);
-                                    adapter = new CitiesAdapter(requireActivity(), temp, cityClick);
-                                    binding.cities.setAdapter(adapter);
-                                }
-
-                                @Override
-                                public void onFailure(String ErrorText) {
-                                    Constants.dismissDialog();
-                                    Log.d(TAG, "onFailure: " + ErrorText);
-                                }
-                            });
-                        }
-                    }
-                }.execute();
-            }
-
-            @Override
-            public void onFailure(String ErrorText) {
-                Constants.dismissDialog();
-                Log.d(TAG, "onFailure: " + ErrorText);
-            }
-        });
-    }
-
-    public class MyTask extends AsyncTask<Void, Void, ArrayList<Cities>> {
-        ArrayList<Cities> dataArray = new ArrayList<>();
-
-        private Activity activity;
-        private Context context;
-
-        public MyTask(Activity activity, Context context) {
-            this.activity = activity;
-            this.context = context;
-        }
-
-        @Override
-        protected ArrayList<Cities> doInBackground(Void... voids) {
-            try {
-                Log.d(TAG, "doInBackground: Reading json");
-                AssetManager assetManager = context.getAssets();
-                InputStream inputStream = assetManager.open("cities.json");
-                Reader reader = new InputStreamReader(inputStream, "UTF-8");
-
-                JsonReader jsonReader = new JsonReader(reader);
-                jsonReader.setLenient(true); // Handle potential parsing issues
-
-                Gson gson = new Gson();
-                // Type listType = new TypeToken<ArrayList<Cities>>() {}.getType();
-                jsonReader.beginArray();
-                while (jsonReader.hasNext()) {
-                    Cities dataItem = gson.fromJson(String.valueOf(jsonReader), Cities.class);
-                    dataArray.add(dataItem);
+                },
+                error -> {
+                    Log.d(TAG, "filter: " + error.getLocalizedMessage());
                 }
-
-//                Gson gson = new GsonBuilder()
-//                        .registerTypeAdapter(Cities.class, new CitiesDeserializer())
-//                        .create();
-//
-//                Type listType = new TypeToken<ArrayList<Cities>>() {}.getType();
-//                dataArray = gson.fromJson(reader, listType);
-
-                jsonReader.endArray();
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.d(TAG, "Error: " + e.getLocalizedMessage());
-                activity.runOnUiThread(() -> {
-                    Toast.makeText(activity, e.getLocalizedMessage() + "", Toast.LENGTH_SHORT).show();
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.d(TAG, "Unexpected Error: " + e.getLocalizedMessage());
-                activity.runOnUiThread(() -> {
-                    Toast.makeText(activity, e.getLocalizedMessage() + "", Toast.LENGTH_SHORT).show();
-                });
-            }
-            return dataArray;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Cities> dataArray) {
-            super.onPostExecute(dataArray);
-            list = new ArrayList<>(dataArray);
-            Constants.dismissDialog();
-            //            Stash.put(Constants.CITIES, list);
-            Log.d(TAG, "onPostExecute: LIST SIZE  " + list.size());
-            Log.d(TAG, "onPostExecute: LIST isNull  " + (list.get(0) == null));
-            Log.d(TAG, "onPostExecute: LIST country_name  " + (list.get(0).toString()));
-            adapter = new CitiesAdapter(activity, list, cityClick);
-            binding.cities.setAdapter(adapter);
-        }
+        );
+        jsonObjectRequest.setTag(ApiLink.GET_PLACES);
+        requestQueue.add(jsonObjectRequest);
     }
-
-/*    public class MyTask extends AsyncTask<Void, Void, ArrayList<Cities>> {
-        private Activity activity;
-
-        public MyTask(Activity context) {
-            this.activity = context;
-        }
-
-        @Override
-        protected ArrayList<Cities> doInBackground(Void... voids) {
-            ArrayList<Cities> dataArray = new ArrayList<>();
-            try {
-                Log.d(TAG, "doInBackground: Reading json");
-                AssetManager assetManager = activity.getAssets(); // Use the context passed in the constructor
-                InputStream inputStream = assetManager.open("cities.json");
-                Reader reader = new InputStreamReader(inputStream, "UTF-8");
-
-                JsonReader jsonReader = new JsonReader(reader);
-                jsonReader.setLenient(true); // Handle potential parsing issues
-
-                Gson gson = new Gson();
-                Type listType = new TypeToken<Cities>() {
-                }.getType();
-                jsonReader.beginArray();
-                while (jsonReader.hasNext()) {
-                    Cities dataItem = gson.fromJson(jsonReader, listType);
-                    dataArray.add(dataItem);
-                }
-
-//                Type listType = new TypeToken<List<Cities>>() {}.getType();
-//                dataArray = gson.fromJson(jsonReader, listType);
-
-                jsonReader.endArray();
-                reader.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.d(TAG, "Error: " + e.getLocalizedMessage());
-                activity.runOnUiThread(() -> {
-                    Toast.makeText(activity, e.getLocalizedMessage() + "", Toast.LENGTH_SHORT).show();
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.d(TAG, "Unexpected Error: " + e.getLocalizedMessage());
-                activity.runOnUiThread(() -> {
-                    Toast.makeText(activity, e.getLocalizedMessage() + "", Toast.LENGTH_SHORT).show();
-                });
-            }
-            return dataArray;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Cities> dataArray) {
-            super.onPostExecute(dataArray);
-            list = new ArrayList<>(dataArray);
-            Constants.dismissDialog();
-//        Stash.put(Constants.CITIES, list);
-            Log.d(TAG, "onPostExecute: LIST SIZE  " + list.size());
-            Toast.makeText(activity, "Size " + list.size(), Toast.LENGTH_SHORT).show();
-            adapter = new CitiesAdapter(activity, list, cityClick); // Use context for adapter
-            binding.cities.setAdapter(adapter);
-        }
-    }*/
-
 
     CityClick cityClick = cities -> {
         View view = getView();
@@ -390,9 +214,17 @@ public class AroundPlaceFragment extends Fragment {
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         }
-        Stash.put(Constants.AROUND_PLACE, cities);
-        startActivity(new Intent(requireContext(), MainActivity.class));
-        requireActivity().finish();
+
+        getCityDetails(cities);
     };
+
+    private void getCityDetails(Cities cities) {
+        Stash.put(Constants.AROUND_PLACE, cities);
+//        startActivity(new Intent(requireContext(), MainActivity.class));
+//        requireActivity().finish();
+
+
+
+    }
 
 }

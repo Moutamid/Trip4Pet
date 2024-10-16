@@ -52,6 +52,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-storage")
 
+    implementation(libs.volley)
+
     implementation(libs.play.services.auth)
 
     implementation(libs.billing)
