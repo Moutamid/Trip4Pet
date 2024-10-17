@@ -1,16 +1,12 @@
 package com.moutamid.trip4pet.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,9 +20,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.google.gson.Gson;
-import com.mannan.translateapi.Language;
-import com.mannan.translateapi.TranslateAPI;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.MainActivity;
 import com.moutamid.trip4pet.R;
@@ -42,13 +35,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 public class AroundPlaceFragment extends Fragment {
     FragmentAroundPlaceBinding binding;
@@ -65,33 +53,35 @@ public class AroundPlaceFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (isAdded() && getContext() != null) {
-            Constants.setLocale(getContext(), Stash.getString(Constants.LANGUAGE, "en"));
-            Constants.initDialog(getContext());
-            Stash.clear(Constants.CITIES);
-//        list = Stash.getArrayList(Constants.CITIES, Cities.class);
-            if (list.isEmpty()) {
-                if (isAdded() && getActivity() != null) {
-                    Constants.showDialog();
-                    // new MyTask(getActivity(), getContext()).execute();
-                    com.moutamid.trip4pet.JsonReader.readPlacesFromAssetInBackground(requireContext(), placeList -> {
-                        // This code runs on the main thread after data is loaded
-                        requireActivity().runOnUiThread(() -> {
-                            // Use the `placeList` here
-                            Constants.dismissDialog();
-                            Log.d(TAG, "onResume: " + placeList.get(0).toString());
-                            list = new ArrayList<>(placeList);
-                            adapter = new CitiesAdapter(requireActivity(), list, cityClick);
-                            binding.cities.setAdapter(adapter);
-                        });
-                    });
-                }
-            }
-//            else {
-//                adapter = new CitiesAdapter(requireActivity(), list, cityClick);
-//                binding.cities.setAdapter(adapter);
+        Stash.clear(Constants.CITIES);
+        Constants.initDialog(requireContext());
+//        if (isAdded() && getContext() != null) {
+//            Constants.setLocale(getContext(), Stash.getString(Constants.LANGUAGE, "en"));
+//            Constants.initDialog(getContext());
+//
+////        list = Stash.getArrayList(Constants.CITIES, Cities.class);
+//            if (list.isEmpty()) {
+//                if (isAdded() && getActivity() != null) {
+//                    Constants.showDialog();
+//                    // new MyTask(getActivity(), getContext()).execute();
+//                    com.moutamid.trip4pet.JsonReader.readPlacesFromAssetInBackground(requireContext(), placeList -> {
+//                        // This code runs on the main thread after data is loaded
+//                        requireActivity().runOnUiThread(() -> {
+//                            // Use the `placeList` here
+//                            Constants.dismissDialog();
+//                            Log.d(TAG, "onResume: " + placeList.get(0).toString());
+//                            list = new ArrayList<>(placeList);
+//                            adapter = new CitiesAdapter(requireActivity(), list, cityClick);
+//                            binding.cities.setAdapter(adapter);
+//                        });
+//                    });
+//                }
 //            }
-        }
+////            else {
+////                adapter = new CitiesAdapter(requireActivity(), list, cityClick);
+////                binding.cities.setAdapter(adapter);
+////            }
+//        }
     }
 
     @Override
@@ -111,8 +101,8 @@ public class AroundPlaceFragment extends Fragment {
         binding.confirm.setOnClickListener(v -> {
             if (!binding.latitude.getEditText().getText().toString().isEmpty() && !binding.longitude.getEditText().getText().toString().isEmpty()) {
                 Cities cities = new Cities();
-                cities.setLatitude(binding.latitude.getEditText().getText().toString());
-                cities.setLongitude(binding.longitude.getEditText().getText().toString());
+                cities.setLatitude(Double.parseDouble(binding.latitude.getEditText().getText().toString()));
+                cities.setLongitude(Double.parseDouble(binding.longitude.getEditText().getText().toString()));
                 Stash.put(Constants.AROUND_PLACE, cities);
                 startActivity(new Intent(requireContext(), MainActivity.class));
                 requireActivity().finish();
@@ -153,7 +143,9 @@ public class AroundPlaceFragment extends Fragment {
                             binding.gps.setVisibility(View.VISIBLE);
                             binding.cities.setVisibility(View.GONE);
                         } else {
-                            if (s.toString().length() > 3) {
+                            adapter = new CitiesAdapter(requireActivity(), new ArrayList<>(), cityClick);
+                            binding.cities.setAdapter(adapter);
+                            if (s.toString().length() >= 3) {
                                 String name = s.toString().substring(0, 1).toUpperCase(Locale.ROOT) + s.toString().substring(1);
                                 Log.d(TAG, "run: " + name);
                                 requestQueue.cancelAll(ApiLink.GET_PLACES);
@@ -180,18 +172,22 @@ public class AroundPlaceFragment extends Fragment {
     public void filter(final String query) {
         Log.d(TAG, "filter: " + query);
         Log.d(TAG, "filter: " + list.size());
-//        Constants.showDialog();
+        Constants.showDialog();
         // Stash.getString(Constants.LANGUAGE, "en")
         String url = ApiLink.searchCities(query);
+        Log.d(TAG, "filter: " + url);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
+                    Constants.dismissDialog();
                     try {
+                        Log.d(TAG, "API RESPONSE");
                         ArrayList<Cities> mainList = new ArrayList<>();
                         JSONArray predictions = response.getJSONArray("predictions");
                         for (int i = 0; i < predictions.length(); i++) {
                             JSONObject city = predictions.getJSONObject(i);
                             mainList.add(new Cities(city.getString("place_id"), city.getString("description")));
                         }
+                        Log.d(TAG, "filter: size " + mainList.size());
                         adapter = new CitiesAdapter(requireActivity(), mainList, cityClick);
                         binding.cities.setAdapter(adapter);
                     } catch (JSONException e) {
@@ -199,6 +195,7 @@ public class AroundPlaceFragment extends Fragment {
                     }
                 },
                 error -> {
+            Constants.dismissDialog();
                     Log.d(TAG, "filter: " + error.getLocalizedMessage());
                 }
         );
@@ -214,17 +211,48 @@ public class AroundPlaceFragment extends Fragment {
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
         }
-
         getCityDetails(cities);
     };
 
     private void getCityDetails(Cities cities) {
-        Stash.put(Constants.AROUND_PLACE, cities);
-//        startActivity(new Intent(requireContext(), MainActivity.class));
-//        requireActivity().finish();
+        Constants.showDialog();
+        String url = ApiLink.getPlace(cities.getId());
+        Log.d(TAG, "getCityDetails: " + url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    Constants.dismissDialog();
+                    try {
+                        Log.d(TAG, "API RESPONSE");
+                        JSONObject result = response.getJSONObject("result");
+                        JSONObject geometry = result.getJSONObject("geometry");
+                        JSONObject location = geometry.getJSONObject("location");
+                        String[] add = cities.getName().split(", ");
+                        cities.setName(add[0]);
+                        if (add.length == 3) {
+                            cities.setState_name(add[1]);
+                            cities.setCountry_name(add[2]);
+                        } else if (add.length == 2) {
+                            cities.setCountry_name(add[1]);
+                        }
+                        cities.setLatitude(location.getDouble("lat"));
+                        cities.setLongitude(location.getDouble("lng"));
 
+                        Log.d(TAG, "getCityDetails: Cities " + cities.toString());
 
+                        Stash.put(Constants.AROUND_PLACE, cities);
+                        startActivity(new Intent(requireContext(), MainActivity.class));
+                        requireActivity().finish();
 
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                },
+                error -> {
+                    Constants.dismissDialog();
+                    Log.d(TAG, "filter: " + error.getLocalizedMessage());
+                }
+        );
+        requestQueue.add(jsonObjectRequest);
     }
 
 }
