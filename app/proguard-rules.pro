@@ -32,6 +32,13 @@
     @com.google.gson.annotations.SerializedName <fields>;
 }
 
+-keepclassmembers class * {
+    public <init>(...);
+}
+
+# Keep all classes in the models package from obfuscation
+-keep class com.moutamid.trip4pet.models.** { *; }
+
 # Keep the Cities class and its inner classes from obfuscation
 -keep class com.moutamid.trip4pet.models.Cities { *; }
 -keep class com.moutamid.trip4pet.models.Cities$* { *; }

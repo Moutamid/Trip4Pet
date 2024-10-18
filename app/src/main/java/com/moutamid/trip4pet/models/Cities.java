@@ -3,20 +3,25 @@ package com.moutamid.trip4pet.models;
 import com.google.gson.annotations.SerializedName;
 
 public class Cities {
+    @SerializedName("id")
     private String id;
+
+    @SerializedName("name")
     private String name;
+
+    @SerializedName("state_name")
     private String state_name;
+
+    @SerializedName("country_name")
     private String country_name;
+
+    @SerializedName("latitude")
     private double latitude;
+
+    @SerializedName("longitude")
     private double longitude;
 
-    public Cities() {
-    }
-
-    public Cities(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+    public Cities() {}
 
     public String getId() {
         return id;

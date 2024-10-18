@@ -185,7 +185,10 @@ public class AroundPlaceFragment extends Fragment {
                         JSONArray predictions = response.getJSONArray("predictions");
                         for (int i = 0; i < predictions.length(); i++) {
                             JSONObject city = predictions.getJSONObject(i);
-                            mainList.add(new Cities(city.getString("place_id"), city.getString("description")));
+                            Cities cities = new Cities();
+                            cities.setId(city.getString("place_id"));
+                            cities.setName(city.getString("description"));
+                            mainList.add(cities);
                         }
                         Log.d(TAG, "filter: size " + mainList.size());
                         adapter = new CitiesAdapter(requireActivity(), mainList, cityClick);
