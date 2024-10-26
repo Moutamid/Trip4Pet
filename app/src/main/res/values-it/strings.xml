@@ -252,4 +252,13 @@
     <string name="has_shifts">Questo posto ha i turni?</string>
     <string name="morning_opening_closing">Apertura/Chiusura Mattina</string>
     <string name="evening_open_closed">Apertura/Chiusura Sera</string>
+    <string name="small_dog">Cane piccolo</string>
+    <string name="medium_dog">Cane medio</string>
+    <string name="big_dog">Cane grande</string>
+    <string name="cat">Gatto</string>
+    <string name="birds">Uccelli</string>
+    <string name="others">Altri</string>
+    <string name="hamster">Criceto</string>
+    <string name="my_pet">Il mio animale</string>
+
 </resources>

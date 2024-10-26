@@ -252,4 +252,13 @@
     <string name="has_shifts">¿Tiene turnos este lugar?</string>
     <string name="morning_opening_closing">Apertura/Cierre Mañana</string>
     <string name="evening_open_closed">Apertura/Cierre Tarde</string>
+    <string name="small_dog">Perro pequeño</string>
+    <string name="medium_dog">Perro mediano</string>
+    <string name="big_dog">Perro grande</string>
+    <string name="cat">Gato</string>
+    <string name="birds">Pájaros</string>
+    <string name="others">Otros</string>
+    <string name="hamster">Hámster</string>
+    <string name="my_pet">Mi mascota</string>
+
 </resources>

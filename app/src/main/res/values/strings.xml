@@ -257,5 +257,13 @@
     <string name="has_shifts">Does this place have shifts?</string>
     <string name="morning_opening_closing">Morning Open/Closed</string>
     <string name="evening_open_closed">Evening Open/Closed</string>
+    <string name="small_dog">Small Dog</string>
+    <string name="medium_dog">Medium Dog</string>
+    <string name="big_dog">Big Dog</string>
+    <string name="cat">Cat</string>
+    <string name="birds">Birds</string>
+    <string name="others">Others</string>
+    <string name="hamster">Hamster</string>
+    <string name="my_pet">My Pet</string>
 
 </resources>

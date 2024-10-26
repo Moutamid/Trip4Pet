@@ -9,16 +9,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.moutamid.trip4pet.Stash;
 import com.google.android.material.card.MaterialCardView;
 import com.moutamid.trip4pet.Constants;
 import com.moutamid.trip4pet.R;
+import com.moutamid.trip4pet.Stash;
 import com.moutamid.trip4pet.databinding.ActivityVehicleBinding;
 
 public class VehicleActivity extends AppCompatActivity {
     ActivityVehicleBinding binding;
     MaterialCardView selected;
     String selectedText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,33 +41,30 @@ public class VehicleActivity extends AppCompatActivity {
         selected = binding.notDefined;
 
         binding.notDefined.setOnClickListener(v -> changeUI(v, getString(R.string.not_defined)));
-        binding.van.setOnClickListener(v -> changeUI(v, getString(R.string.van)));
-        binding.largeVan.setOnClickListener(v -> changeUI(v, getString(R.string.large_van)));
-        binding.miniVan.setOnClickListener(v -> changeUI(v, getString(R.string.mini_van)));
-        binding.x4.setOnClickListener(v -> changeUI(v, getString(R.string._4x4)));
-        binding.overcab.setOnClickListener(v -> changeUI(v, getString(R.string.overcab_motorhome)));
-        binding.lowProfile.setOnClickListener(v -> changeUI(v, getString(R.string.low_profile_motorhome)));
-        binding.aClass.setOnClickListener(v -> changeUI(v, getString(R.string.a_class_motorhome)));
-        binding.heavy.setOnClickListener(v -> changeUI(v, getString(R.string.motorhome_heavyweight)));
+        binding.smallDog.setOnClickListener(v -> changeUI(v, getString(R.string.small_dog)));
+        binding.mediumDog.setOnClickListener(v -> changeUI(v, getString(R.string.medium_dog)));
+        binding.bigDog.setOnClickListener(v -> changeUI(v, getString(R.string.big_dog)));
+        binding.cat.setOnClickListener(v -> changeUI(v, getString(R.string.cat)));
+        binding.hamster.setOnClickListener(v -> changeUI(v, getString(R.string.hamster)));
+        binding.birds.setOnClickListener(v -> changeUI(v, getString(R.string.birds)));
+        binding.others.setOnClickListener(v -> changeUI(v, getString(R.string.others)));
 
-        if (selectedText.equals(getString(R.string.not_defined))){
+        if (selectedText.equals(getString(R.string.not_defined))) {
             changeUI(binding.notDefined, getString(R.string.not_defined));
-        } else if (selectedText.equals(getString(R.string.van))){
-            changeUI(binding.van, getString(R.string.van));
-        } else if (selectedText.equals(getString(R.string.large_van))){
-            changeUI(binding.largeVan, getString(R.string.large_van));
-        } else if (selectedText.equals(getString(R.string.mini_van))){
-            changeUI(binding.miniVan, getString(R.string.mini_van));
-        } else if (selectedText.equals(getString(R.string._4x4))){
-            changeUI(binding.x4, getString(R.string._4x4));
-        } else if (selectedText.equals(getString(R.string.overcab_motorhome))){
-            changeUI(binding.overcab, getString(R.string.overcab_motorhome));
-        } else if (selectedText.equals(getString(R.string.low_profile_motorhome))){
-            changeUI(binding.lowProfile, getString(R.string.low_profile_motorhome));
-        } else if (selectedText.equals(getString(R.string.a_class_motorhome))){
-            changeUI(binding.aClass, getString(R.string.a_class_motorhome));
-        } else if (selectedText.equals(getString(R.string.motorhome_heavyweight))){
-            changeUI(binding.heavy, getString(R.string.motorhome_heavyweight));
+        } else if (selectedText.equals(getString(R.string.small_dog))) {
+            changeUI(binding.smallDog, getString(R.string.small_dog));
+        } else if (selectedText.equals(getString(R.string.medium_dog))) {
+            changeUI(binding.mediumDog, getString(R.string.medium_dog));
+        } else if (selectedText.equals(getString(R.string.big_dog))) {
+            changeUI(binding.bigDog, getString(R.string.big_dog));
+        } else if (selectedText.equals(getString(R.string.cat))) {
+            changeUI(binding.cat, getString(R.string.cat));
+        } else if (selectedText.equals(getString(R.string.hamster))) {
+            changeUI(binding.hamster, getString(R.string.hamster));
+        } else if (selectedText.equals(getString(R.string.birds))) {
+            changeUI(binding.birds, getString(R.string.birds));
+        } else if (selectedText.equals(getString(R.string.others))) {
+            changeUI(binding.others, getString(R.string.others));
         }
 
         binding.apply.setOnClickListener(v -> {

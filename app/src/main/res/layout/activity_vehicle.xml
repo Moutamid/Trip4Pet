@@ -53,7 +53,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             app:tint="@color/blue"
-                            android:src="@drawable/no_car" />
+                            android:src="@drawable/do_not_enter" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -69,7 +69,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/van"
+                    android:id="@+id/small_dog"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -90,12 +90,12 @@
                         <ImageView
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/small_van" />
+                            android:src="@drawable/dog_small" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/van"
+                            android:text="@string/small_dog"
                             android:gravity="center"
                             android:textStyle="bold"
                             android:layout_marginTop="5dp" />
@@ -113,7 +113,7 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/largeVan"
+                    android:id="@+id/mediumDog"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -134,12 +134,12 @@
                         <ImageView
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/large_van" />
+                            android:src="@drawable/dog_medium" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/large_van"
+                            android:text="@string/medium_dog"
                             android:gravity="center"
                             android:textStyle="bold"
                             android:layout_marginTop="5dp" />
@@ -149,7 +149,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/miniVan"
+                    android:id="@+id/bigDog"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -170,12 +170,12 @@
                         <ImageView
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/mini_van" />
+                            android:src="@drawable/dog" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/mini_van"
+                            android:text="@string/big_dog"
                             android:gravity="center"
                             android:textStyle="bold"
                             android:layout_marginTop="5dp" />
@@ -193,7 +193,7 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/x4"
+                    android:id="@+id/cat"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -214,12 +214,12 @@
                         <ImageView
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/x4" />
+                            android:src="@drawable/cat" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/_4x4"
+                            android:text="@string/cat"
                             android:textStyle="bold"
                             android:gravity="center"
                             android:layout_marginTop="5dp" />
@@ -229,7 +229,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/overcab"
+                    android:id="@+id/hamster"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -250,12 +250,12 @@
                         <ImageView
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/motorhome_overcab" />
+                            android:src="@drawable/hamster" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/overcab_motorhome"
+                            android:text="@string/hamster"
                             android:textStyle="bold"
                             android:gravity="center"
                             android:layout_marginTop="5dp" />
@@ -273,7 +273,7 @@
                 android:orientation="horizontal">
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/lowProfile"
+                    android:id="@+id/birds"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -294,12 +294,12 @@
                         <ImageView
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/motorhome_low_profile" />
+                            android:src="@drawable/parrot" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/low_profile_motorhome"
+                            android:text="@string/birds"
                             android:gravity="center"
                             android:textStyle="bold"
                             android:layout_marginTop="5dp" />
@@ -309,7 +309,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/aClass"
+                    android:id="@+id/others"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -330,93 +330,14 @@
                         <ImageView
                             android:layout_width="50dp"
                             android:layout_height="50dp"
-                            android:src="@drawable/motorhome_class" />
+                            android:src="@drawable/livestock" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/a_class_motorhome"
+                            android:text="@string/others"
                             android:gravity="center"
                             android:textStyle="bold"
-                            android:layout_marginTop="5dp" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/heavy"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="5dp"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/grey"
-                    app:cardBackgroundColor="@color/grey"
-                    app:cardElevation="0dp"
-                    app:cardCornerRadius="12dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="6dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/motorhome_heavy" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/motorhome_heavyweight"
-                            android:gravity="center"
-                            android:textStyle="bold"
-                            android:layout_marginTop="5dp" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:visibility="invisible"
-                    android:layout_marginStart="5dp"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/grey"
-                    app:cardBackgroundColor="@color/grey"
-                    app:cardElevation="0dp"
-                    app:cardCornerRadius="12dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="6dp"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/motorhome_class" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="A-class Motorhome"
-                            android:gravity="center"
                             android:layout_marginTop="5dp" />
 
                     </LinearLayout>

@@ -252,4 +252,13 @@
     <string name="has_shifts">Heeft deze plek diensten?</string>
     <string name="morning_opening_closing">Open/Gesloten \'s ochtends</string>
     <string name="evening_open_closed">Open/Gesloten \'s avonds</string>
+    <string name="small_dog">Kleine hond</string>
+    <string name="medium_dog">Middelgrote hond</string>
+    <string name="big_dog">Grote hond</string>
+    <string name="cat">Kat</string>
+    <string name="birds">Vogels</string>
+    <string name="others">Anderen</string>
+    <string name="hamster">Hamster</string>
+    <string name="my_pet">Mijn huisdier</string>
+
 </resources>
