@@ -72,7 +72,7 @@ public class SettingActivity extends AppCompatActivity {
                     .show();
         });
 
-        binding.terms.setOnClickListener(v -> openLink("https://google.com"));
+        binding.terms.setOnClickListener(v -> startActivity(new Intent(this, ContractActivity.class)));
         binding.privacy.setOnClickListener(v -> openLink("https://google.com"));
 
         binding.language.setOnClickListener(v -> {

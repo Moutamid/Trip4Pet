@@ -213,6 +213,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:clickable="true"
+                android:visibility="gone"
                 app:cardBackgroundColor="@color/white"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="0dp"

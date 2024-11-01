@@ -56,6 +56,8 @@ public class SubscriptionActivity extends AppCompatActivity implements BillingPr
         });
 
         binding.start.setOnClickListener(v -> {
+            Stash.put(Constants.ISVIP, true);
+            Toast.makeText(this, "Thank you for being our valuable user", Toast.LENGTH_SHORT).show();
             bp.subscribe(SubscriptionActivity.this, selectedPlan);
         });
 

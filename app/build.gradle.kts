@@ -13,7 +13,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
         setProperty("archivesBaseName", "Trip4Pet-$versionName")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -55,6 +55,9 @@ dependencies {
     implementation(libs.volley)
 
     implementation(libs.play.services.auth)
+
+    implementation(libs.jsoup)
+
 
     implementation(libs.billing)
     implementation(libs.preference)

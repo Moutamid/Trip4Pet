@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements BillingProcessor.
         bp = BillingProcessor.newBillingProcessor(this, Constants.LICENSE_KEY, this);
         bp.initialize();
 
-        checkSubscription();
+        // TODO checkSubscription();
 
         binding.bottomNav.setItemActiveIndicatorColor(ColorStateList.valueOf(getColor(R.color.white2)));
         binding.bottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
