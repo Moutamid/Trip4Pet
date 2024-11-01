@@ -12,18 +12,10 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <androidx.core.widget.NestedScrollView
+    <WebView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:fillViewport="true">
-
-        <TextView
-            android:id="@+id/contract"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="12dp" />
-
-    </androidx.core.widget.NestedScrollView>
+        android:id="@+id/webView" />
 
 </RelativeLayout>
