@@ -33,7 +33,7 @@
     <string name="password">Password</string>
     <string name="change_your_password">Change your password</string>
     <string name="not_defined">Not defined</string>
-    <string name="my_vehicle">My Vehicle</string>
+    <string name="my_vehicle">My Pet</string>
     <string name="delete_my_personal_data">Delete my personal data</string>
     <string name="this_will_delete_your_whole_data">This will delete your whole data</string>
     <string name="van">Van</string>

@@ -28,7 +28,7 @@
     <string name="password">Mot de passe</string>
     <string name="change_your_password">Changer votre mot de passe</string>
     <string name="not_defined">Non défini</string>
-    <string name="my_vehicle">Mon véhicule</string>
+    <string name="my_vehicle">Mon Animal</string>
     <string name="delete_my_personal_data">Supprimer mes données personnelles</string>
     <string name="this_will_delete_your_whole_data">Cela supprimera toutes vos données</string>
     <string name="van">Fourgonnette</string>
